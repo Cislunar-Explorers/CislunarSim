@@ -7,7 +7,7 @@ from typing import Dict, Optional
 
 
 class Parameters:
-    def __init__(self, param_dict: Optional[Dict] = {}):
+    def __init__(self, param_dict: Dict = {}):
         self.gyro_bias = 0
         self.gyro_noise = 0
         self.dry_mass = 0
