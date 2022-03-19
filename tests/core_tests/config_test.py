@@ -59,12 +59,15 @@ class ConfigTestCases(unittest.TestCase):
 
     def test_immutability(self):
         """Makes sure that the configs cannot be mutated."""
+        # TODO: expected failure / assert_raises
         try:
             test_config = Config(self.dummy_param, self.ic_pos).init_cond
             test_config.init_cond = {"throw": "error"}
             assert False
         except Exception as e:
             assert True
+
+
 
 
 if __name__ == "__main__":
