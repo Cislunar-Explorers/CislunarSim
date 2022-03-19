@@ -26,5 +26,5 @@ class Config:
 
         for key, value in initial_conditions.items():
             if key in default_conditions.keys():
-                setattr(default_conditions, key, value)
+                default_conditions[key] = value
         self.init_cond = default_conditions
