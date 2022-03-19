@@ -1,12 +1,14 @@
 import logging
 from typing import Optional
+import core.config
+from core.sim import CislunarSim
 
 log = logging.getLogger()
 
 class SimRunner():
-    def __init__(self, Optional[config_path] = None) -> None:
-        
-        self._sim = sim(config_)
+    def __init__(self, config_path: Optional[str] = None) -> None:
+        config = core.config.make_config(config_path)
+        self._sim = CislunarSim(config)
         pass
 
     def run(self):
