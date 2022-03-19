@@ -51,18 +51,17 @@ class ConfigTestCases(unittest.TestCase):
     def setup_helper(self, param, ic, ic_check):
         self.assert_equals(Config(param, ic).init_cond, ic_check)
 
-
     def test_init(self):
-        '''Tests if the initialization subs in default values for unspecified variables.'''
+        """Tests if the initialization subs in default values for unspecified variables."""
         self.setup_helper(self.dummy_param, self.ic_pos, self.ic_pos_check)
         self.setup_helper(self.dummy_param, self.ic_all, self.ic_all_check)
         self.setup_helper(self.dummy_param, {}, self.ic_default_check)
 
     def test_immutability(self):
-        '''Makes sure that the configs cannot be mutated. '''
+        """Makes sure that the configs cannot be mutated."""
         try:
             test_config = Config(self.dummy_param, self.ic_pos).init_cond
-            test_config.init_cond = {'throw': 'error'}
+            test_config.init_cond = {"throw": "error"}
             assert False
         except Exception as e:
             assert True
