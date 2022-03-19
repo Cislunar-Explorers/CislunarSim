@@ -10,9 +10,7 @@ import parameters
 class Config:
     """Representation of the parameters and initial conditions of the simulation. This module depends on parameters.py. The variation in performance of different runs of the simulation depends on the variation of config."""
 
-    def _init_(
-        self, parameters: parameters.Parameters, initial_conditions: Optional[Dict] = {}
-    ):
+    def _init_(self, parameters: parameters.Parameters, initial_conditions: Dict):
         self.param = parameters
 
         default_conditions = {

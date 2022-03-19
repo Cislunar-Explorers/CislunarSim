@@ -9,7 +9,7 @@ DEBUG = False
 class ConfigTestCases(unittest.TestCase):
     """This test tests whether Config initializes as expected and if it is immutable."""
 
-    dummy_param = Parameters()
+    dummy_param = Parameters({})
     ic_pos = {
         "pos_x": 3.0,
         "pos_y": 3.0,
