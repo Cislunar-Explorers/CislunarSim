@@ -31,7 +31,7 @@ class ParametersTestCase(unittest.TestCase):
             d_main,
             Parameters({"gyro_bias": 1}).__dict__,
         )
-        d_main["gyro_bias"] = 1
+        d_main["gyro_bias"] = 0
         d_main["gyro_noise"] = 2
         self.assert_equals(
             d_main,
