@@ -3,19 +3,11 @@ Sim Parameters Spreadsheet: https://cornell.box.com/s/z20wbp66q0pseqievmadf515uc
 """
 
 
-from typing import Dict
+from typing import Dict, Optional
 
 
 class Parameters:
-    def __init__(self, param_dict: Dict):
-        attributes = [
-            "gyro_bias",
-            "gyro_noise",
-            "dry_mass",
-            "com",
-            "tank_volume",
-            "thruster_force",
-        ]
+    def __init__(self, param_dict: Optional[Dict] = {}):
         self.gyro_bias = 0
         self.gyro_noise = 0
         self.dry_mass = 0
@@ -24,5 +16,5 @@ class Parameters:
         self.thruster_force = 0
 
         for key, value in param_dict.items():
-            if key in attributes:
+            if key in self.__dict__.keys():
                 setattr(self, key, value)
