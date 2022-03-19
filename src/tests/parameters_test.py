@@ -72,15 +72,3 @@ class ParametersTestCase(unittest.TestCase):
             },
             Parameters({}).__dict__,
         )
-
-
-"""
-
-        self.gyro_bias = 0
-        self.gyro_noise = 0
-        self.dry_mass = 0
-        self.com = 0
-        self.tank_volume = 0
-        self.thruster_force = 0
-
-"""
