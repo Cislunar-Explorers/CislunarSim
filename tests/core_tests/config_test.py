@@ -49,7 +49,7 @@ class ConfigTestCases(unittest.TestCase):
     }
 
     def setup_helper(self, param, ic, ic_check):
-        self.assert_equals(Config(param, ic).init_cond, ic_check)
+        self.assertEqual(Config(param, ic).init_cond, ic_check)
 
     def test_init(self):
         """Tests if the initialization subs in default values for unspecified variables."""
