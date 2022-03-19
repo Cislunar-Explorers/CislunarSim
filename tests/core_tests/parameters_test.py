@@ -1,6 +1,6 @@
 
 import unittest, logging
-import src.core.parameters
+import core.parameters
 
 DEBUG = False
 

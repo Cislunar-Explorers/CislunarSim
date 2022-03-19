@@ -1,6 +1,6 @@
 
 import unittest, logging
-import src.core.config
+import core.config
 
 DEBUG = False
 
