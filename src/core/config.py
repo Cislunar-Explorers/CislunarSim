@@ -1,6 +1,6 @@
 """Configurations of parameters and initial conditions for a given simulation."""
 
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 from dataclasses import dataclass
 
 import core.parameters as parameters
@@ -10,9 +10,9 @@ import core.parameters as parameters
 class Config:
     """Representation of the parameters and initial conditions of the simulation. This module depends on parameters.py. The variation in performance of different runs of the simulation depends on the variation of config."""
 
-    def __init__(self, parameters: parameters.Parameters, initial_conditions: Dict):
+    def __init__(self, parameters: parameters.Parameters, initial_conditions: Dict, models:List[]):
         self.param = parameters
-
+        self.models = models
         default_conditions = {
             "pos_x": 0.0,
             "pos_y": 0.0,
