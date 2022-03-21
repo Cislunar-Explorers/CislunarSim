@@ -14,8 +14,9 @@ class Model(ABC):
         return delta_state
 
     @abstractmethod
-    def d_state(self, state: State)  -> Dict[str, Any]:
+    def d_state(self, state: State) -> Dict[str, Any]:
         ...
+
 
 class SensorModel(Model):
     def __init__(self, parameters: Parameters) -> None:
@@ -25,7 +26,7 @@ class SensorModel(Model):
         return super().evaluate(state)
 
     def d_state(self, state: State) -> Dict[str, Any]:
-        pass
+        ...
 
 
 class ActuatorModel(Model):
@@ -36,5 +37,4 @@ class ActuatorModel(Model):
         return super().evaluate(state)
 
     def d_state(self, state: State) -> Dict[str, Any]:
-        pass
-
+        ...
