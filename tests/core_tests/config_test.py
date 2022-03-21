@@ -61,8 +61,8 @@ class ConfigTestCases(unittest.TestCase):
         """Makes sure that the configs cannot be mutated."""
         # TODO: expected failure / assert_raises
         try:
-            test_config = Config(self.dummy_param, self.ic_pos).init_cond
-            test_config.init_cond = {"throw": "error"}
+            test_config = Config(self.dummy_param, self.ic_pos)
+            test_config.init_cond = {"throw_error": -1.0}
             assert False
         except Exception as e:
             assert True
