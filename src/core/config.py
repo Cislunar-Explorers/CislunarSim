@@ -2,6 +2,7 @@
 
 from typing import Dict, List
 from dataclasses import dataclass
+from core.models.model_list import DEFAULT_MODELS
 
 import core.parameters as parameters
 from utils.constants import ModelEnum
@@ -15,7 +16,7 @@ class Config:
         self,
         parameters: parameters.Parameters,
         initial_conditions: Dict,
-        models: List[ModelEnum],
+        models: List[ModelEnum] = DEFAULT_MODELS,
     ):
         self.param = parameters
         self.models = models

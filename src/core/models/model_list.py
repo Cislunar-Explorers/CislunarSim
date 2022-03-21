@@ -12,10 +12,14 @@ class PositionDynamics(Model):
     ...
 
 
+
+# Dict containing all the models that are implemented
 MODEL_DICT: Dict[ModelEnum, Type[Model]] = {
     ModelEnum.AttitudeModel: AttitudeDynamics,
     ModelEnum.PositionModel: PositionDynamics,
 }
+
+DEFAULT_MODELS = [ModelEnum.AttitudeModel, ModelEnum.PositionModel]
 
 
 def build_models(config: Config) -> List[Model]:
