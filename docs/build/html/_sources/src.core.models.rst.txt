@@ -1,0 +1,21 @@
+src.core.models package
+=======================
+
+Submodules
+----------
+
+src.core.models.model module
+----------------------------
+
+.. automodule:: src.core.models.model
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: src.core.models
+   :members:
+   :undoc-members:
+   :show-inheritance:
