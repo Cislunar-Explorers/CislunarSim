@@ -11,7 +11,7 @@ class SimRunner:
         pass
 
     def run(self):
-        while True: # TODO, add better break conditions
+        while True:  # TODO, add better break conditions
             try:
                 self._sim.step()
             except Exception as e:

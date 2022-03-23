@@ -1,2 +1,6 @@
 class State(dict):
-    pass # TODO
+    pass  # TODO
+
+
+class ObservedState(dict):
+    pass  # TODO

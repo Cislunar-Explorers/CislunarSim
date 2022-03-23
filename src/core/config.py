@@ -10,15 +10,15 @@ from utils.constants import ModelEnum
 
 @dataclass(frozen=True)
 class Config:
-    """Representation of the parameters and initial conditions of the simulation. 
-    This module depends on parameters.py. 
+    """Representation of the parameters and initial conditions of the simulation.
+    This module depends on parameters.py.
     The variation in performance of different runs of the simulation depends on the variation of config."""
 
     def __init__(
         self,
         parameters: parameters.Parameters,
         initial_conditions: Dict,
-        models: List[ModelEnum]=DEFAULT_MODELS,
+        models: List[ModelEnum] = DEFAULT_MODELS,
     ):
         self.param = parameters
         self.models = models
