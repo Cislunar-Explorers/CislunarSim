@@ -16,8 +16,8 @@ class CislunarSim:
     def __init__(self, config: Config) -> None:
         self._config = config
         self._models = ModelContainer(self._config)
-        self.state = self._config.init_cond
-        self.observed_state = {}
+        self.state: State = self._config.init_cond
+        self.observed_state = ObservedState()
 
     def step(self) -> PropagatedOutput:
         # Evaluate Actuator models to update state

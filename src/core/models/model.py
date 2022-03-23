@@ -40,7 +40,7 @@ class SensorModel(Model):
         ...
 
 
-class ActuatorModel:
+class ActuatorModel(Model):
     def __init__(self, parameters: Parameters) -> None:
         super().__init__(parameters)
 
