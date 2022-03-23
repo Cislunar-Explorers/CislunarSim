@@ -1,2 +1,2 @@
-class State:
+class State(dict):
     pass # TODO

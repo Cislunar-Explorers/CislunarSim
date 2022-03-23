@@ -18,6 +18,17 @@ class Model(ABC):
         ...
 
 
+class EnvironmentModel(Model):
+    def __init__(self, parameters: Parameters) -> None:
+        super().__init__(parameters)
+
+    def evaluate(self, state: State) -> Dict[str, Any]:
+        return super().evaluate(state)
+
+    def d_state(self, state: State) -> Dict[str, Any]:
+        ...
+
+
 class SensorModel(Model):
     def __init__(self, parameters: Parameters) -> None:
         super().__init__(parameters)
@@ -29,7 +40,7 @@ class SensorModel(Model):
         ...
 
 
-class ActuatorModel(Model):
+class ActuatorModel:
     def __init__(self, parameters: Parameters) -> None:
         super().__init__(parameters)
 
