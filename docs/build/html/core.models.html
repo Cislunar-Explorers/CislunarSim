@@ -97,6 +97,17 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.models.model.</span></span><span class="sig-name descname"><span class="pre">ActuatorModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.parameters.Parameters" title="core.parameters.Parameters"><span class="pre">core.parameters.Parameters</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.models.model.ActuatorModel" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#core.models.model.Model" title="core.models.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">core.models.model.Model</span></code></a></p>
 <dl class="py method">
+<dt class="sig sig-object py" id="core.models.model.ActuatorModel.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.parameters.Parameters" title="core.parameters.Parameters"><span class="pre">core.parameters.Parameters</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#core.models.model.ActuatorModel.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Creates an actuator model with the given parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parameters</strong> (<a class="reference internal" href="core.html#core.parameters.Parameters" title="core.parameters.Parameters"><em>Parameters</em></a>) – parameters for actuator model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="core.models.model.ActuatorModel.d_state">
 <span class="sig-name descname"><span class="pre">d_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.state.State" title="core.state.State"><span class="pre">core.state.State</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#core.models.model.ActuatorModel.d_state" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
@@ -104,7 +115,19 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="core.models.model.ActuatorModel.evaluate">
 <span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.state.State" title="core.state.State"><span class="pre">core.state.State</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#core.models.model.ActuatorModel.evaluate" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Evaluates the model for a given state</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>state</strong> (<a class="reference internal" href="core.html#core.state.State" title="core.state.State"><em>State</em></a>) – state of model</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>idk</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Any]</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -112,6 +135,11 @@
 <dt class="sig sig-object py" id="core.models.model.Model">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.models.model.</span></span><span class="sig-name descname"><span class="pre">Model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.parameters.Parameters" title="core.parameters.Parameters"><span class="pre">core.parameters.Parameters</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.models.model.Model" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="core.models.model.Model.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.parameters.Parameters" title="core.parameters.Parameters"><span class="pre">core.parameters.Parameters</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#core.models.model.Model.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="core.models.model.Model.d_state">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">d_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.state.State" title="core.state.State"><span class="pre">core.state.State</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#core.models.model.Model.d_state" title="Permalink to this definition"></a></dt>
@@ -128,6 +156,11 @@
 <dt class="sig sig-object py" id="core.models.model.SensorModel">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.models.model.</span></span><span class="sig-name descname"><span class="pre">SensorModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.parameters.Parameters" title="core.parameters.Parameters"><span class="pre">core.parameters.Parameters</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.models.model.SensorModel" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#core.models.model.Model" title="core.models.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">core.models.model.Model</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="core.models.model.SensorModel.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.parameters.Parameters" title="core.parameters.Parameters"><span class="pre">core.parameters.Parameters</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#core.models.model.SensorModel.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="core.models.model.SensorModel.d_state">
 <span class="sig-name descname"><span class="pre">d_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.state.State" title="core.state.State"><span class="pre">core.state.State</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#core.models.model.SensorModel.d_state" title="Permalink to this definition"></a></dt>
