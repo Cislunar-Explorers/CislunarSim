@@ -2,6 +2,8 @@ from core.models.model import SensorModel
 import numpy as np
 
 class GyroModel(SensorModel):
+    """The gyro sensor model. This model applies the gyro bias and noise as specified in parameters.py"""
+
     def __init__(self, parameters: Parameters) -> None:
         super().__init__(parameters)
     
