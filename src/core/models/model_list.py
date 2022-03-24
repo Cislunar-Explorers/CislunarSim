@@ -5,11 +5,11 @@ from core.config import Config
 from utils.constants import ModelEnum
 
 
-class AttitudeDynamics(Model):
+class AttitudeDynamics(EnvironmentModel):
     ...
 
 
-class PositionDynamics(Model):
+class PositionDynamics(EnvironmentModel):
     ...
 
 
