@@ -19,7 +19,13 @@ Raises:
 ```
 
 ## How to use
-Sphinx was set up pretty much according to the following StackOverflow post https://stackoverflow.com/a/60159862. The first function to call is:
+Sphinx was set up pretty much according to the following StackOverflow post https://stackoverflow.com/a/60159862. Note that there is a separate virtual environmnet to encapsulate the sphinx-related packages. (**TODO**: Add requirements.txt!) 
+```console
+(cislunarsim-venv)CislunarSim/docs$ deactivate
+CislunarSim/docs$ source venv/bin/activate
+(venv)CislunarSim/docs$
+```
+The first function to call when generating documentation is:
 ```console
 /CislunarSim/docs$ sphinx-apidoc -o ./source ../src
 ```
