@@ -3,7 +3,7 @@ Sim Parameters Spreadsheet: https://cornell.box.com/s/z20wbp66q0pseqievmadf515uc
 """
 
 
-from typing import Dict, Optional
+from typing import Dict
 
 
 class Parameters:
