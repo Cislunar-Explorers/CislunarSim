@@ -1,3 +1,4 @@
+import numpy as np
 from typing import Dict
 
 
@@ -47,8 +48,10 @@ class State:
             if key in self.__dict__.keys():
                 setattr(self, key, value)
 
+    def to_array(self):
+        return np.array(list(self.__dict__.values()))
+
 
 class ObservedState(dict):
-    # takes in some truth state with some noise applied
-    # basically the same type as state
+    # This is the true state with some noise applied
     pass  # TODO
