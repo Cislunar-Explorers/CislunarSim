@@ -1,5 +1,5 @@
 import unittest, logging
-from src.core.state import State
+from core.state import State
 
 import numpy as np
 
@@ -39,12 +39,12 @@ class StateTestCases(unittest.TestCase):
                 dummy_data = True
             s_copy = dict(s_0)
             s_copy[field] = dummy_data
-            self.assert_equals(
+            self.assertEqual(
                 s_copy,
                 State({field: dummy_data}).__dict__,
             )
 
-        self.assert_equals(
+        self.assertEqual(
             {
                 "time": 0.0,
                 "ang_vel_x": 0.0,
@@ -72,31 +72,29 @@ class StateTestCases(unittest.TestCase):
 
     def test_to_array(self):
 
-        self.assert_equals(
-            np.array(
-                [
-                    1.0,
-                    2.0,
-                    3.0,
-                    4.0,
-                    5.0,
-                    6.0,
-                    7.0,
-                    8.0,
-                    9.0,
-                    10.0,
-                    11.0,
-                    12.0,
-                    13.0,
-                    14.0,
-                    15.0,
-                    16.0,
-                    17.0,
-                    18.0,
-                    True,
-                    False,
-                ]
-            ),
+        self.assertEqual(
+            [
+                1.0,
+                2.0,
+                3.0,
+                4.0,
+                5.0,
+                6.0,
+                7.0,
+                8.0,
+                9.0,
+                10.0,
+                11.0,
+                12.0,
+                13.0,
+                14.0,
+                15.0,
+                16.0,
+                17.0,
+                18.0,
+                True,
+                False,
+            ],
             State(
                 {
                     "time": 1.0,
@@ -120,7 +118,9 @@ class StateTestCases(unittest.TestCase):
                     "propulsion_on": True,
                     "solenoid_actuation_on": False,
                 }
-            ).to_array(),
+            )
+            .to_array()
+            .tolist(),
         )
 
 
