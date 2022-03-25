@@ -22,6 +22,6 @@ class GyroModel(SensorModel):
         ang_vel_d = np.random.normal(loc=ang_vel_d, scale=self._parameters.gyro_noise, size=3)
 
         for i in range(3):
-            ang_vel_d[i] = self._parameters.gyro_sensitivity*int(self._parameters.gyro_sensitivity/2 + vel/self._parameters.gyro_sensitivity)
+            ang_vel_d[i] = self._parameters.gyro_sensitivity*int(self._parameters.gyro_sensitivity/2 + ang_vel_d[i]/self._parameters.gyro_sensitivity)
         
         return {"ang_vel.x": ang_vel_d[0], "ang_vel.y": ang_vel_d[1], "ang_vel.z": ang_vel_d[2]}
