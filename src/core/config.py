@@ -3,7 +3,7 @@
 from typing import Dict, Optional
 from dataclasses import dataclass
 
-import parameters
+import core.parameters as parameters
 
 
 @dataclass(frozen=True)
