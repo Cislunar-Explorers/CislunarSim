@@ -42,9 +42,22 @@ class SensorModel(Model):
 
 class ActuatorModel(Model):
     def __init__(self, parameters: Parameters) -> None:
+        """Creates an actuator model with the given parameters
+
+        Args:
+            parameters (Parameters): parameters for actuator model
+        """
         super().__init__(parameters)
 
     def evaluate(self, state: State) -> Dict[str, Any]:
+        """Evaluates the model for a given state
+
+        Args:
+            state (State): state of model
+
+        Returns:
+            Dict[str, Any]: idk
+        """
         return super().evaluate(state)
 
     def d_state(self, state: State) -> Dict[str, Any]:
