@@ -1,8 +1,12 @@
+"""
+Gyro sensor model documentation: https://cornell.box.com/s/6nu08iqfk5i389wlpp44r0yu5h50by8n
+"""
+
 from core.models.model import SensorModel
 import numpy as np
 
 class GyroModel(SensorModel):
-    """The gyro sensor model. This model applies the gyro bias and noise as specified in parameters.py"""
+    """This model applies the gyro bias and noise as specified in parameters.py"""
 
     def __init__(self, parameters: Parameters) -> None:
         super().__init__(parameters)
@@ -16,4 +20,8 @@ class GyroModel(SensorModel):
 
         ang_vel_d = ang_vel_i + gyro_bias
         ang_vel_d = np.random.normal(loc=ang_vel_d, scale=self._parameters.gyro_noise, size=3)
-        return {"ang_vel.x": ang_vel_d[0], "ang_vel.y": ang_vel_d[1], "ang_vel.z": ang_vel_d[2]} #return as quaternion rate?
+
+        for i in range(3):
+            ang_vel_d[i] = self._parameters.gyro_sensitivity*int(self._parameters.gyro_sensitivity/2 + vel/self._parameters.gyro_sensitivity)
+        
+        return {"ang_vel.x": ang_vel_d[0], "ang_vel.y": ang_vel_d[1], "ang_vel.z": ang_vel_d[2]}
