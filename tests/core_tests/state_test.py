@@ -7,37 +7,38 @@ DEBUG = False
 
 
 class StateTestCases(unittest.TestCase):
+    s_0 = {
+        "time": 0.0,
+        "ang_vel_x": 0.0,
+        "ang_vel_y": 0.0,
+        "ang_vel_z": 0.0,
+        "gnc_pos_q1": 0.0,
+        "gnc_pos_q2": 0.0,
+        "gnc_pos_q3": 0.0,
+        "gnc_pos_q4": 0.0,
+        "vel_x": 0.0,
+        "vel_y": 0.0,
+        "vel_z": 0.0,
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "force_propulsion_thrusters": 0.0,
+        "fuel_mass": 0.0,
+        "force_earth": 0.0,
+        "force_moon": 0.0,
+        "propulsion_on": False,
+        "solenoid_actuation_on": False,
+    }
+
     def test_state_fields(self):
-        s_0 = {
-            "time": 0.0,
-            "ang_vel_x": 0.0,
-            "ang_vel_y": 0.0,
-            "ang_vel_z": 0.0,
-            "gnc_pos_q1": 0.0,
-            "gnc_pos_q2": 0.0,
-            "gnc_pos_q3": 0.0,
-            "gnc_pos_q4": 0.0,
-            "vel_x": 0.0,
-            "vel_y": 0.0,
-            "vel_z": 0.0,
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0,
-            "force_propulsion_thrusters": 0.0,
-            "fuel_mass": 0.0,
-            "force_earth": 0.0,
-            "force_moon": 0.0,
-            "propulsion_on": False,
-            "solenoid_actuation_on": False,
-        }
 
         bool_fields = ["propulsion_on", "solenoid_actuation_on"]
 
-        for field in s_0.keys():
+        for field in self.s_0.keys():
             dummy_data = 1.0
             if field in bool_fields:
                 dummy_data = True
-            s_copy = dict(s_0)
+            s_copy = dict(self.s_0)
             s_copy[field] = dummy_data
             self.assertEqual(
                 s_copy,
@@ -45,28 +46,7 @@ class StateTestCases(unittest.TestCase):
             )
 
         self.assertEqual(
-            {
-                "time": 0.0,
-                "ang_vel_x": 0.0,
-                "ang_vel_y": 0.0,
-                "ang_vel_z": 0.0,
-                "gnc_pos_q1": 0.0,
-                "gnc_pos_q2": 0.0,
-                "gnc_pos_q3": 0.0,
-                "gnc_pos_q4": 0.0,
-                "vel_x": 0.0,
-                "vel_y": 0.0,
-                "vel_z": 0.0,
-                "x": 0.0,
-                "y": 0.0,
-                "z": 0.0,
-                "force_propulsion_thrusters": 0.0,
-                "fuel_mass": 0.0,
-                "force_earth": 0.0,
-                "force_moon": 0.0,
-                "propulsion_on": False,
-                "solenoid_actuation_on": False,
-            },
+            self.s_0,
             State({}).__dict__,
         )
 
