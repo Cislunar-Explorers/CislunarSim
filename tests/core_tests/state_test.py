@@ -29,6 +29,28 @@ class StateTestCases(unittest.TestCase):
         "propulsion_on": False,
         "solenoid_actuation_on": False,
     }
+    s_1 = {
+        "time": 1.0,
+        "ang_vel_x": 2.0,
+        "ang_vel_y": 3.0,
+        "ang_vel_z": 4.0,
+        "gnc_pos_q1": 5.0,
+        "gnc_pos_q2": 6.0,
+        "gnc_pos_q3": 7.0,
+        "gnc_pos_q4": 8.0,
+        "vel_x": 9.0,
+        "vel_y": 10.0,
+        "vel_z": 11.0,
+        "x": 12.0,
+        "y": 13.0,
+        "z": 14.0,
+        "force_propulsion_thrusters": 15.0,
+        "fuel_mass": 16.0,
+        "force_earth": 17.0,
+        "force_moon": 18.0,
+        "propulsion_on": True,
+        "solenoid_actuation_on": False,
+    }
 
     def test_state_fields(self):
 
@@ -51,56 +73,31 @@ class StateTestCases(unittest.TestCase):
         )
 
     def test_to_array(self):
-
+        state_list = [
+            1.0,
+            2.0,
+            3.0,
+            4.0,
+            5.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0,
+            17.0,
+            18.0,
+            True,
+            False,
+        ]
         self.assertEqual(
-            [
-                1.0,
-                2.0,
-                3.0,
-                4.0,
-                5.0,
-                6.0,
-                7.0,
-                8.0,
-                9.0,
-                10.0,
-                11.0,
-                12.0,
-                13.0,
-                14.0,
-                15.0,
-                16.0,
-                17.0,
-                18.0,
-                True,
-                False,
-            ],
-            State(
-                {
-                    "time": 1.0,
-                    "ang_vel_x": 2.0,
-                    "ang_vel_y": 3.0,
-                    "ang_vel_z": 4.0,
-                    "gnc_pos_q1": 5.0,
-                    "gnc_pos_q2": 6.0,
-                    "gnc_pos_q3": 7.0,
-                    "gnc_pos_q4": 8.0,
-                    "vel_x": 9.0,
-                    "vel_y": 10.0,
-                    "vel_z": 11.0,
-                    "x": 12.0,
-                    "y": 13.0,
-                    "z": 14.0,
-                    "force_propulsion_thrusters": 15.0,
-                    "fuel_mass": 16.0,
-                    "force_earth": 17.0,
-                    "force_moon": 18.0,
-                    "propulsion_on": True,
-                    "solenoid_actuation_on": False,
-                }
-            )
-            .to_array()
-            .tolist(),
+            state_list,
+            State(self.s_1).to_array().tolist(),
         )
 
 
