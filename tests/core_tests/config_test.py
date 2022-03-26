@@ -1,6 +1,8 @@
+
 import unittest
 from core.config import Config, MutationException
 from core.parameters import Parameters
+
 
 
 class ConfigTestCases(unittest.TestCase):
@@ -46,7 +48,6 @@ class ConfigTestCases(unittest.TestCase):
     }
 
     def setup_helper(self, param, ic, ic_check):
-        print(Config(param, ic))
         self.assertEqual(Config(param, ic).init_cond, ic_check)
 
     def test_init(self):
