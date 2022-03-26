@@ -3,6 +3,9 @@ Gyro sensor model documentation: https://cornell.box.com/s/6nu08iqfk5i389wlpp44r
 """
 
 from core.models.model import SensorModel
+from core.parameters import Parameters
+from core.state import State
+from typing import Dict, Any
 import numpy as np
 
 class GyroModel(SensorModel):
@@ -23,5 +26,5 @@ class GyroModel(SensorModel):
 
         for i in range(3):
             ang_vel_d[i] = self._parameters.gyro_sensitivity*int(self._parameters.gyro_sensitivity/2 + ang_vel_d[i]/self._parameters.gyro_sensitivity)
-        
-        return {"ang_vel.x": ang_vel_d[0], "ang_vel.y": ang_vel_d[1], "ang_vel.z": ang_vel_d[2]}
+
+        return {"ang_vel_x": ang_vel_d[0], "ang_vel_y": ang_vel_d[1], "ang_vel_z": ang_vel_d[2]}
