@@ -20,6 +20,9 @@ class Config:
             "pos_ang": 0.0,
             "velocity": 0.0,
             "quad_rate": 0.0,
+            "ang_vel_x": 0.0,
+            "ang_vel_y": 0.0,
+            "ang_vel_z": 0.0
         }
 
         for key, value in initial_conditions.items():
