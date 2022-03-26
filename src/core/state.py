@@ -11,6 +11,7 @@ class State:
         self.time = 0.0
 
         # primitive state
+        self.fill_frac = 0.88
 
         # angular velocity (radians/second)
         self.ang_vel_x = 0.0
