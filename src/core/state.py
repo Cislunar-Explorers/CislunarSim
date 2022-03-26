@@ -41,6 +41,12 @@ class State:
         self.force_earth = 0.0
         self.force_moon = 0.0
 
+        # derived state (kg * m^2)
+        self.inert_oxy = np.array([[933513642.20, 260948256.18, 430810000.30],
+                                    [260948256.18, 1070855457.07, 387172545.62],
+                                    [430810000.30, 387172545.62, 629606813.62]], 
+                                    dtype=np.float64)
+
         # discrete state
         self.propulsion_on = False
         self.solenoid_actuation_on = False
