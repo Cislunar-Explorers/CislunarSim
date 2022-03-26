@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 import numpy as np
 from typing import Dict
 
@@ -8,8 +9,6 @@ class State:
     """
 
     def __init__(self, state_dict: Dict = {}):
-        self.time = 0.0
-
         # primitive state
 
         # angular velocity (radians/second)
@@ -56,6 +55,46 @@ class State:
             Numpy array: contains all values stored in the fields.
         """
         return np.array(list(self.__dict__.values()))
+
+    def __eq__(self, other):
+        """
+
+        Args:
+            other (State): the "other" object self is being compared to.
+
+        Returns:
+            True iff other is a State object and the fields are equal to each other.
+        """
+        if type(other) == State:
+            return self.__dict__ == other.__dict__
+        return False
+
+
+@dataclass
+class StateTime:
+    """
+    This class associates the state with the time.
+    """
+
+    state: State
+    time: float = 0.0
+
+    def __init__(self, state: State = State({}), time: float = 0.0):
+        self.state = state
+        self.time = time
+
+    def __eq__(self, other):
+        """
+
+        Args:
+            other (StateTime): the "other" object self is being compared to.
+
+        Returns:
+            True iff other is a StateTime object and the states are equal to each other.
+        """
+        if type(other) == StateTime:
+            return self.state.__eq__(other.state)
+        return False
 
 
 class ObservedState(dict):

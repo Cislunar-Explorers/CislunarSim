@@ -22,7 +22,7 @@ class CislunarSim:
     def step(self) -> PropagatedOutput:
         # Evaluate Actuator models to update state
         for actuator_model in self._models.actuator:
-            self.state.update(actuator_model.evaluate(self.state))
+            self.state = State(actuator_model.evaluate(self.state))
 
         # Evaluate environmental models to propagate state
         self.state = propagate_state(self._models.state_update_function, self.state)
