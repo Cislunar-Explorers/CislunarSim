@@ -1,20 +1,18 @@
 """Configurations of parameters and initial conditions for a given simulation."""
 
-from typing import Dict, Optional
-from dataclasses import dataclass, make_dataclass
+from typing import Dict
 
 import core.parameters as parameters
 
 
 class MutationException(Exception):
-    error_code = "Cannot mutate config."
+    pass
 
 
 class Config:
     """Representation of the parameters and initial conditions of the simulation. This module depends on parameters.py. The variation in performance of different runs of the simulation depends on the variation of config."""
 
     _frozen = False
-    # __slots__ = ['param', 'init_cond', '_frozen']
 
     def __init__(self, parameters: parameters.Parameters, initial_conditions: Dict):
         self.param = parameters

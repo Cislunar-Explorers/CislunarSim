@@ -1,9 +1,6 @@
-import unittest, logging
+import unittest
 from core.config import Config, MutationException
 from core.parameters import Parameters
-
-
-DEBUG = False
 
 
 class ConfigTestCases(unittest.TestCase):
@@ -62,12 +59,14 @@ class ConfigTestCases(unittest.TestCase):
         """Makes sure that the configs can be initialized but cannot be mutated."""
         test_config_1 = Config(self.dummy_param, self.ic_pos)
         test_config_2 = Config(self.dummy_param, self.ic_all)
-        with self.assertRaises(MutationException) as err1:
-            test_config_1.init_cond = {"throw": "error"}
-        with self.assertRaises(MutationException) as err2:
-            test_config_2.param = {}
-        self.assertEqual(err1.exception.error_code, "Cannot mutate config.")
-        self.assertEqual(err2.exception.error_code, "Cannot mutate config.")
+        with self.assertRaises(MutationException):
+            test_config_1.init_cond = {
+                "throw": "error"
+            }  # mutating init_cond would throw error
+        with self.assertRaises(MutationException):
+            test_config_2.param = {}  # mutating param would throw error
+        with self.assertRaises(MutationException):
+            test_config_2.new_attribute = {}  # adding attribute would throw error
 
 
 if __name__ == "__main__":
