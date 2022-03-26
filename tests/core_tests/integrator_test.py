@@ -15,6 +15,10 @@ class IntegratorTestCases(unittest.TestCase):
     """
 
     def test_propagate_state(self):
+        """
+        This class tests that propagate_state updates the time and fields of the state correctly given a model.
+        """
+
         def f(t, y):  # function that keeps the field constant
             return 0
 

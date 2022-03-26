@@ -1,5 +1,5 @@
 import unittest, logging
-from core.state import State
+from core.state import State, StateTime
 
 import numpy as np
 
@@ -50,8 +50,22 @@ s_1 = {
 
 
 class StateTestCases(unittest.TestCase):
-    def test_state_fields(self):
+    """
+    This class tests the constructor and methods of class StateTest.
+    """
 
+    def test_state_time_fields(self):
+        """
+        Tests that all fields are set properly when creating a new instance of StateTime.
+        """
+        st_1 = StateTime(s_1, 10.0)
+        self.assertEqual(s_1, st_1.state)
+        self.assertEqual(10.0, st_1.time)
+
+    def test_state_fields(self):
+        """
+        Tests that all fields are set properly when creating a new instance of State.
+        """
         bool_fields = ["propulsion_on", "solenoid_actuation_on"]
 
         for field in s_0.keys():
@@ -71,6 +85,10 @@ class StateTestCases(unittest.TestCase):
         )
 
     def test_to_array(self):
+        """
+        Tests that to_array() returns the correct values for the fields of an instance of State, in a consistent order.
+
+        """
         state_list = [
             2.0,
             3.0,
