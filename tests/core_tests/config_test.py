@@ -1,5 +1,5 @@
 import unittest, logging
-from core.config import Config
+from core.config import Config, MutationException
 from core.parameters import Parameters
 
 
@@ -49,6 +49,7 @@ class ConfigTestCases(unittest.TestCase):
     }
 
     def setup_helper(self, param, ic, ic_check):
+        print(Config(param, ic))
         self.assertEqual(Config(param, ic).init_cond, ic_check)
 
     def test_init(self):
@@ -58,14 +59,15 @@ class ConfigTestCases(unittest.TestCase):
         self.setup_helper(self.dummy_param, {}, self.ic_default_check)
 
     def test_immutability(self):
-        """Makes sure that the configs cannot be mutated."""
-        # TODO: expected failure / assert_raises
-        try:
-            test_config = Config(self.dummy_param, self.ic_pos).init_cond
-            test_config.init_cond = {"throw": "error"}
-            assert False
-        except Exception as e:
-            assert True
+        """Makes sure that the configs can be initialized but cannot be mutated."""
+        test_config_1 = Config(self.dummy_param, self.ic_pos)
+        test_config_2 = Config(self.dummy_param, self.ic_all)
+        with self.assertRaises(MutationException) as err1:
+            test_config_1.init_cond = {"throw": "error"}
+        with self.assertRaises(MutationException) as err2:  
+            test_config_2.param = {}
+        self.assertEqual(err1.exception.error_code, 'Cannot mutate config.')
+        self.assertEqual(err2.exception.error_code, 'Cannot mutate config.')
 
 
 
