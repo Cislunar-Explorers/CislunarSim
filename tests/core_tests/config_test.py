@@ -64,12 +64,10 @@ class ConfigTestCases(unittest.TestCase):
         test_config_2 = Config(self.dummy_param, self.ic_all)
         with self.assertRaises(MutationException) as err1:
             test_config_1.init_cond = {"throw": "error"}
-        with self.assertRaises(MutationException) as err2:  
+        with self.assertRaises(MutationException) as err2:
             test_config_2.param = {}
-        self.assertEqual(err1.exception.error_code, 'Cannot mutate config.')
-        self.assertEqual(err2.exception.error_code, 'Cannot mutate config.')
-
-
+        self.assertEqual(err1.exception.error_code, "Cannot mutate config.")
+        self.assertEqual(err2.exception.error_code, "Cannot mutate config.")
 
 
 if __name__ == "__main__":

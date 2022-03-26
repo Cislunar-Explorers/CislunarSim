@@ -6,18 +6,13 @@ from dataclasses import dataclass, make_dataclass
 import core.parameters as parameters
 
 
-
-# Config = make_dataclass('Config',
-#                    [('x', int),
-#                      'y',
-#                     ('z', int, field(default=5))],
-#                    namespace={'add_one': lambda self: self.x + 1}
-# )
 class MutationException(Exception):
-    error_code = 'Cannot mutate config.'
+    error_code = "Cannot mutate config."
+
 
 class Config:
     """Representation of the parameters and initial conditions of the simulation. This module depends on parameters.py. The variation in performance of different runs of the simulation depends on the variation of config."""
+
     _frozen = False
     # __slots__ = ['param', 'init_cond', '_frozen']
 
@@ -38,15 +33,15 @@ class Config:
                 default_conditions[key] = value
 
         self.init_cond = default_conditions
-        
+
         self._frozen = True
 
     def __setattr__(self, __name, __value) -> None:
         if self._frozen:
-            raise MutationException('Cannot mutate config.')
+            raise MutationException("Cannot mutate config.")
         super.__setattr__(self, __name, __value)
 
     def __delattr__(self, __name) -> None:
         if self._frozen:
-            raise MutationException('Cannot mutate config.')
-        super.__setattr__(self, __name)    
+            raise MutationException("Cannot mutate config.")
+        super.__setattr__(self, __name)
