@@ -3,10 +3,11 @@
 from typing import Dict
 
 import core.parameters as parameters
+import core.state as state
+
 
 class MutationException(Exception):
     pass
-
 
 
 class Config:
@@ -14,27 +15,10 @@ class Config:
 
     _frozen = False
 
-    def __init__(self, parameters: parameters.Parameters, initial_conditions: Dict):
-        self.param = parameters
+    def __init__(self, parameter: Dict, initial_condition: Dict):
 
-        default_conditions = {
-            "pos_x": 0.0,
-            "pos_y": 0.0,
-            "pos_z": 0.0,
-            "pos_ang": 0.0,
-            "velocity": 0.0,
-            "quad_rate": 0.0,
-            "ang_vel_x": 0.0,
-            "ang_vel_y": 0.0,
-            "ang_vel_z": 0.0
-        }
-
-        for key, value in initial_conditions.items():
-            if key in default_conditions.keys():
-                default_conditions[key] = value
-
-        self.init_cond = default_conditions
-
+        self.param = parameters.Parameters(parameter)
+        self.init_cond = state.State(initial_condition)
         self._frozen = True
 
     def __setattr__(self, __name, __value) -> None:
