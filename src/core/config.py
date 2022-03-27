@@ -24,9 +24,9 @@ class Config:
     def __setattr__(self, __name, __value) -> None:
         if self._frozen:
             raise MutationException("Cannot mutate config.")
-        super.__setattr__(self, __name, __value)
+        object.__setattr__(self, __name, __value)
 
     def __delattr__(self, __name) -> None:
         if self._frozen:
             raise MutationException("Cannot mutate config.")
-        super.__setattr__(self, __name)
+        object.__setattr__(self, __name)
