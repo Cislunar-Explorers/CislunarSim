@@ -10,7 +10,7 @@ class MutationException(Exception):
     pass
 
 
-class Config():
+class Config:
     """Representation of the parameters and initial conditions of the simulation. This module depends on parameters.py. The variation in performance of different runs of the simulation depends on the variation of config."""
 
     _frozen = False
@@ -24,10 +24,10 @@ class Config():
     def __setattr__(self, __name, __value) -> None:
         if self._frozen:
             raise MutationException("Cannot mutate config.")
-        super.__setattr__(self, __name, __value)
+        object.__setattr__(self, __name, __value)
 
     def __delattr__(self, __name) -> None:
         if self._frozen:
             raise MutationException("Cannot mutate config.")
-        super.__delattr__(self, __name)
+        object.__delattr__(self, __name)
 
