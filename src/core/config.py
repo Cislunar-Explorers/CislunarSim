@@ -29,4 +29,4 @@ class Config:
     def __delattr__(self, __name) -> None:
         if self._frozen:
             raise MutationException("Cannot mutate config.")
-        object.__setattr__(self, __name)
+        object.__delattr__(self, __name)
