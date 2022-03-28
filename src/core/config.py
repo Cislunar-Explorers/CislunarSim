@@ -1,32 +1,33 @@
 """Configurations of parameters and initial conditions for a given simulation."""
 
-from typing import Dict, Optional
-from dataclasses import dataclass
+from typing import Dict
 
 import core.parameters as parameters
+import core.state as state
 
 
-@dataclass(frozen=True)
+class MutationException(Exception):
+    pass
+
+
 class Config:
     """Representation of the parameters and initial conditions of the simulation. This module depends on parameters.py. The variation in performance of different runs of the simulation depends on the variation of config."""
 
-    def __init__(self, parameters: parameters.Parameters, initial_conditions: Dict):
-        self.param = parameters
+    _frozen = False
 
-        default_conditions = {
-            "pos_x": 0.0,
-            "pos_y": 0.0,
-            "pos_z": 0.0,
-            "pos_ang": 0.0,
-            "velocity": 0.0,
-            "quad_rate": 0.0,
-            "ang_vel_x": 0.0,
-            "ang_vel_y": 0.0,
-            "ang_vel_z": 0.0
-        }
+    def __init__(self, parameter: Dict, initial_condition: Dict):
 
-        for key, value in initial_conditions.items():
-            if key in default_conditions.keys():
-                default_conditions[key] = value
+        self.param = parameters.Parameters(parameter)
+        self.init_cond = state.State(initial_condition)
+        self._frozen = True
 
-        self.init_cond = default_conditions
+    def __setattr__(self, __name, __value) -> None:
+        if self._frozen:
+            raise MutationException("Cannot mutate config.")
+        object.__setattr__(self, __name, __value)
+
+    def __delattr__(self, __name) -> None:
+        if self._frozen:
+            raise MutationException("Cannot mutate config.")
+        object.__delattr__(self, __name)
+
