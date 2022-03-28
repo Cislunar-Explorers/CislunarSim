@@ -1,13 +1,13 @@
 from dataclasses import dataclass
 from core.config import Config
 from core.integrator.integrator import propagate_state
-from core.state import ObservedState, State
+from core.state import ObservedState, State, StateTime
 from core.models.model_list import ModelContainer
 
 
 @dataclass
 class PropagatedOutput:
-    true_state: State
+    true_state: StateTime
     observed_state: ObservedState
     # commanded_actuations
 
