@@ -22,9 +22,10 @@ class InertiaModel(Model):
         #  [Iyx, Iyy, Iyz], 
         #  [Izx, Izy, Izz]].
         # Units are (kg * m^2).
-        idf = np.array([[933513642.20, 260948256.18, 430810000.30],
+        idf = np.array([[933513642.20, 260948256.18,  430810000.30],
                         [260948256.18, 1070855457.07, 387172545.62],
-                        [430810000.30, 387172545.62, 629606813.62]], dtype=np.float64) * 1e-9
+                        [430810000.30, 387172545.62,  629606813.62]], 
+                        dtype=np.float64) * 1e-9
         idf_b = np.matmul(np.matmul(dcm, idf), dcmT)
 
         # Inertia tensor at 125 mL. Structure is:
@@ -34,12 +35,14 @@ class InertiaModel(Model):
         # Units are (kg * m^2).
         idi = np.array([[855858994.14, 229481961.55, 377087149.13],
                         [229481961.55, 963124288.81, 353943859.15],
-                        [377087149.13, 353943859.15, 559805590.96]], dtype=np.float64) * 1e-9
+                        [377087149.13, 353943859.15, 559805590.96]], 
+                        dtype=np.float64) * 1e-9
         idi_b = np.matmul(np.matmul(dcm, idi), dcmT)
 
-        # Determine inertia tensor for Oxygen via linear interpolation as a function of fill fraction.
+        # Determine inertia tensor for Oxygen via linear interpolation as a function of fill 
+        # fraction.
         ioxy = (idf_b - idi_b) * fill_frac + idi_b
-        
+
         return {"Ixx": ioxy[0][0], 
                 "Ixy": ioxy[0][1], 
                 "Ixz": ioxy[0][2], 
@@ -49,7 +52,7 @@ class InertiaModel(Model):
                 "Izx": ioxy[2][0], 
                 "Izy": ioxy[2][1], 
                 "Izz": ioxy[2][2]} 
-    
+
 
 class OmegaModel(Model):
     """ Class for the angular velocity model. """
