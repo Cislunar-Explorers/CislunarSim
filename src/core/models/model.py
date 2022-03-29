@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Dict, Any
 from core.state import State
 from core.parameters import Parameters
+from utils.constants import State_Type
 
 
 class Model(ABC):
@@ -38,11 +39,11 @@ class EnvironmentModel(Model):
     def __init__(self, parameters: Parameters) -> None:
         super().__init__(parameters)
 
-    def evaluate(self, t: float, state: State) -> Dict[str, Any]:
+    def evaluate(self, t: float, state: State) -> Dict[str, State_Type]:
         return self.d_state(t, state)
 
     @abstractmethod
-    def d_state(self, t: float, state: State) -> Dict[str, Any]:
+    def d_state(self, t: float, state: State) -> Dict[str, State_Type]:
         """Function which evaluates the differential equation:
          dy / dt = f(t, y)
          for the current state. "y" is a state vector (not just one variable)

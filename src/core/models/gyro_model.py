@@ -8,6 +8,7 @@ from core.state import State
 from typing import Dict, Any
 import numpy as np
 
+
 class GyroModel(SensorModel):
     """Applies the gyro bias and noise as specified in parameters.py"""
 
@@ -16,7 +17,7 @@ class GyroModel(SensorModel):
 
     def evaluate(self, state: State) -> Dict[str, Any]:
         return super().evaluate(state)
-    
+
     def d_state(self, state: State) -> Dict[str, Any]:
         """Abstracts the angular velocities according to the model
 
@@ -30,9 +31,18 @@ class GyroModel(SensorModel):
         gyro_bias = np.array(self._parameters.gyro_bias)
 
         ang_vel_d = ang_vel_i + gyro_bias
-        ang_vel_d = np.random.normal(loc=ang_vel_d, scale=self._parameters.gyro_noise, size=3)
+        ang_vel_d = np.random.normal(
+            loc=ang_vel_d, scale=self._parameters.gyro_noise, size=3
+        )
 
         for i in range(3):
-            ang_vel_d[i] = self._parameters.gyro_sensitivity*int(self._parameters.gyro_sensitivity/2 + ang_vel_d[i]/self._parameters.gyro_sensitivity)
+            ang_vel_d[i] = self._parameters.gyro_sensitivity * int(
+                self._parameters.gyro_sensitivity / 2
+                + ang_vel_d[i] / self._parameters.gyro_sensitivity
+            )
 
-        return {"ang_vel_x": ang_vel_d[0], "ang_vel_y": ang_vel_d[1], "ang_vel_z": ang_vel_d[2]}
+        return {
+            "ang_vel_x": ang_vel_d[0],
+            "ang_vel_y": ang_vel_d[1],
+            "ang_vel_z": ang_vel_d[2],
+        }

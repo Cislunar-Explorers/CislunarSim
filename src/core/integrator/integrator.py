@@ -13,7 +13,7 @@ def propagate_state(
     Returns a new State object at t+dt"""
     t = state_time.time
     state_array = state_time.state.to_array()
-    solution = solve_ivp(propagate_state_function, (t, t + dt), list(state_array))
+    solution = solve_ivp(propagate_state_function, (t, t + dt), state_array)
     propagated_state = solution.y[:, -1]  # get the last state in the solution
     propagated_state_obj = StateTime(array_to_state(propagated_state), solution.t[-1])
     return propagated_state_obj

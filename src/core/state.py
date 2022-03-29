@@ -104,7 +104,7 @@ class StateTime:
     state: State
     time: float = 0.0
 
-    def __init__(self, state: State = State({}), time: float = 0.0):
+    def __init__(self, state: State = State(), time: float = 0.0):
         self.state = state
         self.time = time
 

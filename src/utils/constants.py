@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Union
 
 
 class StringEnum(str, Enum):
@@ -11,6 +12,9 @@ class StringEnum(str, Enum):
 class ModelEnum(StringEnum):
     AttitudeModel = "att"
     PositionModel = "pos"
+    UnittestModel = "unittest"
 
 
 DEFAULT_MODELS = [ModelEnum.AttitudeModel, ModelEnum.PositionModel]
+
+State_Type = Union[int, float, bool]

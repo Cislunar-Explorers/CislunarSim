@@ -3,7 +3,7 @@ import numpy as np
 from core.models.model import ActuatorModel, EnvironmentModel, SensorModel
 from core.state import State, array_to_state
 from core.config import Config
-from utils.constants import ModelEnum
+from utils.constants import ModelEnum, State_Type
 
 
 class AttitudeDynamics(EnvironmentModel):
@@ -14,10 +14,30 @@ class PositionDynamics(EnvironmentModel):
     ...
 
 
+class TestModel(EnvironmentModel):
+    def d_state(self, t: float, state: State) -> Dict[str, State_Type]:
+        dx = 0
+        dy = 0
+        dz = 0
+        dwx = 0
+        dwy = 0
+        dwz = 0
+
+        return {
+            "ang_vel_x": dwx,
+            "ang_vel_y": dwy,
+            "ang_vel_z": dwz,
+            "x": dx,
+            "y": dy,
+            "z": dz,
+        }
+
+
 # Dict containing all the models that are implemented
 MODEL_DICT: Dict[ModelEnum, Type[EnvironmentModel]] = {
     ModelEnum.AttitudeModel: AttitudeDynamics,
     ModelEnum.PositionModel: PositionDynamics,
+    ModelEnum.UnittestModel: TestModel,
 }
 
 
@@ -45,26 +65,37 @@ def build_state_update_function(env_models: List[EnvironmentModel]):
 
 
 class ModelContainer:
-    # env models propagate the state of the spacecraft
-    environmental: List[EnvironmentModel]
-
-    # actuator models convert actions from FSW to changes in (force/torque)
-    # states
-    actuator: List[ActuatorModel]
-
-    # sensor models convert a true state to an observed state
-    sensor: List[SensorModel]
-
     def __init__(self, config: Config) -> None:
+        # env models propagate the state of the spacecraft
+        self.environmental: List[EnvironmentModel] = []
+
+        # actuator models convert actions from FSW to changes in (force/torque)
+        # states
+        self.actuator: List[ActuatorModel] = []
+
+        # sensor models convert a true state to an observed state
+        self.sensor: List[SensorModel] = []
+
+        # sort models into env/sense/actuate
         for model_name in config.models:
-            model = MODEL_DICT[model_name](config.param)
-            if type(model) is EnvironmentModel:
+            model = MODEL_DICT[model_name]
+            # model_instantiated = model(config.param)
+            if issubclass(model, EnvironmentModel):
                 self.environmental.append(model)
-            elif type(model) is ActuatorModel:
+            elif issubclass(model, ActuatorModel):
                 self.actuator.append(model)
-            elif type(model) is SensorModel:
+            elif issubclass(model, SensorModel):
                 self.sensor.append(model)
             else:
-                raise RuntimeError(f"The type of `{model_name}` is not an expected type.")
+                raise RuntimeError(
+                    f"The type of `{model_name}` is not an expected type: {model}."
+                )
 
-        self.state_update_function: Callable = build_state_update_function(self.environmental)
+        # instantiate the model objects
+        for model_list in (self.environmental, self.actuator, self.sensor):
+            for _model in model_list:
+                _model(config.param)
+
+        self.state_update_function: Callable = build_state_update_function(
+            self.environmental
+        )
