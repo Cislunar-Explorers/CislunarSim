@@ -41,11 +41,19 @@ class State:
         self.force_earth = 0.0
         self.force_moon = 0.0
 
-        # derived state (kg * m^2)
-        self.inert_oxy = np.array([[933513642.20, 260948256.18, 430810000.30],
-                                    [260948256.18, 1070855457.07, 387172545.62],
-                                    [430810000.30, 387172545.62, 629606813.62]], 
-                                    dtype=np.float64)
+        # inertia matrix components (kg * m^2). Structure is
+        # [[Ixx, Ixy, Ixz], 
+        #  [Iyx, Iyy, Iyz], 
+        #  [Izx, Izy, Izz]].
+        self.Ixx = 0.0
+        self.Ixy = 0.0
+        self.Ixz = 0.0
+        self.Iyx = 0.0
+        self.Iyy = 0.0
+        self.Iyz = 0.0
+        self.Izx = 0.0
+        self.Izy = 0.0
+        self.Izz = 0.0
 
         # discrete state
         self.propulsion_on = False

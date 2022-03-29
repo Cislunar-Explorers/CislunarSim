@@ -40,9 +40,24 @@ class InertiaModel(Model):
         # Determine inertia tensor for Oxygen via linear interpolation as a function of fill fraction.
         ioxy = (idf_b - idi_b) * fill_frac + idi_b
         
-        return {"inert_oxy": ioxy}
+        return {"Ixx": ioxy[0][0], 
+                "Ixy": ioxy[0][1], 
+                "Ixz": ioxy[0][2], 
+                "Iyx": ioxy[1][0], 
+                "Iyy": ioxy[1][1], 
+                "Iyz": ioxy[1][2], 
+                "Izx": ioxy[2][0], 
+                "Izy": ioxy[2][1], 
+                "Izz": ioxy[2][2]} 
     
 
-class DynamicsModel():
-    """ Class for the dynamics model. """
-    ...
+class OmegaModel(Model):
+    """ Class for the angular velocity model. """
+    def __init__(self, parameters: Parameters) -> None:
+        super.__init__(parameters)
+
+    def evaluate(self, state: State) -> Dict[str, Any]:
+        return super().evaluate(state)
+
+    def d_state(self, state: State) -> Dict[str, Any]:
+        return super().d_state(state)
