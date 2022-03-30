@@ -5,7 +5,7 @@ from utils.constants import DEFAULT_MODELS
 from utils.constants import ModelEnum
 
 from core.parameters import Parameters
-from core.state import State, StateTime
+from core.state import StateTime
 
 
 class MutationException(Exception):
@@ -28,13 +28,8 @@ class Config:
     ):
 
         self.param = Parameters(param_dict=parameters)
-        try:
-            time = parameters.pop("time")
-        except KeyError:
-            time = 0.0
-
-        self.init_cond = StateTime(State(state_dict=initial_condition), time)
-        self.models = models
+        self.init_cond = StateTime.from_dict(initial_condition)
+        self.models = models  # models is a list of the names of the models that are used in a sim
         self._frozen = True
 
     def __setattr__(self, __name, __value) -> None:

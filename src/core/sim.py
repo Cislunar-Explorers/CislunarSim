@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from core.config import Config
 from core.integrator.integrator import propagate_state
-from core.state import ObservedState, StateTime, State
+from core.state import ObservedState, StateTime
 from core.models.model_list import ModelContainer
 
 

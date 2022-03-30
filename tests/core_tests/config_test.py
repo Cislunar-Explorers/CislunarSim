@@ -1,7 +1,7 @@
 import unittest
 from core.config import Config, MutationException
 from core.parameters import Parameters
-from core.state import State
+from core.state import State, StateTime
 
 
 class ConfigTestCases(unittest.TestCase):
@@ -42,7 +42,7 @@ class ConfigTestCases(unittest.TestCase):
 
     def setup_helper(self, param, ic):
         self.assertEqual(Config(param, ic).param.__dict__, Parameters(param).__dict__)
-        self.assertEqual(Config(param, ic).init_cond.__dict__, State(ic).__dict__)
+        self.assertEqual(Config(param, ic).init_cond.__dict__, StateTime.from_dict(ic).__dict__)
 
     def test_init(self):
         """Tests if the initialization subs in default values for unspecified variables."""

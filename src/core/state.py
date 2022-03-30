@@ -2,6 +2,8 @@ from dataclasses import dataclass
 import numpy as np
 from typing import Dict, Union
 
+from utils.constants import State_Type
+
 
 class State:
     """
@@ -49,6 +51,7 @@ class State:
     def update(self, state_dict: Dict[str, Union[int, float, bool]]) -> None:
         """
         update() is a procedure that updates the fields of the state with specified key/value pairs in state_dict.
+        If a key in the `state_dict` is not defined as an attribute in State.__init__, it will be ignored.
         """
         for key, value in state_dict.items():
             if key in self.__dict__.keys():
@@ -110,6 +113,24 @@ class StateTime:
     def __init__(self, state: State = State(), time: float = 0.0):
         self.state = state
         self.time = time
+
+    @classmethod
+    def from_dict(cls, statetime_dict: Dict[str, State_Type]):
+        """Generates a new StateTime instance from an input dictionary.
+        Can be called via `StateTime.from_dict(...)` to make a new StateTime object
+
+        Args:
+            statetime_dict (Dict[str, State_Type]): _description_
+
+        Returns:
+            _type_: _description_
+        """
+        try:
+            time = statetime_dict.pop("time")
+        except KeyError:
+            time = 0.0
+
+        return cls(State(state_dict=statetime_dict), time=time)
 
     def __eq__(self, other):
         """

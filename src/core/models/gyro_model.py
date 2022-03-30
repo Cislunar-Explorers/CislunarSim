@@ -16,9 +16,6 @@ class GyroModel(SensorModel):
         super().__init__(parameters)
 
     def evaluate(self, state: State) -> Dict[str, Any]:
-        return super().evaluate(state)
-
-    def d_state(self, state: State) -> Dict[str, Any]:
         """Abstracts the angular velocities according to the model
 
         Args:
