@@ -40,7 +40,7 @@ class GyroModelUnitTest(unittest.TestCase):
         }
 
         param_clean = Parameters(clean_vars)
-        dummy_state = State(s_1)
+        dummy_state = State(state_dict=s_1)
 
         gyro_clean = GyroModel(param_clean)
         eval_clean = gyro_clean.evaluate(dummy_state)

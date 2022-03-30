@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from core.config import Config
 from core.integrator.integrator import propagate_state
-from core.state import ObservedState, StateTime
+from core.state import ObservedState, StateTime, State
 from core.models.model_list import ModelContainer
 
 
@@ -34,14 +34,17 @@ class CislunarSim:
 
         # Evaluate Actuator models to update state
         for actuator_model in self._models.actuator:
-            self.state = StateTime(actuator_model.evaluate(self.state))
+            self.state.state.update(actuator_model.evaluate(self.state.state))
 
         # Evaluate environmental models to propagate state
         self.state = propagate_state(self._models.state_update_function, self.state)
 
         # Evaluate sensor models
         for sensor_model in self._models.sensor:
-            self.observed_state.update(sensor_model.evaluate(self.state))
+            self.observed_state.state.update(sensor_model.evaluate(self.state.state))
+
+        # synchronize observed state time with true state time
+        self.observed_state.time = self.state.time
 
         # TODO: Feed outputs of sensor models into FSW and return actuator's state as part of `PropagatedOutput`
 

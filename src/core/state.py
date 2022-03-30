@@ -126,6 +126,6 @@ class StateTime:
         return False
 
 
-class ObservedState(dict):
+class ObservedState(StateTime):
     # This is the true state with some noise applied
     pass  # TODO
