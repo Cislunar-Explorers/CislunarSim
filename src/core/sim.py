@@ -7,12 +7,20 @@ from core.models.model_list import ModelContainer
 
 @dataclass
 class PropagatedOutput:
+    """
+    This is a container class that holds a true_state and its corresponding observed_state.
+    """
+
     true_state: StateTime
     observed_state: ObservedState
     # commanded_actuations
 
 
 class CislunarSim:
+    """
+    This class consolidates all parts of the sim (config, models, state).
+    """
+
     def __init__(self, config: Config) -> None:
         self._config = config
         self._models = ModelContainer(self._config)
@@ -20,6 +28,10 @@ class CislunarSim:
         self.observed_state = ObservedState()
 
     def step(self) -> PropagatedOutput:
+        """
+        step() is the combined true and observed state after one step.
+        """
+
         # Evaluate Actuator models to update state
         for actuator_model in self._models.actuator:
             self.state = StateTime(actuator_model.evaluate(self.state))

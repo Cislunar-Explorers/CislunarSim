@@ -17,4 +17,5 @@ class ModelEnum(StringEnum):
 
 DEFAULT_MODELS = [ModelEnum.AttitudeModel, ModelEnum.PositionModel]
 
+# The union of the different types of fields within State.
 State_Type = Union[int, float, bool]

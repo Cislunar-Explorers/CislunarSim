@@ -47,6 +47,9 @@ class State:
         self.update(state_dict)
 
     def update(self, state_dict: Dict[str, Union[int, float, bool]]) -> None:
+        """
+        update() is a procedure that updates the fields of the state with specified key/value pairs in state_dict.
+        """
         for key, value in state_dict.items():
             if key in self.__dict__.keys():
                 setattr(self, key, value)
