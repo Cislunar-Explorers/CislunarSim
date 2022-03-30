@@ -12,6 +12,9 @@ class MutationException(Exception):
     pass
 
 
+# TODO: Implement make_config function that takes in a config path (most likely leading to a JSON file) and construct a Config object
+
+
 class Config:
     """Representation of the parameters and initial conditions of the simulation.
     This module depends on parameters.py, models.py, and state.py.
