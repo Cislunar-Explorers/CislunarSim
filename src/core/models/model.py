@@ -21,7 +21,7 @@ class Model(ABC):
         self._parameters = parameters
 
     @abstractmethod
-    def evaluate(self, state: State):
+    def evaluate(self, t: float, state: State):
         """
         Abstract method for any model that evaluates the model based on the
          current state.

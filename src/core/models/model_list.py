@@ -15,6 +15,12 @@ class PositionDynamics(EnvironmentModel):
 
 
 class TestModel(EnvironmentModel):
+    def __init__(self, parameters) -> None:
+        super().__init__(parameters)
+
+    def evaluate(self, t: float, state: State) -> Dict[str, State_Type]:
+        return super().evaluate(t, state)
+
     def d_state(self, t: float, state: State) -> Dict[str, State_Type]:
         dx = 0
         dy = 0
@@ -41,7 +47,7 @@ MODEL_DICT: Dict[ModelEnum, Type[EnvironmentModel]] = {
 }
 
 
-def build_state_update_function(env_models: List[EnvironmentModel]):
+def build_state_update_function(env_models: List[EnvironmentModel]) -> Callable[[float, np.ndarray], np.ndarray]:
     def update_function(t: float, state_array: np.ndarray) -> np.ndarray:
         """The function that gets plugged into the integrator and propagates the state.
         The input to this function is the current state.
@@ -53,10 +59,10 @@ def build_state_update_function(env_models: List[EnvironmentModel]):
             np.ndarray: _description_
         """
         propagated_state = State()
-        state = array_to_state(state_array)
+        state_in = array_to_state(state_array)
 
         for model in env_models:
-            propagated_state.update(model.evaluate(t, state))
+            propagated_state.update(model.evaluate(t, state_in))
 
         propagated_state_array = propagated_state.to_array()
         return propagated_state_array
@@ -81,21 +87,15 @@ class ModelContainer:
             model = MODEL_DICT[model_name]
             # model_instantiated = model(config.param)
             if issubclass(model, EnvironmentModel):
-                self.environmental.append(model)
+                model_instantiated = model(config.param)
+                self.environmental.append(model_instantiated)
             elif issubclass(model, ActuatorModel):
-                self.actuator.append(model)
+                model_instantiated = model(config.param)
+                self.actuator.append(model_instantiated)
             elif issubclass(model, SensorModel):
-                self.sensor.append(model)
+                model_instantiated = model(config.param)
+                self.sensor.append(model_instantiated)
             else:
-                raise RuntimeError(
-                    f"The type of `{model_name}` is not an expected type: {model}."
-                )
+                raise RuntimeError(f"The type of `{model_name}` is not an expected type: {model}.")
 
-        # instantiate the model objects
-        for model_list in (self.environmental, self.actuator, self.sensor):
-            for _model in model_list:
-                _model(config.param)
-
-        self.state_update_function: Callable = build_state_update_function(
-            self.environmental
-        )
+        self.state_update_function: Callable = build_state_update_function(self.environmental)
