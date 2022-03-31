@@ -1,5 +1,5 @@
 import numpy as np
-from core.models.model import Model
+from core.models.model import Model, EnvironmentModel
 from typing import Dict, Any
 from core.state import State
 from core.parameters import Parameters
@@ -54,13 +54,22 @@ class InertiaModel(Model):
                 "Izz": ioxy[2][2]} 
 
 
-class OmegaModel(Model):
-    """ Class for the angular velocity model. """
+class OmegaModel(EnvironmentModel):
+    """Class for the angular velocity model."""
     def __init__(self, parameters: Parameters) -> None:
         super.__init__(parameters)
 
     def evaluate(self, state: State) -> Dict[str, Any]:
         return super().evaluate(state)
 
-    def d_state(self, state: State) -> Dict[str, Any]:
+    def d_state(self, t: float, state: State) -> Dict[str, Any]:
+        """Evaluates
+            (tau)   =   [I_b d(omega_{B/N})/dt] 
+                    +   [(omega_{B/N}) x (I_b (omega_{B/N}))] 
+                    + c [(omega_{B/N}) - (omega_{D/N})]
+            where c is the "Kane Damping" constant.
+        """
+
+        # Let (tau) = 0.
+
         return super().d_state(state)

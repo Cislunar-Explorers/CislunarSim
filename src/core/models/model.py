@@ -17,6 +17,30 @@ class Model(ABC):
     def d_state(self, state: State)  -> Dict[str, Any]:
         ...
 
+class EnvironmentModel(Model):
+    def __init__(self, parameters: Parameters) -> None:
+        super().__init__(parameters)
+
+    def evaluate(self, t: float, state: State) -> Dict[str, Any]:
+        return self.d_state(t, state)
+
+    @abstractmethod
+    def d_state(self, t: float, state: State) -> Dict[str, Any]:
+        """Function which evaluates the differential equation:
+            dy / dt = f(t, y)
+            for the current state. "y" is a state vector (not just one variable)
+
+        Args:
+            t (float): current simulation time
+            state (State): Current state object
+
+        Returns:
+            Dict[str, Any]: the name of each state being updated, and the
+                value of its derivative. The keys of this dictionary must be in
+                `STATE_ARRAY_ORDER`
+        """
+        ...
+
 class SensorModel(Model):
     def __init__(self, parameters: Parameters) -> None:
         super().__init__(parameters)
