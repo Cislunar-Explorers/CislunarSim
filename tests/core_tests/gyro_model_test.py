@@ -6,10 +6,9 @@ from typing import Dict
 
 
 class GyroModelUnitTest(unittest.TestCase):
-
     def test_gyro_model(self):
-        
-        #dummy state for testing
+
+        # dummy state for testing
         s_1 = {
             "time": 1.0,
             "ang_vel_x": 2.0,
@@ -37,11 +36,11 @@ class GyroModelUnitTest(unittest.TestCase):
         clean_vars = {
             "gyro_bias": [0, 0, 0],
             "gyro_noise": [0, 0, 0],
-            "gyro_sensitivity": 1
+            "gyro_sensitivity": 1,
         }
 
         param_clean = Parameters(clean_vars)
-        dummy_state = State(s_1)
+        dummy_state = State(state_dict=s_1)
 
         gyro_clean = GyroModel(param_clean)
         eval_clean = gyro_clean.evaluate(dummy_state)
@@ -72,6 +71,7 @@ class GyroModelUnitTest(unittest.TestCase):
         self.assertNotEqual(eval_noisy_biased["ang_vel_x"], s_1["ang_vel_x"])
         self.assertNotEqual(eval_noisy_biased["ang_vel_y"], s_1["ang_vel_y"])
         self.assertNotEqual(eval_noisy_biased["ang_vel_z"], s_1["ang_vel_z"])
+
 
 if __name__ == "__main__":
     unittest.main()
