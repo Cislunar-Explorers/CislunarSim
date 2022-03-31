@@ -53,6 +53,51 @@ class InertiaModel(Model):
                 "Izy": ioxy[2][1], 
                 "Izz": ioxy[2][2]} 
 
+class KaneModel(Model):
+    """Calculates the Kane damping coefficient from 2016 simulation data by K. Doyle."""
+
+    def __init__(self, parameters: Parameters) -> None:
+        super.__init__(parameters)
+
+    def evaluate(self, state: State) -> Dict[str, Any]:
+        return super().evaluate(state)
+
+    def d_state(self, state: State) -> Dict[str, Any]:
+        # Coefficients below are from Kyle's work. 
+        # TODO: Update them when we conduct a new Ansys analysis.
+        k = 0.00085
+        factor = 1.2
+
+        N = 50
+        kane = fill = tau1 = tau2 = np.zeros(N)
+        for i in range(N):
+            fill[i] = (i-1)/N
+            tau1[i] = k * fill[i]
+            tau2[i] = factor * k * (1-fill[i])
+            kane[i] = -np.sqrt(tau1[i]**2 + tau2[i]**2)
+        
+        kane = kane - np.max(kane) + k
+        kane = kane - np.min(kane)
+        kane = kane * k / np.max(kane)
+
+        q = np.round(state.fill_frac / 0.02 + 1)
+        c = kane(q)
+        # TODO: Return c as a state variable.
+        ...
+
+
+
+class LModel(EnvironmentModel):
+    """Class for the angular momentum model."""
+    def __init__(self, parameters: Parameters) -> None:
+        super().__init__(parameters)
+
+    def evaluate(self, state: State) -> Dict[str, Any]:
+        return super().evaluate(state)
+
+    def d_state(self, state: State) -> Dict[str, Any]:
+        ...
+
 
 class OmegaModel(EnvironmentModel):
     """Class for the angular velocity model."""
