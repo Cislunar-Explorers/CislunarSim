@@ -5,7 +5,6 @@ from core.state import State, array_to_state
 from core.config import Config
 from utils.constants import BodyEnum, ModelEnum, State_Type
 from utils.astropy_util import get_body_position
-from astropy.constants import G
 
 
 class AttitudeDynamics(EnvironmentModel):
@@ -55,10 +54,10 @@ class PositionDynamics(EnvironmentModel):
         r_ec = np.subtract(r_eo, r_co)
 
         # mu values of the body, where mu = G * m_body
+        G = 6.6743e-11
         mu_moon = G * 7.34767309e22
         mu_sun = G * 1.988409870698051e30
         mu_earth = G * 5.972167867791379e24
-
         # acceleration column vector calculation
         a = (
             # moon to craft acceleration component
@@ -67,6 +66,16 @@ class PositionDynamics(EnvironmentModel):
             + mu_sun * r_sc / (np.dot(r_sc, r_sc) ** (3 / 2))
             # earth to craft acceleration component
             + mu_earth * r_ec / (np.dot(r_ec, r_ec) ** (3 / 2))
+        )
+        print(
+            {
+                "x": state.vel_x,
+                "y": state.vel_y,
+                "z": state.vel_z,
+                "vel_x": a[0],
+                "vel_y": a[1],
+                "vel_z": a[2],
+            }
         )
 
         return {

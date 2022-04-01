@@ -13,7 +13,7 @@ def get_body_position(time: float, body: BodyEnum) -> Tuple[float, float, float]
 
     Args:
         time (float): the current time being queried
-        body (BodyEnum): body (sun, earth moon)
+        body (BodyEnum): body (earth, moon, sun)
 
     Returns:
         Tuple[float, float, float]: position vector of the specified body
