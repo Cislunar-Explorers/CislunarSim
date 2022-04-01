@@ -11,7 +11,21 @@ class AttitudeDynamics(EnvironmentModel):
 
 
 class PositionDynamics(EnvironmentModel):
-    ...
+    def __init__(self, parameters) -> None:
+        super().__init__(parameters)
+
+    def evaluate(self, t: float, state: State) -> Dict[str, State_Type]:
+        return super().evaluate(t, state)
+
+    def d_state(self, t: float, state: State) -> Dict[str, State_Type]:
+        return {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "vel_x": 0,
+            "vel_y": 0,
+            "vel_z": 0,
+        }
 
 
 class TestModel(EnvironmentModel):
@@ -47,7 +61,9 @@ MODEL_DICT: Dict[ModelEnum, Type[EnvironmentModel]] = {
 }
 
 
-def build_state_update_function(env_models: List[EnvironmentModel]) -> Callable[[float, np.ndarray], np.ndarray]:
+def build_state_update_function(
+    env_models: List[EnvironmentModel],
+) -> Callable[[float, np.ndarray], np.ndarray]:
     def update_function(t: float, state_array: np.ndarray) -> np.ndarray:
         """The function that gets plugged into the integrator and propagates the state.
         The input to this function is the current state.
@@ -96,6 +112,10 @@ class ModelContainer:
                 model_instantiated = model(config.param)
                 self.sensor.append(model_instantiated)
             else:
-                raise RuntimeError(f"The type of `{model_name}` is not an expected type: {model}.")
+                raise RuntimeError(
+                    f"The type of `{model_name}` is not an expected type: {model}."
+                )
 
-        self.state_update_function: Callable = build_state_update_function(self.environmental)
+        self.state_update_function: Callable = build_state_update_function(
+            self.environmental
+        )
