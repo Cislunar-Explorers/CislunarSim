@@ -59,7 +59,7 @@ class StateTestCases(unittest.TestCase):
         Tests that all fields are set properly when creating a new instance of StateTime.
         """
         st_1 = StateTime(State(s_1), 10.0)
-        self.assertEqual(s_1, st_1.state)
+        self.assertEqual(State(s_1), st_1.state)
         self.assertEqual(10.0, st_1.time)
 
     def test_state_fields(self):
