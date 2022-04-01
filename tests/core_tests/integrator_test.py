@@ -1,7 +1,7 @@
 import unittest
 from core.integrator.integrator import propagate_state
 from core.state import State, StateTime
-from state_test import s_1
+from state_test import state_1
 
 import numpy as np
 
@@ -19,10 +19,12 @@ class IntegratorTestCases(unittest.TestCase):
         This class tests that propagate_state updates the time and fields of the state correctly given a model.
         """
 
-        def f(t: float, y: np.ndarray) -> np.ndarray:  # function that keeps the field constant
-            return np.array([0]*len(y))
+        def f(
+            t: float, y: np.ndarray
+        ) -> np.ndarray:  # function that keeps the field constant
+            return np.array([0] * len(y))
 
-        initial_state_time = StateTime(State(s_1), 0.0)
+        initial_state_time = StateTime(state_1, 0.0)
         final_state_time = propagate_state(f, initial_state_time, 3.0)
         self.assertTrue(initial_state_time.__eq__(final_state_time))
         self.assertEqual(3.0, final_state_time.time)

@@ -4,8 +4,8 @@ from core.models.model import ActuatorModel, EnvironmentModel, SensorModel
 from core.state import State, array_to_state
 from core.config import Config
 from utils.constants import BodyEnum, ModelEnum, State_Type
-from utils.astropy_util import get_ephemeris
-from astropy.constants import G, M_earth, M_sun
+from utils.astropy_util import get_body_position
+from astropy.constants import G
 
 
 class AttitudeDynamics(EnvironmentModel):
@@ -39,9 +39,9 @@ class PositionDynamics(EnvironmentModel):
         # craft to origin
         r_co = np.array([state.x, state.y, state.z])
         # moon to origin
-        r_mo = np.array(get_ephemeris(t, BodyEnum.Moon))
+        r_mo = np.array(get_body_position(t, BodyEnum.Moon))
         # sun to origin
-        r_so = np.array(get_ephemeris(t, BodyEnum.Sun))
+        r_so = np.array(get_body_position(t, BodyEnum.Sun))
         # earth to origin
         r_eo = np.array((0.0, 0.0, 0.0))  # Earth is at the origin in GCRS
 
@@ -70,12 +70,12 @@ class PositionDynamics(EnvironmentModel):
         )
 
         return {
-            "vel_x": state.vel_x,
-            "vel_y": state.vel_y,
-            "vel_z": state.vel_z,
-            "acc_x": a[0],
-            "acc_y": a[1],
-            "acc_z": a[2],
+            "x": state.vel_x,
+            "y": state.vel_y,
+            "z": state.vel_z,
+            "vel_x": a[0],
+            "vel_y": a[1],
+            "vel_z": a[2],
         }
 
 
