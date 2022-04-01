@@ -10,7 +10,6 @@ class GyroModelUnitTest(unittest.TestCase):
 
         # dummy state for testing
         s_1 = {
-            "time": 1.0,
             "ang_vel_x": 2.0,
             "ang_vel_y": 3.0,
             "ang_vel_z": 4.0,
@@ -40,7 +39,7 @@ class GyroModelUnitTest(unittest.TestCase):
         }
 
         param_clean = Parameters(clean_vars)
-        dummy_state = State(state_dict=s_1)
+        dummy_state = State(s_1)
 
         gyro_clean = GyroModel(param_clean)
         eval_clean = gyro_clean.evaluate(dummy_state)
