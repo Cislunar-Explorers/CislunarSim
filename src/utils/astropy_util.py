@@ -10,7 +10,6 @@ from astropy.coordinates import SkyCoord
 def get_ephemeris(observeStart: float, body: BodyEnum) -> Tuple[float, float, float]:
     # Astropy needs unix timestamp in seconds!!!
     current_time = observeStart
-    observeStart = observeStart - 11.716
     init_au = SkyCoord(0, 0, 0, unit="m", frame="gcrs", representation_type="cartesian")
     current_au = SkyCoord(
         0, 0, 0, unit="m", frame="gcrs", representation_type="cartesian"
@@ -21,9 +20,6 @@ def get_ephemeris(observeStart: float, body: BodyEnum) -> Tuple[float, float, fl
     elif body == BodyEnum.Moon:
         init_au = get_moon(Time(observeStart, format="unix")).cartesian
         current_au = get_moon(Time(current_time, format="unix")).cartesian
-
-    print(init_au)
-    print(current_au)
     init = CartesianRepresentation([init_au.x, init_au.y, init_au.z], unit="m")
     current = CartesianRepresentation(
         [current_au.x, current_au.y, current_au.z], unit="m"

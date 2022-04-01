@@ -34,15 +34,24 @@ class PositionDynamics(EnvironmentModel):
         Returns:
             Dict[str, State_Type]: The updated vector [v a]
         """
-        # position vectors from moon/sun/earth/craft to the origin, where the origin is the Earth's center of mass
+        # position column vectors from moon/sun/earth/craft to the origin, where the origin is the Earth's center of mass
+
+        # craft to origin
         r_co = np.array([state.x, state.y, state.z])
+        # moon to origin
         r_mo = np.array(get_ephemeris(t, BodyEnum.Moon))
+        # sun to origin
         r_so = np.array(get_ephemeris(t, BodyEnum.Sun))
+        # earth to origin
         r_eo = np.array((0.0, 0.0, 0.0))  # Earth is at the origin in GCRS
 
-        # position vectors from body to the craft
+        # position column vectors from body to the craft
+
+        # moon to the craft
         r_mc = np.subtract(r_mo, r_co)
+        # sun to the craft
         r_sc = np.subtract(r_so, r_co)
+        # earth to the craft
         r_ec = np.subtract(r_eo, r_co)
 
         # mu values of the body, where mu = G * m_body
@@ -50,10 +59,13 @@ class PositionDynamics(EnvironmentModel):
         mu_sun = G * 1.988409870698051e30
         mu_earth = G * 5.972167867791379e24
 
-        # acceleration vector calculation
+        # acceleration column vector calculation
         a = (
+            # moon to craft acceleration component
             mu_moon * r_mc / (np.dot(r_mc, r_mc) ** (3 / 2))
+            # sun to craft acceleration component
             + mu_sun * r_sc / (np.dot(r_sc, r_sc) ** (3 / 2))
+            # earth to craft acceleration component
             + mu_earth * r_ec / (np.dot(r_ec, r_ec) ** (3 / 2))
         )
 
