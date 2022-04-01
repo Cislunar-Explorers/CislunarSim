@@ -3,7 +3,9 @@ import numpy as np
 from core.models.model import ActuatorModel, EnvironmentModel, SensorModel
 from core.state import State, array_to_state
 from core.config import Config
-from utils.constants import ModelEnum, State_Type
+from utils.constants import BodyEnum, ModelEnum, State_Type
+from utils.astropy_util import get_ephemeris
+from astropy.constants import G, M_earth, M_sun
 
 
 class AttitudeDynamics(EnvironmentModel):
@@ -18,13 +20,32 @@ class PositionDynamics(EnvironmentModel):
         return super().evaluate(t, state)
 
     def d_state(self, t: float, state: State) -> Dict[str, State_Type]:
+        r_co = np.array([state.x, state.y, state.z])
+        r_mo = np.array(get_ephemeris(t, BodyEnum.Moon))
+        r_so = np.array(get_ephemeris(t, BodyEnum.Sun))
+        r_eo = np.array((0.0, 0.0, 0.0))  # Earth is at the origin in GCRS
+
+        r_mc = r_mo - r_co
+        r_sc = r_so - r_co
+        r_ec = r_eo - r_co
+
+        mu_moon = G * 7.34767309e22
+        mu_sun = G * 1.988409870698051e30
+        mu_earth = G * 5.972167867791379e24
+
+        a = (
+            mu_moon * r_mc / (np.dot(r_mc, r_mc) ** (3 / 2))
+            + mu_sun * r_sc / (np.dot(r_sc, r_sc) ** (3 / 2))
+            + mu_earth * r_ec / (np.dot(r_ec, r_ec) ** (3 / 2))
+        )
+
         return {
-            "x": 0,
-            "y": 0,
-            "z": 0,
-            "vel_x": 0,
-            "vel_y": 0,
-            "vel_z": 0,
+            "vel_x": state.vel_x,
+            "vel_y": state.vel_y,
+            "vel_z": state.vel_z,
+            "acc_x": a[0],
+            "acc_y": a[1],
+            "acc_z": a[2],
         }
 
 
