@@ -3,6 +3,7 @@ from astropy.coordinates import get_sun, get_moon, CartesianRepresentation
 from astropy.constants import G, M_sun, M_earth
 from typing import Tuple, Optional
 from utils.constants import BodyEnum
+from astropy.coordinates import SkyCoord
 
 
 # Heavily reference the get_ephemeris function here: https://github.com/Cislunar-Explorers/FlightSoftware/blob/master/OpticalNavigation/core/observe_functions.py
@@ -10,8 +11,8 @@ def get_ephemeris(observeStart: float, body: BodyEnum) -> Tuple[float, float, fl
     # Astropy needs unix timestamp in seconds!!!
     current_time = observeStart
     observeStart = observeStart - 11.716
-    init_au = None
-    current_au = None
+    init_au = SkyCoord([0.0, 0.0, 0.0], [0.0, 0.0, 0.0], frame="gcrs", unit="m")
+    current_au = SkyCoord([0.0, 0.0, 0.0], [0.0, 0.0, 0.0], frame="gcrs", unit="m")
     if body == BodyEnum.Sun:
         init_au = get_sun(Time(observeStart, format="unix")).cartesian
         current_au = get_sun(Time(current_time, format="unix")).cartesian
