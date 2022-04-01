@@ -67,16 +67,6 @@ class PositionDynamics(EnvironmentModel):
             # earth to craft acceleration component
             + mu_earth * r_ec / (np.dot(r_ec, r_ec) ** (3 / 2))
         )
-        print(
-            {
-                "x": state.vel_x,
-                "y": state.vel_y,
-                "z": state.vel_z,
-                "vel_x": a[0],
-                "vel_y": a[1],
-                "vel_z": a[2],
-            }
-        )
 
         return {
             "x": state.vel_x,
