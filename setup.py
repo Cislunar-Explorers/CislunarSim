@@ -6,6 +6,6 @@ setup(
     author="SSDS",
     author_email="tmf97@cornell.edu",
     description="HOOTL simulator for the Cislunar Explorers missions",
-    install_requires=["numpy", "matplotlib", "pytest", "scipy"],
+    install_requires=["numpy", "matplotlib", "pytest", "scipy", "astropy"],
     package_dir={"": "src"},
 )
