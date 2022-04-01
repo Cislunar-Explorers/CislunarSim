@@ -41,9 +41,9 @@ class PositionDynamics(EnvironmentModel):
         r_eo = np.array((0.0, 0.0, 0.0))  # Earth is at the origin in GCRS
 
         # position vectors from body to the craft
-        r_mc = r_mo - r_co
-        r_sc = r_so - r_co
-        r_ec = r_eo - r_co
+        r_mc = np.subtract(r_mo, r_co)
+        r_sc = np.subtract(r_so - r_co)
+        r_ec = np.subtract(r_eo - r_co)
 
         # mu values of the body, where mu = G * m_body
         mu_moon = G * 7.34767309e22
