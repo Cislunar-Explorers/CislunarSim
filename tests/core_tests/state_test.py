@@ -1,7 +1,5 @@
-import unittest, logging
+import unittest
 from core.state import State, StateTime
-
-import numpy as np
 
 DEBUG = False
 
