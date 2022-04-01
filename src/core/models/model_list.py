@@ -13,6 +13,10 @@ class AttitudeDynamics(EnvironmentModel):
 
 
 class PositionDynamics(EnvironmentModel):
+    """
+    The position dynamics model implementation.
+    """
+
     def __init__(self, parameters) -> None:
         super().__init__(parameters)
 
@@ -20,19 +24,33 @@ class PositionDynamics(EnvironmentModel):
         return super().evaluate(t, state)
 
     def d_state(self, t: float, state: State) -> Dict[str, State_Type]:
+        """
+        Takes the derivative of a vector [r v] to compute [v a], where r is a position vector,
+        v is the velocity vector, and a is the acceleration vector
+        Args:
+            t (float): the initial time
+            state (State): the initial state
+
+        Returns:
+            Dict[str, State_Type]: The updated vector [v a]
+        """
+        # position vectors from moon/sun/earth/craft to the origin, where the origin is the Earth's center of mass
         r_co = np.array([state.x, state.y, state.z])
         r_mo = np.array(get_ephemeris(t, BodyEnum.Moon))
         r_so = np.array(get_ephemeris(t, BodyEnum.Sun))
         r_eo = np.array((0.0, 0.0, 0.0))  # Earth is at the origin in GCRS
 
+        # position vectors from body to the craft
         r_mc = r_mo - r_co
         r_sc = r_so - r_co
         r_ec = r_eo - r_co
 
+        # mu values of the body, where mu = G * m_body
         mu_moon = G * 7.34767309e22
         mu_sun = G * 1.988409870698051e30
         mu_earth = G * 5.972167867791379e24
 
+        # acceleration vector calculation
         a = (
             mu_moon * r_mc / (np.dot(r_mc, r_mc) ** (3 / 2))
             + mu_sun * r_sc / (np.dot(r_sc, r_sc) ** (3 / 2))
