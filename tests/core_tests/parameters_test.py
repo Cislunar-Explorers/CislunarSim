@@ -2,19 +2,11 @@ import unittest
 
 from core.parameters import Parameters
 import math
+from utils.test_utils import d3456
 
 
 class ParametersTestCase(unittest.TestCase):
     def test_parameters(self):
-        d3456 = {
-            "gyro_bias": [0.497625, -0.10821875, 0.77490625],
-            "gyro_noise": [0.1824535, 0.11738579, 0.19192256],
-            "gyro_sensitivity": 0.015625 * (math.pi / 180),
-            "dry_mass": 3,
-            "com": 4,
-            "tank_volume": 5,
-            "thruster_force": 6,
-        }
         self.assertEqual(
             d3456,
             Parameters(d3456).__dict__,

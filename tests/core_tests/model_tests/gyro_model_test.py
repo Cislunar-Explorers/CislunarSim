@@ -10,7 +10,6 @@ class GyroModelUnitTest(unittest.TestCase):
 
         # dummy state for testing
         s_1 = {
-            "time": 1.0,
             "ang_vel_x": 2.0,
             "ang_vel_y": 3.0,
             "ang_vel_z": 4.0,

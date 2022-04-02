@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, IntEnum
 from typing import Union
 
 
@@ -19,3 +19,12 @@ DEFAULT_MODELS = [ModelEnum.AttitudeModel, ModelEnum.PositionModel]
 
 # The union of the different types of fields within State.
 State_Type = Union[int, float, bool]
+
+
+class BodyEnum(IntEnum):
+    def __str__(self):
+        return str(self.name)
+
+    Earth = 0
+    Moon = 1
+    Sun = 2
