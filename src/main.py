@@ -4,17 +4,21 @@ import core.config
 from core.sim import CislunarSim
 
 
-class SimRunner():
+class SimRunner:
+    """
+    This class serves as the main entry point to the sim.
+    """
+
     def __init__(self, config_path: Optional[str] = None) -> None:
         config = core.config.make_config(config_path)
         self._sim = CislunarSim(config)
-        pass
+        self.state_history = []
 
     def run(self):
-        for t in config.timesteps:
+        while True:  # TODO, add better break conditions
             try:
-                self._sim.step()
+                updated_states = self._sim.step()
+                self.state_history.append(updated_states)
             except Exception as e:
                 log.error(e, exc_info=True)
                 break
-        

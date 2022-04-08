@@ -1,29 +1,46 @@
 """Configurations of parameters and initial conditions for a given simulation."""
 
-from typing import Dict, Optional
-from dataclasses import dataclass
+from typing import Dict, List
+from utils.constants import DEFAULT_MODELS
+from utils.constants import ModelEnum
 
-import core.parameters as parameters
+from core.parameters import Parameters
+from core.state import StateTime
 
 
-@dataclass(frozen=True)
+class MutationException(Exception):
+    pass
+
+
+# TODO: Implement make_config function that takes in a config path (most likely leading to a JSON file) and construct a Config object
+
+
 class Config:
-    """Representation of the parameters and initial conditions of the simulation. This module depends on parameters.py. The variation in performance of different runs of the simulation depends on the variation of config."""
+    """Representation of the parameters and initial conditions of the simulation.
+    This module depends on parameters.py, models.py, and state.py.
+    The variation in performance of different runs of the simulation depends on the variation of config.
+    This class is frozen, so it cannot be changed."""
 
-    def __init__(self, parameters: parameters.Parameters, initial_conditions: Dict):
-        self.param = parameters
+    _frozen = False
 
-        default_conditions = {
-            "pos_x": 0.0,
-            "pos_y": 0.0,
-            "pos_z": 0.0,
-            "pos_ang": 0.0,
-            "velocity": 0.0,
-            "quad_rate": 0.0,
-        }
+    def __init__(
+        self,
+        parameters: Dict,
+        initial_condition: Dict,
+        models: List[ModelEnum] = DEFAULT_MODELS,
+    ):
 
-        for key, value in initial_conditions.items():
-            if key in default_conditions.keys():
-                default_conditions[key] = value
+        self.param = Parameters(param_dict=parameters)
+        self.init_cond = StateTime.from_dict(initial_condition)
+        self.models = models  # models is a list of the names of the models that are used in a sim
+        self._frozen = True
 
-        self.init_cond = default_conditions
+    def __setattr__(self, __name, __value) -> None:
+        if self._frozen:
+            raise MutationException("Cannot mutate config.")
+        object.__setattr__(self, __name, __value)
+
+    def __delattr__(self, __name) -> None:
+        if self._frozen:
+            raise MutationException("Cannot mutate config.")
+        object.__delattr__(self, __name)
