@@ -1,7 +1,7 @@
 from utils.constants import ModelEnum
 from utils.log import log
 from utils.data_handling import states_to_df, df_to_csv
-from typing import List, Union
+from typing import List, Union, cast
 from core.config import Config
 from core.sim import CislunarSim
 from core.state import PropagatedOutput
@@ -17,8 +17,8 @@ class SimRunner:
         if type(config) is str:
             # TODO: config = core.config.make_config(config_path)
             config = Config({}, {})
-
-        self._sim = CislunarSim(config)
+        
+        self._sim = CislunarSim(cast(Config, config))
         self.state_history: List[PropagatedOutput] = []
 
     def run(self) -> pd.DataFrame:
