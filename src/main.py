@@ -1,7 +1,12 @@
+from dataclasses import asdict
+from core import models
+from utils.constants import ModelEnum
 from utils.log import log
 from typing import List, Optional
-import core.config
+from core.config import Config
 from core.sim import CislunarSim, PropagatedOutput
+import pandas as pd
+import time
 
 
 class SimRunner:
@@ -10,7 +15,8 @@ class SimRunner:
     """
 
     def __init__(self, config_path: Optional[str] = None) -> None:
-        config = core.config.make_config(config_path)
+        # TODO: config = core.config.make_config(config_path)
+        config = Config()
         self._sim = CislunarSim(config)
         self.state_history: List[PropagatedOutput] = []
 
@@ -30,7 +36,20 @@ class SimRunner:
 
         return self.state_history
 
+
 def export_states_to_csv(states: List[PropagatedOutput]) -> None:
-    # convert list of PropagatedOutputs to List of flattened Dicts
-    
-    state_dict_list = []
+    dataframes = []
+    for output in states:
+        flattened_output_dict = pd.json_normalize(asdict(output))
+        single_dataframe = pd.DataFrame.from_dict(flattened_output_dict)
+        dataframes.append(single_dataframe)
+
+    complete_df = pd.concat(dataframes)
+    complete_df.to_csv(f"runs/cislunarsim-{time.time()}")
+
+
+if __name__ == "__main__":
+    # freefall from ~4000km altitude to test basic functionality of the sim  
+    initial_condition = {"x": 10_000_000, "y": 1_000, "z": 1_000, "ang_vel_x": 4.5}
+    models_to_use = [ModelEnum.PositionModel]
+    conf = Config({}, initial_condition, models=models_to_use)
