@@ -12,6 +12,9 @@ class StringEnum(str, Enum):
 class ModelEnum(StringEnum):
     AttitudeModel = "att"
     PositionModel = "pos"
+
+    GyroModel = "gyro"
+
     UnittestModel = "unittest"
 
 

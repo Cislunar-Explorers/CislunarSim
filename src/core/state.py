@@ -109,12 +109,8 @@ class StateTime:
     This class associates the state with the time.
     """
 
-    state: State
+    state: State = State()
     time: float = 0.0
-
-    def __init__(self, state: State = State(), time: float = 0.0):
-        self.state = state
-        self.time = time
 
     @classmethod
     def from_dict(cls, statetime_dict: Dict[str, State_Type]):
@@ -149,6 +145,18 @@ class StateTime:
         return False
 
 
+@dataclass
 class ObservedState(StateTime):
     # This is the true state with some noise applied
     pass  # TODO
+
+
+@dataclass
+class PropagatedOutput:
+    """
+    This is a container class that holds a true_state and its corresponding observed_state.
+    """
+
+    true_state: StateTime
+    observed_state: ObservedState
+    # commanded_actuations
