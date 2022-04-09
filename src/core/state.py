@@ -57,6 +57,10 @@ class State:
             if key in self.__dict__.keys():
                 setattr(self, key, value)
 
+    def asdict(self) -> Dict[str, State_Type]:
+        """Emulates the dataclass's `asdict`"""
+        return {key: val for key, val in self.__dict__.items()}
+
     def to_array(self):
         """
         to_array() is the representation of the values of the fields as an
@@ -84,6 +88,11 @@ class State:
         if type(other) == State:
             return self.__dict__ == other.__dict__
         return False
+
+    def __repr__(self) -> str:
+        item_list = [f"{key}={value}" for key, value in self.__dict__.items()]
+        item_string = "\n\t".join(item_list)
+        return f"{self.__class__}:\n\t{item_string}"
 
 
 STATE_ARRAY_ORDER = list(State().__dict__.keys())

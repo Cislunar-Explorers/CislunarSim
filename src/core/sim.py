@@ -1,8 +1,13 @@
+from cmath import sqrt
 from dataclasses import dataclass
+
+from numpy import Inf
 from core.config import Config
 from core.integrator.integrator import propagate_state
 from core.state import ObservedState, StateTime
 from core.models.model_list import ModelContainer
+from utils.log import log
+from utils.numbers import R_EARTH
 
 
 @dataclass
@@ -27,6 +32,9 @@ class CislunarSim:
         self.state: StateTime = self._config.init_cond
         self.observed_state = ObservedState()
 
+        self.should_run = True
+        self.num_iters = 0
+
     def step(self) -> PropagatedOutput:
         """
         step() is the combined true and observed state after one step.
@@ -48,4 +56,34 @@ class CislunarSim:
 
         # TODO: Feed outputs of sensor models into FSW and return actuator's state as part of `PropagatedOutput`
 
+        # check if we should stop the sim
+        self.should_run = not (self.should_stop(self.state))
+        self.num_iters += 1
         return PropagatedOutput(self.state, self.observed_state)
+
+    def should_stop(self) -> bool:
+        """Returns True if something in our state reaches a condition that should stop the sim
+
+        Args:
+            state (StateTime): The current state of the system to evaluate
+
+        Returns:
+            bool: Whether the sim should be stopped
+        """
+
+        state = self.state.state
+
+        if any(state.to_array() is Inf):
+            log.error("Stopping sim because of infinite value in state")
+            log.debug(f"{self.state}")
+            return True
+
+        if self.num_iters > 1e5:
+            log.error("Stopping sim because it's running too long")
+            return True
+
+        if sqrt(state.x**2 + state.y**2 + state.z**2) < R_EARTH:
+            log.error("Stopping sim because craft is inside the Earth")
+            return True
+
+        return False
