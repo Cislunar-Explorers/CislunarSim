@@ -17,7 +17,7 @@ class SimRunner:
         if type(config) is str:
             # TODO: config = core.config.make_config(config_path)
             config = Config({}, {})
-        
+
         self._sim = CislunarSim(cast(Config, config))
         self.state_history: List[PropagatedOutput] = []
 
