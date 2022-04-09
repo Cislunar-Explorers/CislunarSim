@@ -43,7 +43,7 @@ s_1 = {
     "propulsion_on": True,
     "solenoid_actuation_on": False,
 }
-state_1 = State(s_1)
+state_1 = State(**s_1)
 
 d3456 = {
     "gyro_bias": [0.497625, -0.10821875, 0.77490625],

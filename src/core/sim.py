@@ -1,7 +1,6 @@
-from cmath import sqrt
 from dataclasses import dataclass
 
-from numpy import Inf
+import numpy as np
 from core.config import Config
 from core.integrator.integrator import propagate_state
 from core.state import ObservedState, StateTime
@@ -57,7 +56,7 @@ class CislunarSim:
         # TODO: Feed outputs of sensor models into FSW and return actuator's state as part of `PropagatedOutput`
 
         # check if we should stop the sim
-        self.should_run = not (self.should_stop(self.state))
+        self.should_run = not (self.should_stop())
         self.num_iters += 1
         return PropagatedOutput(self.state, self.observed_state)
 
@@ -73,7 +72,8 @@ class CislunarSim:
 
         state = self.state.state
 
-        if any(state.to_array() is Inf):
+        if np.isfinite(state.to_array()).all():
+            # Thank you: https://stackoverflow.com/questions/911871/
             log.error("Stopping sim because of infinite value in state")
             log.debug(f"{self.state}")
             return True
@@ -82,7 +82,7 @@ class CislunarSim:
             log.error("Stopping sim because it's running too long")
             return True
 
-        if sqrt(state.x**2 + state.y**2 + state.z**2) < R_EARTH:
+        if (state.x**2 + state.y**2 + state.z**2)**0.5 < R_EARTH:
             log.error("Stopping sim because craft is inside the Earth")
             return True
 
