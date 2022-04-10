@@ -90,10 +90,11 @@ STATE_ARRAY_ORDER = list(State().__dict__.keys())
 
 
 def array_to_state(values: np.ndarray) -> State:
-    """Converts a numpy array or list into a `State` object.
-     This assumes that the items in `state_array` are consistent with
-     `STATE_ARRAY_ORDER`(which is an assumption that will probably lead
-     to many bugs in the future...)
+    """
+    Converts a numpy array or list into a State object.
+    This assumes that the items in state_array are consistent with
+    STATE_ARRAY_ORDER (which is an assumption that will probably lead
+    to many bugs in the future...)
 
     Args:
         state_array (np.ndarray): n-by-1 numpy array of each state
