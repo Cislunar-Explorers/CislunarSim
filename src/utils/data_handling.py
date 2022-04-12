@@ -16,5 +16,7 @@ def states_to_df(states: List[PropagatedOutput]) -> pd.DataFrame:
     return complete_df
 
 
-def df_to_csv(dataframe: pd.DataFrame):
-    dataframe.to_csv(f"runs/cislunarsim-{time.time()}")
+def df_to_csv(dataframe: pd.DataFrame, path: Optional = None):
+    if path is None:
+        path = SIM_ROOT + "runs"
+    dataframe.to_csv(f"{path}/cislunarsim-{time.time()}.csv")

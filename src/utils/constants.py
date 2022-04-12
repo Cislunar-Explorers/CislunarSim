@@ -1,6 +1,9 @@
 from enum import Enum, IntEnum
 from typing import Union
+from pathlib import Path
 
+
+SIM_ROOT = (Path(__file__).parent / "..").resolve()
 
 class StringEnum(str, Enum):
     """Similar to the built-in IntEnum, but with strings!
