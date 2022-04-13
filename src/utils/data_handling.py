@@ -1,8 +1,10 @@
-from typing import List
+from typing import List, Optional, Union
 import time
 import pandas as pd
 from core.state import PropagatedOutput
 from dataclasses import asdict
+from utils.constants import SIM_ROOT
+from pathlib import Path
 
 
 def states_to_df(states: List[PropagatedOutput]) -> pd.DataFrame:
@@ -16,7 +18,7 @@ def states_to_df(states: List[PropagatedOutput]) -> pd.DataFrame:
     return complete_df
 
 
-def df_to_csv(dataframe: pd.DataFrame, path: Optional = None):
+def df_to_csv(dataframe: pd.DataFrame, path: Optional[Union[str, Path]] = None):
     if path is None:
-        path = SIM_ROOT + "runs"
+        path = SIM_ROOT / "runs"
     dataframe.to_csv(f"{path}/cislunarsim-{time.time()}.csv")
