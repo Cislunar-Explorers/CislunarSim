@@ -11,8 +11,8 @@ class Model(ABC):
     """
 
     def __init__(self, parameters: Parameters) -> None:
-        """
-        Model __init__: All models will be dependent on some parameters, so we load them in here.
+        """ Model __init__: All models will be dependent on some parameters, so we load them in here.
+
         Args:
             parameters (Parameters): Instance of the parameters class gets passed in to be accessible by the model.
         """
@@ -20,10 +20,10 @@ class Model(ABC):
 
     @abstractmethod
     def evaluate(self, state: State):
-        """
-        Abstract method for any model that evaluates the model based on the current state.
+        """ Abstract method for any model that evaluates the model based on the current state.
         An instance of State is required to evaluate the model, (because each 
         model should be dependent on the state of the system.)
+        
         Args:
             state (State): a instance of a State class.
 
@@ -42,8 +42,7 @@ class EnvironmentModel(Model):
     @abstractmethod
     def d_state(self, t: float, state: State) -> Dict[str, State_Type]:
         """Function which evaluates the differential equation:
-         dy / dt = f(t, y)
-         for the current state. "y" is a state vector (not just one variable)
+         dy / dt = f(t, y) for the current state. "y" is a state vector (not just one variable)
 
         Args:
             t (float): current simulation time
