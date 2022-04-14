@@ -1,0 +1,11 @@
+{
+    "reportUnboundVariable": "warning",
+    "reportSelfClsParameterName": "error",
+    "reportMissingImports": "error",
+    "reportImportCycles": "error",
+    "reportUnusedImport": "warning",
+    "reportUnusedVariable": "warning",
+    "reportWildcardImportFromLibrary": "error",
+    "reportOptionalMemberAccess": "warning",
+    "reportDuplicateImport": "error"
+}
