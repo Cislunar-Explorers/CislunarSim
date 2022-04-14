@@ -5,6 +5,8 @@ from main import freefall
 
 
 def main():
+    # The following line requires Python 3.8+
+    # https://github.com/mCodingLLC/VideosSampleCode/issues/5
     with cProfile.Profile() as pr:
         freefall()
 
