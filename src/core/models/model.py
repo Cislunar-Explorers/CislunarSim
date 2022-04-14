@@ -50,8 +50,8 @@ class EnvironmentModel(Model):
 
         Returns:
             Dict[str, Any]: the name of each state being updated, and the
-             value of its derivative. The keys of this dictionary must be in
-             `STATE_ARRAY_ORDER`
+                value of its derivative. The keys of this dictionary must be in
+                `STATE_ARRAY_ORDER`
         """
         ...
 
