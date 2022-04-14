@@ -36,7 +36,7 @@ iniconfig==1.1.1
 kiwisolver==1.4.2
 matplotlib==3.5.1
 nodeenv==1.6.0
-numpy==1.22.3
+numpy==1.21.6
 packaging==21.3
 Pillow==9.0.1
 pluggy==1.0.0
