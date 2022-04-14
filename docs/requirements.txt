@@ -27,3 +27,25 @@ sphinxcontrib-qthelp==1.0.3
 sphinxcontrib-serializinghtml==1.1.5
 urllib3==1.26.9
 zipp==3.7.0
+
+attrs==21.4.0
+-e git+https://github.com/Cislunar-Explorers/CislunarSim.git@e7e421ae1b9212b8bbd5d5dc8be3511eafd34dcc#egg=cislunar_sim
+cycler==0.11.0
+fonttools==4.31.2
+iniconfig==1.1.1
+kiwisolver==1.4.2
+matplotlib==3.5.1
+nodeenv==1.6.0
+numpy==1.22.3
+packaging==21.3
+Pillow==9.0.1
+pluggy==1.0.0
+py==1.11.0
+pyparsing==3.0.7
+pyright==1.1.234
+pytest==7.1.1
+python-dateutil==2.8.2
+scipy==1.8.0
+six==1.16.0
+tomli==2.0.1
+
