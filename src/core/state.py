@@ -55,6 +55,9 @@ class State:
         self.Izy = 0.0
         self.Izz = 0.0
 
+        # Kane damping constant
+        self.kane_c = 0.0
+
         # discrete state
         self.propulsion_on = False
         self.solenoid_actuation_on = False

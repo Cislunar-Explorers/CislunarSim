@@ -82,21 +82,21 @@ class KaneModel(Model):
 
         q = np.round(state.fill_frac / 0.02 + 1)
         c = kane(q)
-        # TODO: Return c as a state variable.
-        ...
+
+        return {"kane_c": c}
 
 
+# # Maybe in another life...
+# class LModel(EnvironmentModel):
+#     """Class for the angular momentum model."""
+#     def __init__(self, parameters: Parameters) -> None:
+#         super().__init__(parameters)
 
-class LModel(EnvironmentModel):
-    """Class for the angular momentum model."""
-    def __init__(self, parameters: Parameters) -> None:
-        super().__init__(parameters)
+#     def evaluate(self, state: State) -> Dict[str, Any]:
+#         return super().evaluate(state)
 
-    def evaluate(self, state: State) -> Dict[str, Any]:
-        return super().evaluate(state)
-
-    def d_state(self, state: State) -> Dict[str, Any]:
-        ...
+#     def d_state(self, state: State) -> Dict[str, Any]:
+#         ...
 
 
 class OmegaModel(EnvironmentModel):
