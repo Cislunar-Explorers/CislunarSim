@@ -59,8 +59,7 @@ class State:
 
     def to_array(self):
         """
-        to_array() is the representation of the values of the fields as an
-         array.
+        to_array() is the representation of the values of the fields as an array.
 
         Returns:
             Numpy array: contains all values stored in the fields.

@@ -12,8 +12,7 @@ class Model(ABC):
 
     def __init__(self, parameters: Parameters) -> None:
         """
-        Model __init__
-        All models will be dependent on some parameters, so we load them in here.
+        Model __init__: All models will be dependent on some parameters, so we load them in here.
         Args:
             parameters (Parameters): Instance of the parameters class gets passed in to be accessible by the model.
         """

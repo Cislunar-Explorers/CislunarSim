@@ -26,6 +26,7 @@ class PositionDynamics(EnvironmentModel):
         """
         Takes the derivative of a vector [r v] to compute [v a], where r is a position vector,
         v is the velocity vector, and a is the acceleration vector
+        
         Args:
             t (float): the initial time
             state (State): the initial state
