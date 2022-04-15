@@ -95,6 +95,7 @@ class PositionDynamics(EnvironmentModel):
         # # earth to the craft
         # r_ec = np.subtract(r_eo, r_co)
 
+        # Position column vectors from body to the craft
         r_mc = state.derived_state.r_mc
         r_sc = state.derived_state.r_sc
         r_ec = state.derived_state.r_ec
