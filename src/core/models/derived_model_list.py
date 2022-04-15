@@ -1,13 +1,14 @@
 from os import stat
 from typing import Callable, List, Dict, Type
 import numpy as np
-# from core.models.model import ActuatorModel, EnvironmentModel, SensorModel
-from core.models.derived_model_list import DerivedStateModel
+from core.models.model import ActuatorModel, EnvironmentModel, SensorModel, DerivedStateModel
 from core.state import State, array_to_state
-from core.derived_state import DerivedState
 from core.config import Config
 from utils.constants import BodyEnum, ModelEnum, State_Type
 from utils.astropy_util import get_body_position
+
+class DerivedAttitude(DerivedStateModel):
+    ...
 
 class DerivedPosition(DerivedStateModel):
     """Updates position column vectors for use in the position dynamics model."""

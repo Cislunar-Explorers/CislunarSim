@@ -81,3 +81,11 @@ class ActuatorModel(Model):
     @abstractmethod
     def evaluate(self, state: State) -> Dict[str, Any]:
         ...
+
+class DerivedStateModel(Model):
+    def __init__(self, parameters: Parameters) -> None:
+        super().__init__(parameters)
+
+    @abstractmethod
+    def evaluate(self, state: State) -> Dict[str, Any]:
+        ...
