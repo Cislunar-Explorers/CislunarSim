@@ -1,4 +1,6 @@
-astropy==5.0.4
+# Readthedocs does not have numpy 5.0.4 installed, so we need to use an older version
+# astropy==5.0.4
+astropy==4.3.1
 attrs==21.4.0
 -e git+https://github.com/Cislunar-Explorers/CislunarSim.git@859f958eb06470317b762fff2417dee382549f10#egg=cislunar_sim
 cycler==0.11.0
@@ -8,7 +10,8 @@ kiwisolver==1.4.2
 matplotlib==3.5.1
 nodeenv==1.6.0
 # Readthedocs does not have numpy 1.22.3 installed, so we need to use an older version
-numpy==1.22.3
+# numpy==1.22.3
+numpy==1.21.6
 packaging==21.3
 pandas==1.4.2
 Pillow==9.0.1
@@ -22,7 +25,8 @@ python-dateutil==2.8.2
 pytz==2022.1
 PyYAML==6.0
 # Readthedocs does not have scipy 1.8.0 installed, so we need to use an older version
-scipy==1.8.0
+# scipy==1.8.0
+scipy==1.7.3
 six==1.16.0
 snakeviz==2.1.1
 tomli==2.0.1
