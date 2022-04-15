@@ -7,7 +7,7 @@ from utils.constants import State_Type
 class DerivedState:
     """
     Container class for derived state variables needed for state determination.
-    TODO: Concretely document what these are.
+    TODO: Concretely document these somewhere.
     """
 
     def __init__(self, derived_state_dict: Dict = {}):
