@@ -5,6 +5,7 @@
 # Required
 version: 4.4.0
 
+python: "3.8"
 # Set the version of Python and other tools you might need
 #build:
 #  os: ubuntu-20.04

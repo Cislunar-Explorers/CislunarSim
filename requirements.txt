@@ -10,8 +10,8 @@ kiwisolver==1.4.2
 matplotlib==3.5.1
 nodeenv==1.6.0
 # Readthedocs does not have numpy 1.22.3 installed, so we need to use an older version
-# numpy==1.22.3
-numpy==1.21.6
+numpy==1.22.3
+# numpy==1.21.6
 packaging==21.3
 pandas==1.4.2
 Pillow==9.0.1
@@ -25,8 +25,8 @@ python-dateutil==2.8.2
 pytz==2022.1
 PyYAML==6.0
 # Readthedocs does not have scipy 1.8.0 installed, so we need to use an older version
-# scipy==1.8.0
-scipy==1.7.3
+scipy==1.8.0
+# scipy==1.7.3
 six==1.16.0
 snakeviz==2.1.1
 tomli==2.0.1
