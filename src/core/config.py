@@ -12,7 +12,8 @@ class MutationException(Exception):
     pass
 
 
-# TODO: Implement make_config function that takes in a config path (most likely leading to a JSON file) and construct a Config object
+# TODO: Implement make_config function that takes in a config path (most likely leading to a JSON file)
+# and construct a Config object
 
 
 class Config:
