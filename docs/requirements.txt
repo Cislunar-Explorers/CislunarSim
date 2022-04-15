@@ -31,3 +31,4 @@ zipp==3.7.0
 -r ../requirements.txt
 numpy==1.21.6
 scipy==1.7.3
+astropy==4.3.1
