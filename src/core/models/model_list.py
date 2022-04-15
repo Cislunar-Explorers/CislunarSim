@@ -1,3 +1,4 @@
+from os import stat
 from typing import Callable, List, Dict, Type
 import numpy as np
 from core.models.model import ActuatorModel, EnvironmentModel, SensorModel
@@ -52,6 +53,15 @@ class PositionDynamics(EnvironmentModel):
         r_sc = np.subtract(r_so, r_co)
         # earth to the craft
         r_ec = np.subtract(r_eo, r_co)
+
+        # TODO: Uncomment these :)
+        # r_co = state.derived_state.r_co
+        # r_mo = state.derived_state.r_mo
+        # r_so = state.derived_state.r_so
+        # r_eo = state.derived_state.r_eo
+        # r_mc = state.derived_state.r_mc
+        # r_sc = state.derived_state.r_sc
+        # r_ec = state.derived_state.r_ec
 
         # mu values of the body, where mu = G * m_body
         G = 6.6743e-11

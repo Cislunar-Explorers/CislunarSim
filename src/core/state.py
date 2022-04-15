@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import numpy as np
 from typing import Dict, Union
-
+from core import derived_state
 from utils.constants import State_Type
 
 
@@ -45,6 +45,9 @@ class State:
         # discrete state
         self.propulsion_on = False
         self.solenoid_actuation_on = False
+
+        # derived state
+        self.derived_state = derived_state.DerivedState(Dict = {})
 
         self.update(state_dict)
 
