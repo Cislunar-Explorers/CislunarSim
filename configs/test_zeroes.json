@@ -1,0 +1,38 @@
+ {
+    "parameters": {
+        "gyro_bias" : [0.0, 0.0, 0.0],
+        "gyro_noise" : [0.0, 0.0, 0.0],
+        "gyro_sensitivity": 0.0,
+        "dry_mass": 0.0,
+        "com": 0.0,
+        "tank_volume": 0.0,
+        "thruster_force": 0.0
+    },
+    "initial_condition": {
+        
+        "ang_vel_x" : 0.0, 
+        "ang_vel_y" : 0.0, 
+        "ang_vel_z" : 0.0, 
+        
+        "gnc_pos_q1" : 0.0, 
+        "gnc_pos_q2" : 0.0, 
+        "gnc_pos_q3" : 0.0, 
+        "gnc_pos_q4" : 0.0, 
+
+        "vel_x" : 0.0, 
+        "vel_y" : 0.0, 
+        "vel_z" : 0.0, 
+
+        "x" : 0.0,
+        "y" : 0.0,
+        "z" : 0.0,
+        
+        "force_propulsion_thrusters": 0.0,
+        "fuel_mass": 0.0,
+        "force_earth": 0.0,
+        "force_moon": 0.0,
+        "propulsion_on": true,
+        "solenoid_actuation_on": true
+    },
+    "models" : ["att", "pos"]
+ }

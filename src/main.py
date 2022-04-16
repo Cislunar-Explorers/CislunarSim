@@ -7,16 +7,21 @@ from core.sim import CislunarSim
 from core.state import PropagatedOutput
 import pandas as pd
 
-
 class SimRunner:
     """
     This class serves as the main entry point to the sim.
     """
 
-    def __init__(self, config: Union[str, Config]) -> None:
-        if type(config) is str:
-            # TODO: config = core.config.make_config(config_path)
-            config = Config({}, {})
+
+    def __init__(self, config_path: Union[str, Config] = "data/zeroes.json") -> None: 
+        #TODO: use a file with actual default values, not zeroes
+        if isinstance(config_path, str):
+            config = Config.make_config(config_path)
+        else:
+            assert isinstance(config_path, Config)
+            config = config_path
+        self._sim = CislunarSim(config)
+        self.state_history = []
 
         self._sim = CislunarSim(cast(Config, config))
         self.state_history: List[PropagatedOutput] = []
