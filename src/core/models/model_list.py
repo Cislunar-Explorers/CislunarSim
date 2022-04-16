@@ -164,6 +164,9 @@ def build_state_update_function(
 
 class ModelContainer:
     def __init__(self, config: Config) -> None:
+
+        # TODO: Add derived state models, models not configurable (i.e., constant each run)
+
         # env models propagate the state of the spacecraft
         self.environmental: List[EnvironmentModel] = []
 
