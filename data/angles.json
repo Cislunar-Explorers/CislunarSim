@@ -1,0 +1,21 @@
+{
+    "initial_condition": {
+        
+        "ang_vel_x" : 5.0, 
+        "ang_vel_y" : 5.0, 
+        "ang_vel_z" : 5.0, 
+        
+        "gnc_pos_q1" : 0.0, 
+        "gnc_pos_q2" : 0.0, 
+        "gnc_pos_q3" : 0.0, 
+        "gnc_pos_q4" : 0.0, 
+
+        "vel_x" : 0.0, 
+        "vel_y" : 0.0, 
+        "vel_z" : 0.0, 
+
+        "x" : 0.0,
+        "y" : 0.0,
+        "z" : 0.0
+    }
+ }
