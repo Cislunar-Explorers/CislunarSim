@@ -98,6 +98,16 @@ class ConfigTestCases(unittest.TestCase):
         "y" : 70.5,
         "z" : 0.0
         }
+    test1_param = {
+        "thruster_force": 30.0
+    } 
+    test1_ic = {
+        "vel_x" : 38.0, 
+        "vel_y" : 37.0, 
+        "vel_z" : 36.0, 
+        "propulsion_on": False,
+        "solenoid_actuation_on": False
+    } 
 
     def setup_helper(self, param, ic):
         self.assertEqual(Config(param, ic).param.__dict__, Parameters(param).__dict__)
@@ -130,13 +140,15 @@ class ConfigTestCases(unittest.TestCase):
 
     def test_make_config(self):
         """Tests creating config from json files in the data folder. """  
-        DEFAULT_PATH = "data/zeroes.json"      
-        ANGLES_PATH = "data/angles.json"
-        EMPTY_PATH = "data/empty.json"
+        DEFAULT_PATH = "data/test_zeroes.json"      
+        ANGLES_PATH = "data/test_angles.json"
+        EMPTY_PATH = "data/test_empty.json"
+        TEST1_PATH = "data/test1.json"
 
         self.make_config_helper(DEFAULT_PATH, self.zeroes_param, self.zeroes_ic)
         self.make_config_helper(ANGLES_PATH, {}, self.angles_ic)
         self.make_config_helper(EMPTY_PATH, {}, {})
+        self.make_config_helper(TEST1_PATH, self.test1_param, self.test1_ic)
 
 
 if __name__ == "__main__":
