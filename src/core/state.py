@@ -5,51 +5,52 @@ from core.derived_state import DerivedState
 from utils.constants import State_Type
 
 
+@dataclass
 class State:
     """
     This is a container class for all state variables as defined in this sheet:
      https://cornell.box.com/s/z20wbp66q0pseqievmadf515ucd971g2.
+
+     In order to init a class of State, by far the easiest way is via kwarg unpacking:
+     `my_state = State{**state_dict}`
     """
 
-    def __init__(self, state_dict: Dict = {}):
-        # primitive state
+    # primitive state
 
-        # angular velocity (radians/second)
-        self.ang_vel_x = 0.0
-        self.ang_vel_y = 0.0
-        self.ang_vel_z = 0.0
+    # angular velocity (radians/second)
+    ang_vel_x: float = 0.0
+    ang_vel_y: float = 0.0
+    ang_vel_z: float = 0.0
 
-        # angular position
-        self.gnc_pos_q1 = 0.0
-        self.gnc_pos_q2 = 0.0
-        self.gnc_pos_q3 = 0.0
-        self.gnc_pos_q4 = 0.0
+    # angular position
+    gnc_pos_q1: float = 0.0
+    gnc_pos_q2: float = 0.0
+    gnc_pos_q3: float = 0.0
+    gnc_pos_q4: float = 0.0
 
-        # velocity (meters / second)
-        self.vel_x = 0.0
-        self.vel_y = 0.0
-        self.vel_z = 0.0
+    # velocity (meters / second)
+    vel_x: float = 0.0
+    vel_y: float = 0.0
+    vel_z: float = 0.0
 
-        # position (meters)
-        self.x = 0.0
-        self.y = 0.0
-        self.z = 0.0
+    # position (meters)
+    x: float = 0.0
+    y: float = 0.0
+    z: float = 0.0
 
-        self.force_propulsion_thrusters = 0.0
-        self.fuel_mass = 0.0
+    force_propulsion_thrusters: float = 0.0
+    fuel_mass: float = 0.0
 
-        # derived state (Newtons)
-        self.force_earth = 0.0
-        self.force_moon = 0.0
+    # derived state (Newtons)
+    force_earth: float = 0.0
+    force_moon: float = 0.0
 
-        # discrete state
-        self.propulsion_on = False
-        self.solenoid_actuation_on = False
+    # derived state
+    derived_state = DerivedState(Dict = {})
 
-        # derived state
-        self.derived_state = DerivedState(Dict = {})
-
-        self.update(state_dict)
+    # discrete state
+    propulsion_on: bool = False
+    solenoid_actuation_on: bool = False
 
     def update(self, state_dict: Dict[str, Union[int, float, bool]]) -> None:
         """
@@ -75,18 +76,19 @@ class State:
         new_state = dict(zip(self.__dict__.keys(), state_array))
         self.update(new_state)
 
-    def __eq__(self, other):
-        """
-
-        Args:
-            other (State): the "other" object self is being compared to.
-
-        Returns:
-            True iff other is a State object with equal attributes.
-        """
-        if type(other) == State:
-            return self.__dict__ == other.__dict__
-        return False
+    # being a dataclass means __eq__ is automatically generated for you!
+    # def __eq__(self, other):
+    #    """
+    #
+    #    Args:
+    #        other (State): the "other" object self is being compared to.
+    #
+    #    Returns:
+    #        True iff other is a State object with equal attributes.
+    #    """
+    #    if type(other) == State:
+    #        return self.__dict__ == other.__dict__
+    #    return False
 
 
 STATE_ARRAY_ORDER = list(State().__dict__.keys())
@@ -101,7 +103,7 @@ def array_to_state(values: np.ndarray) -> State:
     Args:
         state_array (np.ndarray): n-by-1 numpy array of each state
     """
-    return State(dict(zip(STATE_ARRAY_ORDER, values)))
+    return State(**dict(zip(STATE_ARRAY_ORDER, values)))
 
 
 @dataclass
@@ -110,12 +112,8 @@ class StateTime:
     This class associates the state with the time.
     """
 
-    state: State
+    state: State = State()
     time: float = 0.0
-
-    def __init__(self, state: State = State(), time: float = 0.0):
-        self.state = state
-        self.time = time
 
     @classmethod
     def from_dict(cls, statetime_dict: Dict[str, State_Type]):
@@ -126,14 +124,14 @@ class StateTime:
             statetime_dict (Dict[str, State_Type]): _description_
 
         Returns:
-            _type_: _description_
+            StateTime: _description_
         """
         try:
             time = statetime_dict.pop("time")
         except KeyError:
             time = 0.0
 
-        return cls(State(state_dict=statetime_dict), time=time)
+        return cls(State(**statetime_dict), time=time)
 
     def __eq__(self, other):
         """
@@ -150,6 +148,18 @@ class StateTime:
         return False
 
 
+@dataclass
 class ObservedState(StateTime):
     # This is the true state with some noise applied
     pass  # TODO
+
+
+@dataclass
+class PropagatedOutput:
+    """
+    This is a container class that holds a true_state and its corresponding observed_state.
+    """
+
+    true_state: StateTime
+    observed_state: ObservedState
+    # commanded_actuations

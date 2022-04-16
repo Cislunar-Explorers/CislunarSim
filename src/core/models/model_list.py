@@ -1,7 +1,8 @@
 from os import stat
 from typing import Callable, List, Dict, Type
 import numpy as np
-from core.models.model import ActuatorModel, EnvironmentModel, SensorModel, DerivedStateModel
+from core.models.model import ActuatorModel, EnvironmentModel, SensorModel, DerivedStateModel, MODEL_TYPES
+from core.models.gyro_model import GyroModel
 from core.state import State, array_to_state
 from core.config import Config
 from utils.constants import BodyEnum, ModelEnum, State_Type
@@ -151,9 +152,10 @@ class TestModel(EnvironmentModel):
 
 
 # Dict containing all the models that are implemented
-MODEL_DICT: Dict[ModelEnum, Type[EnvironmentModel]] = {
+MODEL_DICT: Dict[ModelEnum, MODEL_TYPES] = {
     ModelEnum.AttitudeModel: AttitudeDynamics,
     ModelEnum.PositionModel: PositionDynamics,
+    ModelEnum.GyroModel: GyroModel,
     ModelEnum.UnittestModel: TestModel,
 }
 
@@ -215,10 +217,6 @@ class ModelContainer:
                 model_instantiated = model(config.param)
                 self.sensor.append(model_instantiated)
             else:
-                raise RuntimeError(
-                    f"The type of `{model_name}` is not an expected type: {model}."
-                )
+                raise RuntimeError(f"The type of `{model_name}` is not an expected type: {model}.")
 
-        self.state_update_function: Callable = build_state_update_function(
-            self.environmental
-        )
+        self.state_update_function: Callable = build_state_update_function(self.environmental)

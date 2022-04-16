@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Any
+from typing import Dict, Any, Type, Union
 from core.state import State
 from core.parameters import Parameters
 from utils.constants import State_Type
@@ -90,3 +90,5 @@ class DerivedStateModel(Model):
     @abstractmethod
     def evaluate(self, state: State) -> Dict[str, Any]:
         ...
+        
+MODEL_TYPES = Union[Type[EnvironmentModel], Type[SensorModel], Type[ActuatorModel]]

@@ -14,6 +14,8 @@ class GyroModel(SensorModel):
 
     def __init__(self, parameters: Parameters) -> None:
         super().__init__(parameters)
+        self.gyro_bias = np.array(self._parameters.gyro_bias)
+        self.gyro_noise = np.array(self._parameters.gyro_noise)
 
     def evaluate(self, state: State) -> Dict[str, Any]:
         """Abstracts the angular velocities according to the model
@@ -25,17 +27,13 @@ class GyroModel(SensorModel):
             Dict[str, Any]: The augmented angular velocities
         """
         ang_vel_i = np.array([state.ang_vel_x, state.ang_vel_y, state.ang_vel_z])
-        gyro_bias = np.array(self._parameters.gyro_bias)
 
-        ang_vel_d = ang_vel_i + gyro_bias
-        ang_vel_d = np.random.normal(
-            loc=ang_vel_d, scale=self._parameters.gyro_noise, size=3
-        )
+        ang_vel_d = ang_vel_i + self.gyro_bias
+        ang_vel_d = np.random.normal(loc=ang_vel_d, scale=self.gyro_noise, size=3)
 
         for i in range(3):
             ang_vel_d[i] = self._parameters.gyro_sensitivity * int(
-                self._parameters.gyro_sensitivity / 2
-                + ang_vel_d[i] / self._parameters.gyro_sensitivity
+                self._parameters.gyro_sensitivity / 2 + ang_vel_d[i] / self._parameters.gyro_sensitivity
             )
 
         return {
