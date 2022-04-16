@@ -1,6 +1,7 @@
-from typing import Callable, List, Dict, Type
+from typing import Callable, List, Dict
 import numpy as np
-from core.models.model import ActuatorModel, EnvironmentModel, SensorModel
+from core.models.model import ActuatorModel, EnvironmentModel, SensorModel, MODEL_TYPES
+from core.models.gyro_model import GyroModel
 from core.state import State, array_to_state
 from core.config import Config
 from utils.constants import BodyEnum, ModelEnum, State_Type
@@ -33,14 +34,17 @@ class PositionDynamics(EnvironmentModel):
         Returns:
             Dict[str, State_Type]: The updated vector [v a]
         """
-        # position column vectors from moon/sun/earth/craft to the origin, where the origin is the Earth's center of mass
+        # position column vectors from moon/sun/earth/craft to the origin,
+        # where the origin is the Earth's center of mass
 
         # craft to origin
         r_co = np.array([state.x, state.y, state.z])
         # moon to origin
-        r_mo = np.array(get_body_position(t, BodyEnum.Moon))
+        
+        # round t to the 10s place
+        r_mo = np.array(get_body_position(t//10*10, BodyEnum.Moon))
         # sun to origin
-        r_so = np.array(get_body_position(t, BodyEnum.Sun))
+        r_so = np.array(get_body_position(t//10*10, BodyEnum.Sun))
         # earth to origin
         r_eo = np.array((0.0, 0.0, 0.0))  # Earth is at the origin in GCRS
 
@@ -104,9 +108,10 @@ class TestModel(EnvironmentModel):
 
 
 # Dict containing all the models that are implemented
-MODEL_DICT: Dict[ModelEnum, Type[EnvironmentModel]] = {
+MODEL_DICT: Dict[ModelEnum, MODEL_TYPES] = {
     ModelEnum.AttitudeModel: AttitudeDynamics,
     ModelEnum.PositionModel: PositionDynamics,
+    ModelEnum.GyroModel: GyroModel,
     ModelEnum.UnittestModel: TestModel,
 }
 
@@ -162,10 +167,6 @@ class ModelContainer:
                 model_instantiated = model(config.param)
                 self.sensor.append(model_instantiated)
             else:
-                raise RuntimeError(
-                    f"The type of `{model_name}` is not an expected type: {model}."
-                )
+                raise RuntimeError(f"The type of `{model_name}` is not an expected type: {model}.")
 
-        self.state_update_function: Callable = build_state_update_function(
-            self.environmental
-        )
+        self.state_update_function: Callable = build_state_update_function(self.environmental)
