@@ -9,7 +9,7 @@ class SimRunner:
     This class serves as the main entry point to the sim.
     """
 
-    def __init__(self, config_path: Optional[str] = None) -> None:
+    def __init__(self, config_path: Optional[str] = "data/zeroes.json") -> None: #TODO: use a file with actual default values, not zeroes
         config = core.config.make_config(config_path)
         self._sim = CislunarSim(config)
         self.state_history = []

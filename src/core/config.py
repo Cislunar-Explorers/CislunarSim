@@ -52,7 +52,7 @@ class Config:
             raise MutationException("Cannot mutate config.")
         object.__delattr__(self, __name)
   
-    def make_config(self, path_str):
+    def make_config(path_str: str):
         ''' make_config creates a config object from json file in the proposed location. 
         
         It is dependent on state.py, and parameters.py. Changes in these files will affect this method. It will be used by main.py. Changes in this method might affect the functionality of Main.
@@ -92,10 +92,7 @@ class Config:
             json_init_cond = data.get("initial_condition", {})
             json_models = data.get("models", [])
 
-
-
-
-        return self.__init__(
+        return Config(
             json_params,
             json_init_cond,
             json_models
