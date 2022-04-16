@@ -168,9 +168,9 @@ class ModelContainer:
     def __init__(self, config: Config) -> None:
 
         # derived state models propagate derived values
-        # TODO: Fill in here
-        self.derived: List[DerivedStateModel] = []
-        # TODO: Add derived state models, models not configurable (i.e., constant each run)
+        # Derived state models are the same each time, meaning we can simply list them here.
+        # TODO: Determine whether this is the best way to do this.
+        self.derived: List[DerivedStateModel] = [DerivedPosition(config.param)]
 
         # env models propagate the state of the spacecraft
         self.environmental: List[EnvironmentModel] = []
