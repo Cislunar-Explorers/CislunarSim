@@ -42,9 +42,9 @@ class PositionDynamics(EnvironmentModel):
         # moon to origin
         
         # round t to the 10s place
-        r_mo = np.array(get_body_position(t, BodyEnum.Moon))
+        r_mo = np.array(get_body_position(t//10*10, BodyEnum.Moon))
         # sun to origin
-        r_so = np.array(get_body_position(t, BodyEnum.Sun))
+        r_so = np.array(get_body_position(t//10*10, BodyEnum.Sun))
         # earth to origin
         r_eo = np.array((0.0, 0.0, 0.0))  # Earth is at the origin in GCRS
 
