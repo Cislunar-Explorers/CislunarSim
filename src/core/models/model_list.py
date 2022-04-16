@@ -24,6 +24,8 @@ class PositionDynamics(EnvironmentModel):
         return super().evaluate(t, state)
 
     def d_state(self, t: float, state: State) -> Dict[str, State_Type]:
+        print("START")
+        print(state.x)
         """
         Takes the derivative of a vector [r v] to compute [v a], where r is a position vector,
         v is the velocity vector, and a is the acceleration vector
@@ -40,9 +42,9 @@ class PositionDynamics(EnvironmentModel):
         # craft to origin
         r_co = np.array([state.x, state.y, state.z])
         # moon to origin
-        r_mo = np.array(get_body_position(t, BodyEnum.Moon))
+        r_mo = np.array(get_body_position(t//10*10, BodyEnum.Moon))
         # sun to origin
-        r_so = np.array(get_body_position(t, BodyEnum.Sun))
+        r_so = np.array(get_body_position(t//10*10, BodyEnum.Sun))
         # earth to origin
         r_eo = np.array((0.0, 0.0, 0.0))  # Earth is at the origin in GCRS
 
@@ -69,7 +71,8 @@ class PositionDynamics(EnvironmentModel):
             # earth to craft acceleration component
             + mu_earth * r_ec / (np.dot(r_ec, r_ec) ** (3 / 2))
         )
-
+        print("END")
+        print(state.vel_x)
         return {
             "x": state.vel_x,
             "y": state.vel_y,
