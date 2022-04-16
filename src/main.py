@@ -7,14 +7,19 @@ from core.sim import CislunarSim
 from core.state import PropagatedOutput
 import pandas as pd
 
-
 class SimRunner:
     """
     This class serves as the main entry point to the sim.
     """
 
-    def __init__(self, config_path: str = "data/zeroes.json") -> None: #TODO: use a file with actual default values, not zeroes
-        config = Config.make_config(config_path)
+
+    def __init__(self, config_path: Union[str, Config] = "data/zeroes.json") -> None: 
+        #TODO: use a file with actual default values, not zeroes
+        if isinstance(config_path, str):
+            config = Config.make_config(config_path)
+        else:
+            assert isinstance(config_path, Config)
+            config = config_path
         self._sim = CislunarSim(config)
         self.state_history = []
 
@@ -48,7 +53,7 @@ class SimRunner:
 def freefall():
     # freefall from ~4000km altitude to test basic functionality of the sim
     initial_condition = {"x": 10_000_000, "y": 1_000, "z": 1_000, "ang_vel_x": 4.5, "time": 0.0}
-    models_to_use = [ModelEnum.PositionModel, ModelEnum.GyroModel]
+    models_to_use = ['pos', 'gyro']
     conf = Config({}, initial_condition, models=models_to_use)
 
     test_sim = SimRunner(conf)
