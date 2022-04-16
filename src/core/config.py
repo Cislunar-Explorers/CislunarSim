@@ -2,7 +2,7 @@
 
 from typing import Dict, List
 import json
-from jsonschema import validate
+from jsonschema import validate, Draft3Validator
 from jsonschema import ValidationError
 from utils.constants import DEFAULT_MODELS
 from utils.constants import ModelEnum
@@ -57,7 +57,7 @@ class Config:
         
         It is dependent on state.py, and parameters.py. Changes in these files will affect this method. It will be used by main.py. Changes in this method might affect the functionality of Main.
 
-        To construct a json file, consult schema.json and example.json in the 'data' folder. All properties are optional, default values will be inserted if a field is not specified. However, if a property is specified its type and format has to be correct. 
+        To construct a json file, consult schema.json and example.json in the 'configs' folder. All properties are optional, default values will be inserted if a field is not specified. However, if a property is specified its type and format has to be correct. 
 
         Raises: `JsonError` if json file is not well defined. 
 
@@ -65,7 +65,8 @@ class Config:
         with open(path_str, "r") as read_file:
             data = json.load(read_file)
             try:
-                validate(instance=data, schema=json.load(open("data/schema.json", "r")))
+                Draft3Validator(json.load(open("configs/schema.json", "r"))).validate(data)
+                # validate(instance=data, schema=json.load(open("configs/schema.json", "r")))
             except ValidationError:
                 raise JsonError("Schema validation failed.")
             

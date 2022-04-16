@@ -6,7 +6,7 @@
 
         "vel_x" : 38.0, 
         "vel_y" : 37.0, 
-        "vel_z" : 36.0, 
+        "vel_z" : false, 
         "propulsion_on": false,
         "solenoid_actuation_on": false
     }
