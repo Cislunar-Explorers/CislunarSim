@@ -88,7 +88,7 @@ class DerivedStateModel(Model):
         super().__init__(parameters)
 
     @abstractmethod
-    def evaluate(self, state: State) -> Dict[str, Any]:
+    def evaluate(self, t: float, state: State) -> Dict[str, Any]:
         ...
         
 

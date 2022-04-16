@@ -47,8 +47,10 @@ class DerivedState:
 
     def update(self, derived_state_dict: Dict) -> None:
         """
-        update() is a procedure that updates the fields of the derived state with specified key/value pairs in derived_state_dict.
-        If a key in the `derived_state_dict` is not defined as an attribute in DerivedState.__init__, it will be ignored.
+        update() is a procedure that updates the fields of the derived state with specified 
+            key/value pairs in derived_state_dict.
+        If a key in the `derived_state_dict` is not defined as an attribute in DerivedState.
+            __init__, it will be ignored.
         """
         for key, value in derived_state_dict.items():
             if key in self.__dict__.keys():
