@@ -91,4 +91,5 @@ class DerivedStateModel(Model):
     def evaluate(self, state: State) -> Dict[str, Any]:
         ...
         
-MODEL_TYPES = Union[Type[EnvironmentModel], Type[SensorModel], Type[ActuatorModel]]
+
+MODEL_TYPES = Union[Type[EnvironmentModel], Type[SensorModel], Type[ActuatorModel], Type[DerivedStateModel]]

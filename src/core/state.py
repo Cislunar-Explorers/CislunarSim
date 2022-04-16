@@ -46,7 +46,7 @@ class State:
     force_moon: float = 0.0
 
     # derived state
-    derived_state = DerivedState(Dict = {})
+    derived_state: DerivedState = DerivedState()
 
     # discrete state
     propulsion_on: bool = False

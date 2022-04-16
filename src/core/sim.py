@@ -30,7 +30,7 @@ class CislunarSim:
         for actuator_model in self._models.actuator:
             self.state.state.update(actuator_model.evaluate(self.state.state))
 
-        # TODO: Propagate derived state
+        # Propagate derived state
         for derived_state_model in self._models.derived:
             self.state.state.derived_state.update(
                 derived_state_model.evaluate(self.state.state))
