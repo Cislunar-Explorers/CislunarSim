@@ -24,7 +24,7 @@ in terminal to find your Python version. If it's lower than 3.8, you should upgr
 
 Run in terminal (Mac users only):
 
-If you don't have Homebrew, run the following. If you do, :
+If you don't have Homebrew, run the following:
 
 ```
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
