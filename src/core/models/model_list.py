@@ -79,6 +79,8 @@ class PositionDynamics(EnvironmentModel):
         r_mc = state.derived_state.r_mc
         r_sc = state.derived_state.r_sc
         r_ec = state.derived_state.r_ec
+        
+        print(r_mc, "\n\n", r_sc, "\n\n", r_ec, "\n\n")
 
         # mu values of the body, where mu = G * m_body
         G = 6.6743e-11
@@ -158,7 +160,7 @@ def build_state_update_function(
         for model in env_models:
             propagated_state.update(model.evaluate(t, state_in))
 
-        propagated_state_array = propagated_state.to_array()
+        propagated_state_array = propagated_state.float_fields_to_array()
         return propagated_state_array
 
     return update_function

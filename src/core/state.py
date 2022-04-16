@@ -3,6 +3,7 @@ from attr import field
 import numpy as np
 from typing import Dict, Union
 from core.derived_state import DerivedState
+from core.models.model_list import DerivedPosition
 from utils.constants import State_Type
 
 
@@ -81,13 +82,12 @@ class State:
 
     def float_fields_to_array(self):
         """
-        float_fields_to_array() acts like to_array(), but only returns the
-            float fields.
+        float_fields_to_array() acts like to_array(), but ignores the derived state.
 
         Returns:
             Numpy array: contains all values stored in the fields.
         """
-        return np.array(list([x for x in self.__dict__.values() if type(x) is not DerivedState]))
+        return np.array(list(x for x in self.__dict__.values() if type(x) is not DerivedState))
 
     def from_array(self, state_array: np.ndarray):
 
@@ -109,7 +109,7 @@ class State:
     #    return False
 
 
-STATE_ARRAY_ORDER = list(State().__dict__.keys())
+STATE_ARRAY_ORDER = list(k for k in State().__dict__.keys() if k != "derived_state")
 
 
 def array_to_state(values: np.ndarray) -> State:
