@@ -142,8 +142,8 @@ class ConfigTestCases(unittest.TestCase):
         self.make_config_helper(EMPTY_PATH, {}, {})
         self.make_config_helper(TEST1_PATH, self.test1_param, self.test1_ic)
 
-        # with self.assertRaises(JsonError):
-        #     Config.make_config(FAIL_PATH)
+        with self.assertRaises(JsonError):
+            Config.make_config(FAIL_PATH)
         #     # some of the fields in fail path are mistyped
         with self.assertRaises(JsonError):
             Config.make_config(FAIL_GYRO_PATH)
