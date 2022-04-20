@@ -5,9 +5,8 @@ from core.state import State, StateTime, ObservedState, PropagatedOutput
 from core.models.model_list import ModelContainer
 from utils.astropy_util import get_body_position
 from utils.log import log
-from utils.numbers import R_EARTH, R_MOON
 import matplotlib.pyplot as plt
-from utils.constants import BodyEnum
+from utils.constants import BodyEnum, R_EARTH, R_MOON
 
 
 class CislunarSim:
