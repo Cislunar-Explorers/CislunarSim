@@ -1,3 +1,4 @@
+from functools import lru_cache
 from astropy.time import Time
 from astropy.coordinates import get_sun, get_moon, CartesianRepresentation
 from typing import Tuple
@@ -6,10 +7,9 @@ from astropy.coordinates import SkyCoord
 
 
 # Heavily reference the get_ephemeris function here: https://github.com/Cislunar-Explorers/FlightSoftware/blob/master/OpticalNavigation/core/observe_functions.py
-def get_body_position(time: float, body: BodyEnum) -> Tuple[float, float, float]:
-    """
-
-    Gets position vector of [body] based on [time]
+@lru_cache
+def get_body_position(time: int, body: BodyEnum) -> Tuple[float, float, float]:
+    """ Gets position vector of [body] based on [time]
 
     Args:
         time (float): the current time being queried

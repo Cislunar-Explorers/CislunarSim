@@ -1,0 +1,6 @@
+{
+    "parameters": {
+        "gyro_bias" : [0.0, 0.0],
+        "gyro_noise" : [0.0, 0.0, 0.0]
+    }
+ }

@@ -1,8 +1,9 @@
-"""Configurations of parameters and initial conditions for a given simulation."""
+"""Configurations of parameters, initial conditions, and default models for a given simulation."""
 
 from typing import Dict, List
-from utils.constants import DEFAULT_MODELS
-from utils.constants import ModelEnum
+import json
+from jsonschema import validate, Draft3Validator, ValidationError
+from utils.constants import DEFAULT_MODELS, ModelEnum
 
 from core.parameters import Parameters
 from core.state import StateTime
@@ -12,8 +13,8 @@ class MutationException(Exception):
     pass
 
 
-# TODO: Implement make_config function that takes in a config path (most likely leading to a JSON file)
-# and construct a Config object
+class JsonError(Exception):
+    pass
 
 
 class Config:
@@ -28,12 +29,17 @@ class Config:
         self,
         parameters: Dict,
         initial_condition: Dict,
-        models: List[ModelEnum] = DEFAULT_MODELS,
+        models: List[ModelEnum] = [ModelEnum.AttitudeModel, ModelEnum.PositionModel],
     ):
 
         self.param = Parameters(param_dict=parameters)
         self.init_cond = StateTime.from_dict(initial_condition)
-        self.models = models  # models is a list of the names of the models that are used in a sim
+
+        # convert string list to model list
+        model_objs = []
+        for model in models:
+            model_objs.append(model)
+        self.models = model_objs  # models is a list of the names of the models that are used in a sim
         self._frozen = True
 
     def __setattr__(self, __name, __value) -> None:
@@ -45,3 +51,52 @@ class Config:
         if self._frozen:
             raise MutationException("Cannot mutate config.")
         object.__delattr__(self, __name)
+
+    @classmethod
+    def make_config(cls, path_str: str):
+        """make_config creates a config object from json file in the proposed location.
+
+        It is dependent on state.py, and parameters.py. Changes in these files will affect this method. It will be used by main.py. Changes in this method might affect the functionality of Main.
+
+        To construct a json file, consult schema.json and example.json in the 'configs' folder. All properties are optional, default values will be inserted if a field is not specified. However, if a property is specified its type and format has to be correct.
+
+        Raises: `JsonError` if json file is not well defined.
+
+        """
+        with open(path_str, "r") as read_file:
+            data = json.load(read_file)
+            try:
+                Draft3Validator(json.load(open("configs/schema.json", "r"))).validate(
+                    data
+                )
+                # validate(instance=data, schema=json.load(open("configs/schema.json", "r")))
+            except ValidationError:
+                raise JsonError("Schema validation failed.")
+
+            # Checking if gyro_bias ans gyro_noise are in the correct format if thery are specified. (other type verification is done by schema.json)
+            try:  # validate gyro_bias is a list of length 3
+                gyro_bias = data.get("parameters").get("gyro_bias")
+                if len(gyro_bias) != 3:
+                    raise JsonError("gyro_bias is not well defined.")
+            except AttributeError:
+                pass  # there is no "parameters" in the json
+            except TypeError:
+                pass  # there is no "gyro_bias" in the json
+
+            try:  # validate gyro_noise is a list of length 3
+                gyro_noise = data.get("parameters").get("gyro_noise")
+                if len(gyro_noise) != 3:
+                    raise JsonError("gyro_noise is not well defined.")
+            except AttributeError:
+                pass  # there is no "parameters" in the json
+            except TypeError:
+                pass  # there is no "gyro_noise" in the json
+
+            json_params = data.get("parameters", {})
+            json_init_cond = data.get("initial_condition", {})
+            json_models = data.get("models", [])
+            actual_models = []
+            for model_str in json_models:
+                actual_models.append(ModelEnum(model_str))
+
+        return cls(json_params, json_init_cond, actual_models)
