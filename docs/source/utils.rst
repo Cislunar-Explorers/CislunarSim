@@ -20,10 +20,26 @@ utils.constants module
    :undoc-members:
    :show-inheritance:
 
+utils.data\_handling module
+---------------------------
+
+.. automodule:: utils.data_handling
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 utils.log module
 ----------------
 
 .. automodule:: utils.log
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+utils.numbers module
+--------------------
+
+.. automodule:: utils.numbers
    :members:
    :undoc-members:
    :show-inheritance:
