@@ -1,5 +1,10 @@
 from enum import Enum, IntEnum
 from typing import Union
+from pathlib import Path
+
+
+SIM_ROOT = (Path(__file__).parent / "../..").resolve()
+SRC_ROOT = (Path(__file__).parent / "..").resolve()
 
 
 class StringEnum(str, Enum):
@@ -12,6 +17,9 @@ class StringEnum(str, Enum):
 class ModelEnum(StringEnum):
     AttitudeModel = "att"
     PositionModel = "pos"
+
+    GyroModel = "gyro"
+
     UnittestModel = "unittest"
 
 

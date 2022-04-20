@@ -55,8 +55,8 @@ class ConfigTestCases(unittest.TestCase):
         test_config_1 = Config(self.param_pos, self.ic_pos)
         test_config_2 = Config(self.param_all, self.ic_all)
         with self.assertRaises(MutationException):
-            test_config_1.init_cond = State(
-                {"throw": "error"}
+            test_config_1.init_cond = StateTime(
+                State(**{"x": "error"})
             )  # mutating init_cond would throw error
         with self.assertRaises(MutationException):
             test_config_2.param = Parameters({})  # mutating param would throw error
