@@ -10,6 +10,14 @@ source venv/bin/activate
 pip install -e .
 ```
 
+## Running the sim
+
+Make sure you're in /tests. Then run the following:
+
+```
+python profiling.py
+```
+
 ## IMPORTANT: Python Version MUST be 3.8 and above
 
 Run

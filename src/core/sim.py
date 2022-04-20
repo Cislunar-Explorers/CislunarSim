@@ -97,22 +97,23 @@ class CislunarSim:
         if (state.x**2 + state.y**2 + state.z**2) ** 0.5 < R_EARTH:
             log.error("Stopping sim because craft is inside the Earth")
             log.debug(f"r={(state.x**2 + state.y**2 + state.z**2)**0.5} < {R_EARTH}")
-            self.ax.scatter3D(self.xlocs, self.ylocs, self.zlocs, cmap="Greens")
-            u, v = np.mgrid[0 : 2 * np.pi : 20j, 0 : np.pi : 10j]
-            earth_x = R_EARTH * np.cos(u) * np.sin(v)
-            earth_y = R_EARTH * np.sin(u) * np.sin(v)
-            earth_z = R_EARTH * np.cos(v)
-            self.ax.plot_surface(earth_x, earth_y, earth_z, color="g")
-
-            moon_cx, moon_cy, moon_cz = get_body_position(
-                self.state.time, BodyEnum.Moon
-            )
-            moon_x = moon_cx + R_MOON * np.cos(u) * np.sin(v)
-            moon_y = moon_cy + R_MOON * np.sin(u) * np.sin(v)
-            moon_z = moon_cz + R_MOON * np.cos(v)
-            self.ax.plot_surface(moon_x, moon_y, moon_z, color="g")
-
-            plt.show()
+            self.plot_data()
             return True
 
         return False
+
+    def plot_data(self):
+        self.ax.scatter3D(self.xlocs, self.ylocs, self.zlocs, cmap="Greens")
+        u, v = np.mgrid[0 : 2 * np.pi : 20j, 0 : np.pi : 10j]
+        earth_x = R_EARTH * np.cos(u) * np.sin(v)
+        earth_y = R_EARTH * np.sin(u) * np.sin(v)
+        earth_z = R_EARTH * np.cos(v)
+        self.ax.plot_surface(earth_x, earth_y, earth_z, color="g")
+
+        moon_cx, moon_cy, moon_cz = get_body_position(self.state.time, BodyEnum.Moon)
+        moon_x = moon_cx + R_MOON * np.cos(u) * np.sin(v)
+        moon_y = moon_cy + R_MOON * np.sin(u) * np.sin(v)
+        moon_z = moon_cz + R_MOON * np.cos(v)
+        self.ax.plot_surface(moon_x, moon_y, moon_z, color="g")
+
+        plt.show()
