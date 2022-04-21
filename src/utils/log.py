@@ -1,5 +1,4 @@
 import logging
-from logging.handlers import RotatingFileHandler
 
 logging.basicConfig(
     level=logging.DEBUG,
