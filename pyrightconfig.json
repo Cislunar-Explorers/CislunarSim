@@ -1,4 +1,5 @@
 {
+    "pythonVersion": "3.8",
     "reportUnboundVariable": "warning",
     "reportSelfClsParameterName": "error",
     "reportMissingImports": "error",
