@@ -1,9 +1,11 @@
 astropy==5.0.4
 attrs==21.4.0
--e git+https://github.com/Cislunar-Explorers/CislunarSim.git@859f958eb06470317b762fff2417dee382549f10#egg=cislunar_sim
+-e git+https://github.com/Cislunar-Explorers/CislunarSim.git@918ab4c711657c7aa221dc6dd5a42998a672e193#egg=cislunar_sim
 cycler==0.11.0
 fonttools==4.31.2
+importlib-resources==5.7.1
 iniconfig==1.1.1
+jsonschema==4.4.0
 kiwisolver==1.4.2
 matplotlib==3.5.1
 nodeenv==1.6.0
@@ -16,6 +18,7 @@ py==1.11.0
 pyerfa==2.0.0.1
 pyparsing==3.0.7
 pyright==1.1.234
+pyrsistent==0.18.1
 pytest==7.1.1
 python-dateutil==2.8.2
 pytz==2022.1
@@ -25,3 +28,4 @@ six==1.16.0
 snakeviz==2.1.1
 tomli==2.0.1
 tornado==6.1
+zipp==3.8.0
