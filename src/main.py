@@ -9,44 +9,40 @@ import pandas as pd
 
 import argparse
 
-_DESCRIPTION = '''CISLUNAR Simulation Runner!'''
+_DESCRIPTION = """CISLUNAR Simulation Runner!"""
+
 
 class SimRunner:
     """
     This class serves as the main entry point to the sim.
     """
 
-
-    def __init__(self, args: Union[str, Config] = "configs/test_zeroes.json") -> None: 
+    def __init__(self, config: Config = None) -> None:
         """
         Runs the sim from specified config path. Called from command-line.
 
         Input structure: "python3 src/main.py --config {file path}"
         Example: "python3 src/main.py --config configs/test_angles.json"
         """
+        # if called from somewhere within the program, with config objects
+        if config:
+            self._sim = CislunarSim(config)
+
         # if called from command line
-        if isinstance(args, str):
+        else:
             # Build the argument parser
-            parser = argparse.ArgumentParser(description= _DESCRIPTION)
+            parser = argparse.ArgumentParser(description=_DESCRIPTION)
             parser.add_argument(
-                '-c', '--config', type = str, help =
-                'json configuration file used to initialize the simulation'
+                "config",
+                type=str,
+                help="initialize simulation with given path to json config file.",
             )
 
             # Parser command line arguments
             args = parser.parse_args()
-            config_path = args.config
-            config = Config.make_config(config_path)
-        # if called from somewhere within the program, with config objects   
-        else:
-            assert isinstance(args, Config)
-            config = args
-        self._sim = CislunarSim(config)
+            self._sim = CislunarSim(Config.make_config(args.config))
+
         self.state_history = []
-
-        self._sim = CislunarSim(cast(Config, config))
-        self.state_history: List[PropagatedOutput] = []
-
 
     def run(self) -> pd.DataFrame:
         """Runs the sim and returns the truth and observed states in a pandas dataframe.
@@ -72,17 +68,6 @@ class SimRunner:
         return self.state_history
 
 
-def freefall():
-    # freefall from ~4000km altitude to test basic functionality of the sim
-    initial_condition = {"x": 10_000_000, "y": 1_000, "z": 1_000, "ang_vel_x": 4.5, "time": 0.0}
-    models_to_use = [ModelEnum.PositionModel, ModelEnum.GyroModel]
-    conf = Config({}, initial_condition, models=models_to_use)
-
-    test_sim = SimRunner(conf)
-    data = test_sim.run()
-    df_to_csv(data)
-
-
 if __name__ == "__main__":
-    # freefall()
-    Simrunner()
+    data = SimRunner().run()
+    df_to_csv(data)
