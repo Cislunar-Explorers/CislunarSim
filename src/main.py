@@ -7,24 +7,46 @@ from core.sim import CislunarSim
 from core.state import PropagatedOutput
 import pandas as pd
 
+import argparse
+
+_DESCRIPTION = '''CISLUNAR Simulation Runner!'''
+
 class SimRunner:
     """
     This class serves as the main entry point to the sim.
     """
 
 
-    def __init__(self, config_path: Union[str, Config] = "data/zeroes.json") -> None: 
-        #TODO: use a file with actual default values, not zeroes
-        if isinstance(config_path, str):
+    def __init__(self, args: Union[str, Config] = "configs/test_zeroes.json") -> None: 
+        """
+        Runs the sim from specified config path. Called from command-line.
+
+        Input structure: "python3 src/main.py --config {file path}"
+        Example: "python3 src/main.py --config configs/test_angles.json"
+        """
+        # if called from command line
+        if isinstance(args, str):
+            # Build the argument parser
+            parser = argparse.ArgumentParser(description= _DESCRIPTION)
+            parser.add_argument(
+                '-c', '--config', type = str, help =
+                'json configuration file used to initialize the simulation'
+            )
+
+            # Parser command line arguments
+            args = parser.parse_args()
+            config_path = args.config
             config = Config.make_config(config_path)
+        # if called from somewhere within the program, with config objects   
         else:
-            assert isinstance(config_path, Config)
-            config = config_path
+            assert isinstance(args, Config)
+            config = args
         self._sim = CislunarSim(config)
         self.state_history = []
 
         self._sim = CislunarSim(cast(Config, config))
         self.state_history: List[PropagatedOutput] = []
+
 
     def run(self) -> pd.DataFrame:
         """Runs the sim and returns the truth and observed states in a pandas dataframe.
@@ -62,4 +84,5 @@ def freefall():
 
 
 if __name__ == "__main__":
-    freefall()
+    # freefall()
+    Simrunner()
