@@ -38,13 +38,17 @@ class DerivedPosition(DerivedStateModel):
         # earth to the craft
         r_ec = np.subtract(r_eo, r_co)
 
+
+        print(r_mc, "\n\n", r_sc, "\n\n", r_ec, "\n\n")
+
         return {
-            'r_co': r_co,
-            'r_mo': r_mo,
-            'r_so': r_so,
-            'r_mc': r_mc,
-            'r_sc': r_sc,
-            'r_ec': r_ec,
+            "r_co": r_co,
+            "r_mo": r_mo,
+            "r_so": r_so,
+            "r_eo": r_eo,
+            "r_mc": r_mc,
+            "r_sc": r_sc,
+            "r_ec": r_ec,
         }
 
 
@@ -79,8 +83,6 @@ class PositionDynamics(EnvironmentModel):
         r_mc = state.derived_state.r_mc
         r_sc = state.derived_state.r_sc
         r_ec = state.derived_state.r_ec
-        
-        print(r_mc, "\n\n", r_sc, "\n\n", r_ec, "\n\n")
 
         # mu values of the body, where mu = G * m_body
         G = 6.6743e-11

@@ -3,7 +3,6 @@ from attr import field
 import numpy as np
 from typing import Dict, Union
 from core.derived_state import DerivedState
-from core.models.model_list import DerivedPosition
 from utils.constants import State_Type
 
 
