@@ -39,7 +39,7 @@ class DerivedPosition(DerivedStateModel):
         r_ec = np.subtract(r_eo, r_co)
 
 
-        print(r_mc, "\n\n", r_sc, "\n\n", r_ec, "\n\n")
+        # print(r_mc, "\n\n", r_sc, "\n\n", r_ec, "\n\n")
 
         return {
             "r_co": r_co,
@@ -83,6 +83,9 @@ class PositionDynamics(EnvironmentModel):
         r_mc = state.derived_state.r_mc
         r_sc = state.derived_state.r_sc
         r_ec = state.derived_state.r_ec
+
+        # print("Here")
+        # print(r_mc, "\n\n", r_sc, "\n\n", r_ec, "\n\n")
 
         # mu values of the body, where mu = G * m_body
         G = 6.6743e-11

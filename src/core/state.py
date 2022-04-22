@@ -47,7 +47,7 @@ class State:
     force_moon: float = 0.0
 
     # derived state
-    derived_state: DerivedState = field(init=False)
+    derived_state: DerivedState = DerivedState()
 
     # discrete state
     propulsion_on: bool = False
@@ -58,7 +58,9 @@ class State:
         __post_init__() is a procedure that is called after the object is created.
         TODO: Make it propagate the derived state?
         """
-        self.derived_state = DerivedState()
+        # print(self.derived_state, "\n")
+        # self.derived_state.update(self.__dict__)
+        ...
 
     def update(self, state_dict: Dict[str, Union[int, float, bool]]) -> None:
         """

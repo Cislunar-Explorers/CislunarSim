@@ -67,7 +67,7 @@ class CislunarSim:
 
         state = self.state.state
 
-        if not np.isfinite(state.to_array()).all():
+        if not np.isfinite(state.float_fields_to_array()).all():
             # Thank you: https://stackoverflow.com/questions/911871/
             log.error("Stopping sim because of infinite value in state")
             log.debug(f"{self.state}")
