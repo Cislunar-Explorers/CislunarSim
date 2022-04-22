@@ -21,8 +21,8 @@ class SimRunner:
         """
         Runs the sim from specified config path. Called from command-line.
 
-        Input structure: "python3 src/main.py --config {file path}"
-        Example: "python3 src/main.py --config configs/test_angles.json"
+        Input structure: "python3 src/main.py {file path}"
+        Example: "python3 src/main.py configs/freefall.json"
         """
         # if called from somewhere within the program, with config objects
         if config:
@@ -35,7 +35,7 @@ class SimRunner:
             parser.add_argument(
                 "config",
                 type=str,
-                help="initialize simulation with given path to json config file.",
+                help="Initialize simulation with given path to json config file.",
             )
 
             # Parser command line arguments
