@@ -1,13 +1,12 @@
-from utils.constants import ModelEnum
 from utils.log import log
 from utils.data_handling import states_to_df, df_to_csv
-from typing import List, Union, cast
+import logging
 from core.config import Config
 from core.sim import CislunarSim
-from core.state import PropagatedOutput
 import pandas as pd
 
 import argparse
+
 
 _DESCRIPTION = """CISLUNAR Simulation Runner!"""
 
@@ -37,9 +36,19 @@ class SimRunner:
                 type=str,
                 help="Initialize simulation with given path to json config file.",
             )
+            parser.add_argument(
+                "-v",
+                "--verbose",
+                action="store_true",
+                help="set the logging level to DEBUG instead of INFO",
+            )
 
             # Parser command line arguments
             args = parser.parse_args()
+
+            # Set Logging level of "Sim" based on --verbose argument.
+            log.setLevel(logging.DEBUG) if args.verbose else log.setLevel(logging.INFO)
+
             self._sim = CislunarSim(Config.make_config(args.config))
 
         self.state_history = []
