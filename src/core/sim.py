@@ -96,7 +96,6 @@ class CislunarSim:
             log.debug(f"r={(state.x**2 + state.y**2 + state.z**2)**0.5} < {R_EARTH}")
             data_plot = Plot(self.xlocs, self.ylocs, self.zlocs, self.state)
             data_plot.plot_data()
-            # self.plot_data()
             return True
 
         return False

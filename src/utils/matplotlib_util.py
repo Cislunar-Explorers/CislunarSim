@@ -1,8 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from utils.astropy_util import get_body_position
-from mimetypes import init
-from utils.constants import BodyEnum, R_EARTH, R_MOON
+from utils.constants import BodyEnum, R_EARTH, R_MOON, R_SUN
 
 
 class Plot:
@@ -40,11 +39,11 @@ class Plot:
         moon_z = moon_cz + R_MOON * np.cos(v)
         self.ax.plot_surface(moon_x, moon_y, moon_z, color="gray")
 
-        # # Calculation and plotting of sun's position
-        # moon_cx, moon_cy, moon_cz = get_body_position(self.state.time, BodyEnum.Sun)
-        # moon_x = moon_cx + R_SUN * np.cos(u) * np.sin(v)
-        # moon_y = moon_cy + R_SUN * np.sin(u) * np.sin(v)
-        # moon_z = moon_cz + R_SUN * np.cos(v)
-        # self.ax.plot_surface(moon_x, moon_y, moon_z, color="y")
+        # Calculation and plotting of sun's position
+        sun_cx, sun_cy, sun_cz = get_body_position(self.state.time, BodyEnum.Sun)
+        sun_x = sun_cx + R_SUN * np.cos(u) * np.sin(v)
+        sun_y = sun_cy + R_SUN * np.sin(u) * np.sin(v)
+        sun_z = sun_cz + R_SUN * np.cos(v)
+        self.ax.plot_surface(sun_x, sun_y, sun_z, color="y")
 
         plt.show()
