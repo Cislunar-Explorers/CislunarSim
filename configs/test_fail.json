@@ -1,8 +1,8 @@
 {
-    "Parameters": {
+    "parameters": {
         "thruster_force": 30.0
     },
-    "initialCondition": {
+    "initial_condition": {
 
         "vel_x" : 38.0, 
         "vel_y" : 37.0, 
