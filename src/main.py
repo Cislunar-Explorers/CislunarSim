@@ -6,15 +6,16 @@ from core.config import Config
 from core.sim import CislunarSim
 from core.state import PropagatedOutput
 import pandas as pd
+from utils.matplotlib_util import Plot
+
 
 class SimRunner:
     """
     This class serves as the main entry point to the sim.
     """
 
-
-    def __init__(self, config_path: Union[str, Config] = "data/zeroes.json") -> None: 
-        #TODO: use a file with actual default values, not zeroes
+    def __init__(self, config_path: Union[str, Config] = "data/zeroes.json") -> None:
+        # TODO: use a file with actual default values, not zeroes
         if isinstance(config_path, str):
             config = Config.make_config(config_path)
         else:
@@ -35,7 +36,12 @@ class SimRunner:
             pd.DataFrame: Dataframe of the true and observed states at each instant of observation.
         """
         states = self._run()
-        return states_to_df(states)
+        run_df = states_to_df(states)
+
+        data_plot = Plot(run_df)
+        data_plot.plot_data()
+
+        return run_df
 
     def _run(self):
         while self._sim.should_run:
@@ -52,7 +58,13 @@ class SimRunner:
 
 def freefall():
     # freefall from ~4000km altitude to test basic functionality of the sim
-    initial_condition = {"x": 10_000_000, "y": 1_000, "z": 1_000, "ang_vel_x": 4.5, "time": 0.0}
+    initial_condition = {
+        "x": 10_000_000,
+        "y": 1_000,
+        "z": 1_000,
+        "ang_vel_x": 4.5,
+        "time": 0.0,
+    }
     models_to_use = [ModelEnum.PositionModel, ModelEnum.GyroModel]
     conf = Config({}, initial_condition, models=models_to_use)
 

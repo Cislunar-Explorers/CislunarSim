@@ -22,19 +22,6 @@ class CislunarSim:
         self.should_run = True
         self.num_iters = 0
 
-        # fig = plt.figure()
-        # self.ax = fig.add_subplot(111, projection="3d")
-        # self.ax.set_xlim(-10000000, 10000000)
-        # self.ax.set_ylim(-10000000, 10000000)
-        # self.ax.set_zlim(-10000000, 10000000)
-        # self.ax.set_xlabel("x")
-        # self.ax.set_ylabel("y")
-        # self.ax.set_zlabel("z")
-        # # self.ax = plt.axes(projection='3d')
-        self.xlocs = np.array([])
-        self.ylocs = np.array([])
-        self.zlocs = np.array([])
-
     def step(self) -> PropagatedOutput:
         """
         step() is the combined true and observed state after one step.
@@ -61,10 +48,6 @@ class CislunarSim:
         # check if we should stop the sim
         self.should_run = not (self.should_stop())
         self.num_iters += 1
-
-        self.xlocs = np.append(self.xlocs, self.state.state.x)
-        self.ylocs = np.append(self.ylocs, self.state.state.y)
-        self.zlocs = np.append(self.zlocs, self.state.state.z)
 
         log.debug(self.state)
         return PropagatedOutput(self.state, self.observed_state)
@@ -94,29 +77,6 @@ class CislunarSim:
         if (state.x**2 + state.y**2 + state.z**2) ** 0.5 < R_EARTH:
             log.error("Stopping sim because craft is inside the Earth")
             log.debug(f"r={(state.x**2 + state.y**2 + state.z**2)**0.5} < {R_EARTH}")
-            data_plot = Plot(self.xlocs, self.ylocs, self.zlocs, self.state)
-            data_plot.plot_data()
             return True
 
         return False
-
-    # def plot_data(self) -> None:
-    #     """Procedure that plots a model of the earth, moon and the craft's trajectory in R3"""
-    #     # 3D scatter plot of craft's trajectory
-    #     self.ax.scatter3D(self.xlocs, self.ylocs, self.zlocs, cmap="Greens")
-
-    #     # Calculation and plotting of earth's position
-    #     u, v = np.mgrid[0 : 2 * np.pi : 20j, 0 : np.pi : 10j]
-    #     earth_x = R_EARTH * np.cos(u) * np.sin(v)
-    #     earth_y = R_EARTH * np.sin(u) * np.sin(v)
-    #     earth_z = R_EARTH * np.cos(v)
-    #     self.ax.plot_surface(earth_x, earth_y, earth_z, color="g")
-
-    #     # Calculation and plotting of moon's position
-    #     moon_cx, moon_cy, moon_cz = get_body_position(self.state.time, BodyEnum.Moon)
-    #     moon_x = moon_cx + R_MOON * np.cos(u) * np.sin(v)
-    #     moon_y = moon_cy + R_MOON * np.sin(u) * np.sin(v)
-    #     moon_z = moon_cz + R_MOON * np.cos(v)
-    #     self.ax.plot_surface(moon_x, moon_y, moon_z, color="g")
-
-    #     plt.show()
