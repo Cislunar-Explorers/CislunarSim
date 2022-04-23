@@ -1,5 +1,5 @@
 import unittest
-from core.state import State, StateTime
+from core.state import State, StateTime, DerivedState
 from utils.test_utils import s_0, state_1
 
 
@@ -40,9 +40,9 @@ class StateTestCases(unittest.TestCase):
 
     def test_to_array(self):
         """
-        Tests that to_array() returns the correct values for the fields of an instance of State, in a consistent order.
-
+        Tests that float_fields_to_array() returns the correct values for the fields of an instance of State, in a consistent order.
         """
+
         state_list = [
             2.0,
             3.0,
@@ -66,7 +66,7 @@ class StateTestCases(unittest.TestCase):
         ]
         self.assertEqual(
             state_list,
-            state_1.to_array().tolist(),
+            state_1.float_fields_to_array().tolist(),
         )
 
 
