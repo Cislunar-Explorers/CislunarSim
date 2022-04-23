@@ -37,7 +37,6 @@ class Plot:
             arrowprops=dict(arrowstyle="->"),
         )
         self.annot.set_visible(False)
-        self.sc = None
 
     def plot_data(self) -> None:
         """Procedure that plots a model of the earth, moon and the craft's trajectory in R3"""
