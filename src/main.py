@@ -1,6 +1,7 @@
 from utils.log import log
 from utils.data_handling import states_to_df, df_to_csv
 import logging
+from typing import Union
 from core.config import Config
 from core.sim import CislunarSim
 import pandas as pd
@@ -16,7 +17,7 @@ class SimRunner:
     This class serves as the main entry point to the sim.
     """
 
-    def __init__(self, config: Config = None) -> None:
+    def __init__(self, config: Union[Config, None] = None) -> None:
         """
         Runs the sim from specified config path. Called from command-line.
 
@@ -26,7 +27,7 @@ class SimRunner:
             "python3 src/main.py configs/test_angles.json -v"
         """
         # if called from somewhere within the program, with config objects
-        if config:
+        if isinstance (config, Config):
             self._sim = CislunarSim(config)
 
         # if called from command line
