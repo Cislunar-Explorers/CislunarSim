@@ -19,9 +19,11 @@ class SimRunner:
 
     def __init__(self, config: Union[Config, None] = None) -> None:
         """
-        Runs the sim from specified config path. Called from command-line.
+        Runs the sim from specified config path or from a Config Object. 
 
-        Input structure: "python3 src/main.py {file path} {-v}"
+        Input structure: 
+            "python3 src/main.py {file path} [-v]"
+            File path is a required argument, verbose is an optional argument.
         Example: 
             "python3 src/main.py configs/freefall.json"
             "python3 src/main.py configs/test_angles.json -v"
