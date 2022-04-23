@@ -46,6 +46,7 @@ s_1 = {
     "force_moon": 18.0,
     "propulsion_on": True,
     "solenoid_actuation_on": False,
+    "derived_state": DerivedState(),
 }
 state_1 = State(**s_1)
 

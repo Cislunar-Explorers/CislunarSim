@@ -26,6 +26,8 @@ class StateTestCases(unittest.TestCase):
             dummy_data = 1.0
             if field in bool_fields:
                 dummy_data = True
+            if field == "derived_state":
+                dummy_data = DerivedState()
             s_copy = dict(s_0)
             s_copy[field] = dummy_data
             self.assertEqual(
