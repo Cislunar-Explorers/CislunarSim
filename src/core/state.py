@@ -53,15 +53,6 @@ class State:
     propulsion_on: bool = False
     solenoid_actuation_on: bool = False
 
-    def __post_init__(self):
-        """
-        __post_init__() is a procedure that is called after the object is created.
-        TODO: Make it propagate the derived state?
-        """
-        # print(self.derived_state, "\n")
-        # self.derived_state.update(self.__dict__)
-        ...
-
     def update(self, state_dict: Dict[str, Union[int, float, bool]]) -> None:
         """
         update() is a procedure that updates the fields of the state with specified key/value pairs in state_dict.
@@ -83,10 +74,10 @@ class State:
 
     def float_fields_to_array(self):
         """
-        float_fields_to_array() acts like to_array(), but ignores the derived state.
+        float_fields_to_array() acts like to_array(), but ignores the derived state. This is helpful for functions which wish to evaluate numerical fields of the state, such as should_stop() in sim.py and propagate_state() in integrator.py.
 
         Returns:
-            Numpy array: contains all values stored in the fields.
+            Numpy array: contains all values stored in the float or bool fields.
         """
         return np.array(list(x for x in self.__dict__.values() if type(x) is not DerivedState))
 
