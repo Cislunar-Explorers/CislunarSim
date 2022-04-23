@@ -20,8 +20,10 @@ class SimRunner:
         """
         Runs the sim from specified config path. Called from command-line.
 
-        Input structure: "python3 src/main.py {file path}"
-        Example: "python3 src/main.py configs/freefall.json"
+        Input structure: "python3 src/main.py {file path} {-v}"
+        Example: 
+            "python3 src/main.py configs/freefall.json"
+            "python3 src/main.py configs/test_angles.json -v"
         """
         # if called from somewhere within the program, with config objects
         if config:
