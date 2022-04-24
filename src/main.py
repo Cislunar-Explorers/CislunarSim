@@ -89,23 +89,6 @@ class SimRunner:
         return self.state_history
 
 
-def freefall():
-    # freefall from ~4000km altitude to test basic functionality of the sim
-    initial_condition = {
-        "x": 10_000_000,
-        "y": 1_000,
-        "z": 1_000,
-        "ang_vel_x": 4.5,
-        "time": 0.0,
-    }
-    models_to_use = [ModelEnum.PositionModel, ModelEnum.GyroModel]
-    conf = Config({}, initial_condition, models=models_to_use)
-
-    test_sim = SimRunner(conf)
-    data = test_sim.run()
-    df_to_csv(data)
-
-
 if __name__ == "__main__":
     data = SimRunner().run()
     df_to_csv(data)
