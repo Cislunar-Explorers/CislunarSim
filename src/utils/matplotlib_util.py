@@ -50,7 +50,7 @@ class Plot:
         earth_x = R_EARTH * np.cos(u) * np.sin(v)
         earth_y = R_EARTH * np.sin(u) * np.sin(v)
         earth_z = R_EARTH * np.cos(v)
-        # self.ax.plot_surface(earth_x, earth_y, earth_z, color="g")
+        self.ax.plot_surface(earth_x, earth_y, earth_z, color="g")
 
         # Calculation and plotting of moon's position
         moon_cx, moon_cy, moon_cz = get_body_position(self.ts[-1], BodyEnum.Moon)
