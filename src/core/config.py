@@ -2,7 +2,8 @@
 
 from typing import Dict, List
 import json
-from jsonschema import validate, Draft3Validator, ValidationError
+from utils.log import log
+from jsonschema import Draft3Validator, ValidationError
 from utils.constants import DEFAULT_MODELS, ModelEnum
 
 from core.parameters import Parameters
@@ -93,8 +94,15 @@ class Config:
                 pass  # there is no "gyro_noise" in the json
 
             json_params = data.get("parameters", {})
+            if json_params == {}:
+                log.warning("parameters are not specified")
             json_init_cond = data.get("initial_condition", {})
+            if json_init_cond == {}:
+                log.warning("initial conditions are not specified")
             json_models = data.get("models", [])
+            if json_models == []:
+                log.warning("models are not specified")
+
             actual_models = []
             for model_str in json_models:
                 actual_models.append(ModelEnum(model_str))

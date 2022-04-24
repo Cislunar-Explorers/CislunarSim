@@ -22,9 +22,16 @@ python profiling.py
 
 Run
 
-```
-python -V
-```
+Input structure: 
+    ```
+    "python3 src/main.py {file path} [-v]"
+    ```
+    File path is a required argument, verbose is an optional argument.
+Example: 
+    ```
+    "python3 src/main.py configs/freefall.json"
+    "python3 src/main.py configs/test_angles.json -v"
+    ```
 
 in terminal to find your Python version. If it's lower than 3.8, you should upgrade your Python version.
 
