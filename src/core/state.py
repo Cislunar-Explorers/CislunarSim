@@ -7,8 +7,7 @@ from utils.constants import State_Type
 
 @dataclass
 class State:
-    """
-    This is a container class for all state variables as defined in this sheet:
+    """ This is a container class for all state variables as defined in this sheet:
      https://cornell.box.com/s/z20wbp66q0pseqievmadf515ucd971g2.
 
      In order to init a class of State, by far the easiest way is via kwarg unpacking:
@@ -50,8 +49,7 @@ class State:
     solenoid_actuation_on: bool = False
 
     def update(self, state_dict: Dict[str, Union[int, float, bool]]) -> None:
-        """
-        update() is a procedure that updates the fields of the state with specified key/value pairs in state_dict.
+        """ update() is a procedure that updates the fields of the state with specified key/value pairs in state_dict.
         If a key in the `state_dict` is not defined as an attribute in State.__init__, it will be ignored.
         """
         for key, value in state_dict.items():
@@ -59,9 +57,7 @@ class State:
                 setattr(self, key, value)
 
     def to_array(self):
-        """
-        to_array() is the representation of the values of the fields as an
-         array.
+        """ to_array() is the representation of the values of the fields as an array.
 
         Returns:
             Numpy array: contains all values stored in the fields.
@@ -94,7 +90,7 @@ STATE_ARRAY_ORDER = list(State().__dict__.keys())
 def array_to_state(values: np.ndarray) -> State:
     """Converts a numpy array or list into a `State` object.
      This assumes that the items in `state_array` are consistent with
-     `STATE_ARRAY_ORDER`(which is an assumption that will probably lead
+     `STATE_ARRAY_ORDER` (which is an assumption that will probably lead
      to many bugs in the future...)
 
     Args:
@@ -114,7 +110,7 @@ class StateTime:
 
     @classmethod
     def from_dict(cls, statetime_dict: Dict[str, State_Type]):
-        """Generates a new StateTime instance from an input dictionary.
+        """ Generates a new StateTime instance from an input dictionary.
         Can be called via `StateTime.from_dict(...)` to make a new StateTime object
 
         Args:
