@@ -66,7 +66,6 @@ class PositionDynamics(EnvironmentModel):
             # earth to craft acceleration component
             + mu_earth * r_ec / (np.dot(r_ec, r_ec) ** (3 / 2))
         )
-
         return {
             "x": state.vel_x,
             "y": state.vel_y,
@@ -162,6 +161,10 @@ class ModelContainer:
                 model_instantiated = model(config.param)
                 self.sensor.append(model_instantiated)
             else:
-                raise RuntimeError(f"The type of `{model_name}` is not an expected type: {model}.")
+                raise RuntimeError(
+                    f"The type of `{model_name}` is not an expected type: {model}."
+                )
 
-        self.state_update_function: Callable = build_state_update_function(self.environmental)
+        self.state_update_function: Callable = build_state_update_function(
+            self.environmental
+        )
