@@ -5,6 +5,7 @@ from core.state import State, StateTime, ObservedState, PropagatedOutput
 from core.models.model_list import ModelContainer
 from utils.log import log
 from utils.numbers import R_EARTH
+from utils.constants import EARTH_SOI
 
 
 class CislunarSim:
@@ -68,13 +69,19 @@ class CislunarSim:
             log.debug(f"{self.state}")
             return True
 
-        if self.num_iters > 1e5:
+        if self.num_iters > 1e6:
             log.error("Stopping sim because it's running too long")
             return True
 
-        if (state.x**2 + state.y**2 + state.z**2)**0.5 < R_EARTH:
+        r_e = (state.x**2 + state.y**2 + state.z**2)**0.5
+        if r_e < R_EARTH:
             log.error("Stopping sim because craft is inside the Earth")
-            log.debug(f"r={(state.x**2 + state.y**2 + state.z**2)**0.5} < {R_EARTH}")
+            log.debug(f"r={r_e} < {R_EARTH}")
+            return True
+        
+        if r_e > EARTH_SOI:
+            log.error("Stopping sim because craft in Heliocentric orbit (outside of Earth's SOI)")
+            log.debug(f"r={r_e} > {EARTH_SOI}")
             return True
 
         return False

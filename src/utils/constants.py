@@ -36,3 +36,14 @@ class BodyEnum(IntEnum):
     Earth = 0
     Moon = 1
     Sun = 2
+
+
+# mu values of the body, where mu = G * m_body
+G = 6.6743e-11
+mu_moon = G * 7.34767309e22
+mu_sun = G * 1.988409870698051e30
+mu_earth = G * 5.972167867791379e24
+
+EARTH_SMA = 149.60e9  # semi-major axis of Earth's orbit around the Sun
+
+EARTH_SOI = EARTH_SMA * (mu_earth / mu_sun) ** (2 / 5)

@@ -4,7 +4,7 @@ from core.models.model import ActuatorModel, EnvironmentModel, SensorModel, MODE
 from core.models.gyro_model import GyroModel
 from core.state import State, array_to_state
 from core.config import Config
-from utils.constants import BodyEnum, ModelEnum, State_Type
+from utils.constants import BodyEnum, ModelEnum, State_Type, mu_sun, mu_earth, mu_moon
 from utils.astropy_util import get_body_position
 
 
@@ -40,11 +40,11 @@ class PositionDynamics(EnvironmentModel):
         # craft to origin
         r_co = np.array([state.x, state.y, state.z])
         # moon to origin
-        
+
         # round t to the 10s place
-        r_mo = np.array(get_body_position(t//10*10, BodyEnum.Moon))
+        r_mo = np.array(get_body_position(t // 10 * 10, BodyEnum.Moon))
         # sun to origin
-        r_so = np.array(get_body_position(t//10*10, BodyEnum.Sun))
+        r_so = np.array(get_body_position(t // 10 * 10, BodyEnum.Sun))
         # earth to origin
         r_eo = np.array((0.0, 0.0, 0.0))  # Earth is at the origin in GCRS
 
@@ -57,11 +57,6 @@ class PositionDynamics(EnvironmentModel):
         # earth to the craft
         r_ec = np.subtract(r_eo, r_co)
 
-        # mu values of the body, where mu = G * m_body
-        G = 6.6743e-11
-        mu_moon = G * 7.34767309e22
-        mu_sun = G * 1.988409870698051e30
-        mu_earth = G * 5.972167867791379e24
         # acceleration column vector calculation
         a = (
             # moon to craft acceleration component
