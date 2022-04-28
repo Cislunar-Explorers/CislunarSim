@@ -6,6 +6,8 @@ import argparse
 
 
 class PlotHelper:
+    """This class serves as a helper tool for plotting sim run csvs."""
+
     def __init__(self) -> None:
         # if called from command line
         # Build the argument parser
@@ -21,9 +23,6 @@ class PlotHelper:
         self.data = pd.read_csv(args.csv_link)
         self.pl = Plot(self.data)
 
-    def run(self) -> pd.DataFrame:
-        self.pl.plot_data()
-
 
 if __name__ == "__main__":
-    data = PlotHelper().run()
+    data = PlotHelper().pl.plot_data()

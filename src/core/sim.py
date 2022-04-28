@@ -23,9 +23,7 @@ class CislunarSim:
         self.num_iters = 0
 
     def step(self) -> PropagatedOutput:
-        """
-        step() is the combined true and observed state after one step.
-        """
+        """step() is the combined true and observed state after one step."""
 
         # Evaluate Actuator models to update state
         for actuator_model in self._models.actuator:
