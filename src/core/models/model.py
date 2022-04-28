@@ -44,8 +44,7 @@ class EnvironmentModel(Model):
 
     @abstractmethod
     def d_state(self, t: float, state: State) -> Dict[str, State_Type]:
-        """Function which evaluates the differential equation:
-         dy / dt = f(t, y)
+        """Function which evaluates the differential equation: dy / dt = f(t, y)
          for the current state. "y" is a state vector (not just one variable)
 
         Args:
