@@ -1,4 +1,3 @@
-from email.mime import base
 import unittest
 from core.models.model_list import PositionDynamics, DerivedPosition
 from utils.test_utils import state_1, d3456

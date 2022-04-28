@@ -54,8 +54,7 @@ class State:
     solenoid_actuation_on: bool = False
 
     def update(self, state_dict: Dict[str, Union[int, float, bool]]) -> None:
-        """
-        update() is a procedure that updates the fields of the state with specified key/value pairs in state_dict.
+        """ update() is a procedure that updates the fields of the state with specified key/value pairs in state_dict.
         If a key in the `state_dict` is not defined as an attribute in State.__init__, it will be ignored.
         """
         for key, value in state_dict.items():

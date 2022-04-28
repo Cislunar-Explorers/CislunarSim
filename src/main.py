@@ -1,11 +1,15 @@
-from utils.constants import ModelEnum
 from utils.log import log
 from utils.data_handling import states_to_df, df_to_csv
-from typing import List, Union, cast
+import logging
+from typing import Union
 from core.config import Config
 from core.sim import CislunarSim
-from core.state import PropagatedOutput
 import pandas as pd
+
+import argparse
+
+
+_DESCRIPTION = """CISLUNAR Simulation Runner!"""
 
 
 class SimRunner:
@@ -13,13 +17,46 @@ class SimRunner:
     This class serves as the main entry point to the sim.
     """
 
-    def __init__(self, config: Union[str, Config]) -> None:
-        if type(config) is str:
-            # TODO: config = core.config.make_config(config_path)
-            config = Config({}, {})
+    def __init__(self, config: Union[Config, None] = None) -> None:
+        """
+        Runs the sim from specified config path or from a Config Object. 
 
-        self._sim = CislunarSim(cast(Config, config))
-        self.state_history: List[PropagatedOutput] = []
+        Input structure: 
+            "python3 src/main.py {file path} [-v]"
+            File path is a required argument, verbose is an optional argument.
+        Example: 
+            "python3 src/main.py configs/freefall.json"
+            "python3 src/main.py configs/test_angles.json -v"
+        """
+        # if called from somewhere within the program, with config objects
+        if isinstance (config, Config):
+            self._sim = CislunarSim(config)
+
+        # if called from command line
+        else:
+            # Build the argument parser
+            parser = argparse.ArgumentParser(description=_DESCRIPTION)
+            parser.add_argument(
+                "config",
+                type=str,
+                help="Initialize simulation with given path to json config file.",
+            )
+            parser.add_argument(
+                "-v",
+                "--verbose",
+                action="store_true",
+                help="set the logging level to DEBUG instead of INFO",
+            )
+
+            # Parser command line arguments
+            args = parser.parse_args()
+
+            # Set Logging level of "Sim" based on --verbose argument.
+            log.setLevel(logging.DEBUG) if args.verbose else log.setLevel(logging.INFO)
+
+            self._sim = CislunarSim(Config.make_config(args.config))
+
+        self.state_history = []
 
     def run(self) -> pd.DataFrame:
         """Runs the sim and returns the truth and observed states in a pandas dataframe.
@@ -45,16 +82,6 @@ class SimRunner:
         return self.state_history
 
 
-def freefall():
-    # freefall from ~4000km altitude to test basic functionality of the sim
-    initial_condition = {"x": 10_000_000, "y": 1_000, "z": 1_000, "ang_vel_x": 4.5, "time": 0.0}
-    models_to_use = [ModelEnum.PositionModel, ModelEnum.GyroModel]
-    conf = Config({}, initial_condition, models=models_to_use)
-
-    test_sim = SimRunner(conf)
-    data = test_sim.run()
-    df_to_csv(data)
-
-
 if __name__ == "__main__":
-    freefall()
+    data = SimRunner().run()
+    df_to_csv(data)
