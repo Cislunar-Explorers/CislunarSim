@@ -1,4 +1,6 @@
+from multiprocessing import dummy
 import unittest
+import numpy as np
 from core.state import State, StateTime, DerivedState
 from utils.test_utils import s_0, state_1
 
@@ -20,26 +22,23 @@ class StateTestCases(unittest.TestCase):
         """
         Tests that all fields are set properly when creating a new instance of State.
         """
-        # bool_fields = ["propulsion_on", "solenoid_actuation_on"]
+        bool_fields = ["propulsion_on", "solenoid_actuation_on"]
+        
+        s = State(**s_0)
 
-        # for field in s_0.keys():
-        #     dummy_data = 1.0
-        #     if field in bool_fields:
-        #         dummy_data = True
-        #     if field == "derived_state":
-        #         dummy_data = DerivedState()
-        #     s_copy = dict(s_0)
-        #     s_copy[field] = dummy_data
-        #     self.assertEqual(
-        #         s_copy,
-        #         State(**{field: dummy_data}).__dict__,
-        #     )
+        for field in s_0.keys():
+            dummy_data = 1.0
+            if field in bool_fields:
+                dummy_data = True
+            if field == "derived_state":
+                dummy_data = DerivedState()
+            s_copy = dict(s_0)
+            s_copy[field] = dummy_data
 
-        # self.assertEqual(
-        #     s_0,
-        #     State().__dict__,
-        # )
-        ...
+        self.assertEqual(
+            s_copy,
+            State(**{field: dummy_data}).__dict__,
+        )
 
     def test_to_array(self):
         """

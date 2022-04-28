@@ -48,6 +48,7 @@ s_1 = {
     "solenoid_actuation_on": False,
     "derived_state": DerivedState(),
 }
+
 state_1 = State(**s_1)
 
 d3456 = {
