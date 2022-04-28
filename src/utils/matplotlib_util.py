@@ -7,9 +7,12 @@ from utils.constants import BodyEnum, R_EARTH, R_MOON
 class Plot:
     def __init__(self, df):
         self.fig_2d = plt.figure()
-        self.ax_vel_xs = plt.subplot(221)
-        self.ax_vel_ys = plt.subplot(222)
-        self.ax_vel_zs = plt.subplot(223)
+        self.ax_vel_xs = plt.subplot(321)
+        self.ax_vel_ys = plt.subplot(322)
+        self.ax_vel_zs = plt.subplot(323)
+        self.ax_xs = plt.subplot(324)
+        self.ax_ys = plt.subplot(325)
+        self.ax_zs = plt.subplot(326)
 
         self.fig_3d = plt.figure()
         self.ax = plt.subplot(111, projection="3d")
@@ -35,6 +38,13 @@ class Plot:
         self.ax_vel_zs.set_ylim(-1000, 1000)
         self.ax_vel_zs.set_xlabel("t")
         self.ax_vel_zs.set_ylabel("Velocity z")
+
+        self.ax_xs.set_xlabel("t")
+        self.ax_xs.set_ylabel("x")
+        self.ax_ys.set_xlabel("t")
+        self.ax_ys.set_ylabel("y")
+        self.ax_zs.set_xlabel("t")
+        self.ax_zs.set_ylabel("z")
 
         self.xlocs = df["true_state.state.x"].to_numpy()
         self.ylocs = df["true_state.state.y"].to_numpy()
@@ -65,6 +75,10 @@ class Plot:
         self.ax_vel_xs.scatter(self.ts, self.vel_xs, cmap="Greens")
         self.ax_vel_ys.scatter(self.ts, self.vel_ys, cmap="Greens")
         self.ax_vel_zs.scatter(self.ts, self.vel_zs, cmap="Greens")
+
+        self.ax_xs.scatter(self.ts, self.xlocs, cmap="Greens")
+        self.ax_ys.scatter(self.ts, self.ylocs, cmap="Greens")
+        self.ax_zs.scatter(self.ts, self.zlocs, cmap="Greens")
 
     def plot_data_3d(self):
         """Procedure that plots a model of the earth, moon and the craft's trajectory in R3"""
