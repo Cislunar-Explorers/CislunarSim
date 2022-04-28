@@ -107,8 +107,8 @@ class Plot:
             if cont:
                 self.update_annot(ind)
                 self.annot.set_visible(True)
-                self.fig.canvas.draw_idle()
+                self.fig_2d.canvas.draw_idle()
             else:
                 if vis:
                     self.annot.set_visible(False)
-                    self.fig.canvas.draw_idle()
+                    self.fig_2d.canvas.draw_idle()
