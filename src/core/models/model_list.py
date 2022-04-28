@@ -19,7 +19,7 @@ class DerivedPosition(DerivedStateModel):
     def __init__(self, parameters) -> None:
         super().__init__(parameters)
 
-    def evaluate(self, t: float, state: State) -> Dict[str, State_Type]:
+    def evaluate(self, t: float, state: State) -> Dict[str, np.ndarray]:
         # Position column vectors from moon/sun/earth/craft to the origin, where the origin is 
         # the Earth's center of mass.
         # Craft to origin
