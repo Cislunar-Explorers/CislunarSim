@@ -6,9 +6,13 @@ from utils.constants import BodyEnum, R_EARTH, R_MOON
 
 class Plot:
     def __init__(self, df):
-        self.fig = plt.figure()
-        self.ax_2d = plt.subplot(121)
-        self.ax = plt.subplot(122, projection="3d")
+        self.fig_2d = plt.figure()
+        self.ax_vel_xs = plt.subplot(221)
+        self.ax_vel_ys = plt.subplot(222)
+        self.ax_vel_zs = plt.subplot(223)
+
+        self.fig_3d = plt.figure()
+        self.ax = plt.subplot(111, projection="3d")
 
         self.ax.set_xlim(-10000000, 10000000)
         self.ax.set_ylim(-10000000, 10000000)
@@ -17,16 +21,28 @@ class Plot:
         self.ax.set_ylabel("y")
         self.ax.set_zlabel("z")
 
-        self.ax_2d.set_xlim(-1000, 1000)
-        self.ax_2d.set_ylim(-1000, 1000)
-        self.ax_2d.set_xlabel("t")
-        self.ax_2d.set_ylabel("Velocity x")
+        self.ax_vel_xs.set_xlim(-1000, 1000)
+        self.ax_vel_xs.set_ylim(-1000, 1000)
+        self.ax_vel_xs.set_xlabel("t")
+        self.ax_vel_xs.set_ylabel("Velocity x")
+
+        self.ax_vel_ys.set_xlim(-1000, 1000)
+        self.ax_vel_ys.set_ylim(-1000, 1000)
+        self.ax_vel_ys.set_xlabel("t")
+        self.ax_vel_ys.set_ylabel("Velocity y")
+
+        self.ax_vel_zs.set_xlim(-1000, 1000)
+        self.ax_vel_zs.set_ylim(-1000, 1000)
+        self.ax_vel_zs.set_xlabel("t")
+        self.ax_vel_zs.set_ylabel("Velocity z")
 
         self.xlocs = df["true_state.state.x"].to_numpy()
         self.ylocs = df["true_state.state.y"].to_numpy()
         self.zlocs = df["true_state.state.z"].to_numpy()
         self.ts = df["true_state.time"].to_numpy()
         self.vel_xs = df["true_state.state.vel_x"].to_numpy()
+        self.vel_ys = df["true_state.state.vel_y"].to_numpy()
+        self.vel_zs = df["true_state.state.vel_z"].to_numpy()
 
         self.annot = self.ax.annotate(
             "",
@@ -43,7 +59,9 @@ class Plot:
         # 3D scatter plot of craft's trajectory
         self.sc = self.ax.scatter3D(self.xlocs, self.ylocs, self.zlocs, cmap="Greens")
 
-        self.ax_2d.scatter(self.ts, self.vel_xs, cmap="Greens")
+        self.ax_vel_xs.scatter(self.ts, self.vel_xs, cmap="Greens")
+        self.ax_vel_ys.scatter(self.ts, self.vel_ys, cmap="Greens")
+        self.ax_vel_zs.scatter(self.ts, self.vel_zs, cmap="Greens")
 
         # Calculation and plotting of earth's position
         u, v = np.mgrid[0 : 2 * np.pi : 20j, 0 : np.pi : 10j]
@@ -66,7 +84,8 @@ class Plot:
         # sun_z = sun_cz + R_SUN * np.cos(v)
         # self.ax.plot_surface(sun_x, sun_y, sun_z, color="y")
 
-        self.fig.canvas.mpl_connect("motion_notify_event", self.hover)
+        self.fig_2d.canvas.mpl_connect("motion_notify_event", self.hover)
+        plt.tight_layout()
         plt.show()
 
     def update_annot(self, ind):
@@ -80,7 +99,8 @@ class Plot:
         # self.annot.get_bbox_patch().set_facecolor(cmap(norm(c[ind["ind"][0]])))
         # self.annot.get_bbox_patch().set_alpha(0.4)
 
-    def hover(self, event):
+    def hover(self, event) -> None:
+        """Procedure that displays the annotation associated with the point that is hovered."""
         vis = self.annot.get_visible()
         if event.inaxes == self.ax:
             cont, ind = self.sc.contains(event)
