@@ -24,7 +24,9 @@ class StateTestCases(unittest.TestCase):
         """
         bool_fields = ["propulsion_on", "solenoid_actuation_on"]
         
-        s = State(**s_0)
+        s_copy = {}
+        field = ""
+        dummy_data = None
 
         for field in s_0.keys():
             dummy_data = 1.0

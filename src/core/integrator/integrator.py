@@ -14,9 +14,6 @@ def propagate_state(
 ) -> StateTime:
     """Takes in a state and propagates it over a timestep of `dt` seconds.
     Returns a new State object at t+dt"""
-    # for derived_state_model in models.derived:
-    #         state_time.state.derived_state.update(
-    #             derived_state_model.evaluate(state_time.time, state_time.state))
     t = state_time.time
     propagate_state_function = models.state_update_function
     state_array = state_time.state.float_fields_to_array()
