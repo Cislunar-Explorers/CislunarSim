@@ -1,6 +1,7 @@
 from enum import Enum, IntEnum
 from typing import Union
 from pathlib import Path
+import numpy as np
 
 
 SIM_ROOT = (Path(__file__).parent / "../..").resolve()
@@ -26,7 +27,7 @@ class ModelEnum(StringEnum):
 DEFAULT_MODELS = [ModelEnum.AttitudeModel, ModelEnum.PositionModel]
 
 # The union of the different types of fields within State.
-State_Type = Union[int, float, bool]
+State_Type = Union[int, float, bool, np.ndarray]
 
 
 class BodyEnum(IntEnum):
