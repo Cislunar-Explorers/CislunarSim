@@ -55,6 +55,12 @@ class Plot:
         self.annot.set_visible(False)
 
     def plot_data(self) -> None:
+        self.plot_data_2d()
+        self.plot_data_3d()
+        plt.tight_layout()
+        plt.show()
+
+    def plot_data_2d(self) -> None:
         """Procedure that plots a model of the earth, moon and the craft's trajectory in R3"""
         # 3D scatter plot of craft's trajectory
         self.sc = self.ax.scatter3D(self.xlocs, self.ylocs, self.zlocs, cmap="Greens")
@@ -85,8 +91,13 @@ class Plot:
         # self.ax.plot_surface(sun_x, sun_y, sun_z, color="y")
 
         self.fig_2d.canvas.mpl_connect("motion_notify_event", self.hover)
-        plt.tight_layout()
-        plt.show()
+        
+
+    def plot_data_3d(self):
+        pass
+
+
+
 
     def update_annot(self, ind):
 
