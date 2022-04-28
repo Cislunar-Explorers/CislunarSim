@@ -69,6 +69,7 @@ class Plot:
         self.ax_vel_ys.scatter(self.ts, self.vel_ys, cmap="Greens")
         self.ax_vel_zs.scatter(self.ts, self.vel_zs, cmap="Greens")
 
+    def plot_data_3d(self):
         # Calculation and plotting of earth's position
         u, v = np.mgrid[0 : 2 * np.pi : 20j, 0 : np.pi : 10j]
         earth_x = R_EARTH * np.cos(u) * np.sin(v)
@@ -90,14 +91,7 @@ class Plot:
         # sun_z = sun_cz + R_SUN * np.cos(v)
         # self.ax.plot_surface(sun_x, sun_y, sun_z, color="y")
 
-        self.fig_2d.canvas.mpl_connect("motion_notify_event", self.hover)
-        
-
-    def plot_data_3d(self):
-        pass
-
-
-
+        self.fig_3d.canvas.mpl_connect("motion_notify_event", self.hover)
 
     def update_annot(self, ind):
 
