@@ -61,12 +61,13 @@ class Plot:
         plt.show()
 
     def plot_data_2d(self) -> None:
-        """Procedure that plots a model of the earth, moon and the craft's trajectory in R3"""
+        """Procedure that displays 2d plots of spacecraft data"""
         self.ax_vel_xs.scatter(self.ts, self.vel_xs, cmap="Greens")
         self.ax_vel_ys.scatter(self.ts, self.vel_ys, cmap="Greens")
         self.ax_vel_zs.scatter(self.ts, self.vel_zs, cmap="Greens")
 
     def plot_data_3d(self):
+        """Procedure that plots a model of the earth, moon and the craft's trajectory in R3"""
         # 3D scatter plot of craft's trajectory
         self.sc = self.ax.scatter3D(self.xlocs, self.ylocs, self.zlocs, cmap="Greens")
 
