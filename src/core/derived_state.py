@@ -28,21 +28,21 @@ class DerivedState:
 
     # Position column vectors from moon/sun/earth/craft to the origin, where the origin is # the Earth's center of mass.
     # craft to origin
-    r_co: np.array = np.array((0.0, 0.0, 0.0))
+    r_co: np.ndarray = np.array((0.0, 0.0, 0.0))
     # moon to origin
-    r_mo: np.array = np.array((0.0, 0.0, 0.0))
+    r_mo: np.ndarray = np.array((0.0, 0.0, 0.0))
     # sun to origin
-    r_so: np.array = np.array((0.0, 0.0, 0.0))
+    r_so: np.ndarray = np.array((0.0, 0.0, 0.0))
     # earth to origin
-    r_eo: np.array = np.array((0.0, 0.0, 0.0))
+    r_eo: np.ndarray = np.array((0.0, 0.0, 0.0))
 
     # Position column vectors from body to the craft.
     # moon to the craft
-    r_mc: np.array = np.array((0.0, 0.0, 0.0))
+    r_mc: np.ndarray = np.array((0.0, 0.0, 0.0))
     # sun to the craft
-    r_sc: np.array = np.array((0.0, 0.0, 0.0))
+    r_sc: np.ndarray = np.array((0.0, 0.0, 0.0))
     # earth to the craft
-    r_ec: np.array = np.array((0.0, 0.0, 0.0))
+    r_ec: np.ndarray = np.array((0.0, 0.0, 0.0))
 
 
     def update(self, derived_state_dict: Dict) -> None:
