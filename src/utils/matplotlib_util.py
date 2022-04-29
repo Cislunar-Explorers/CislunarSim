@@ -7,12 +7,8 @@ from utils.constants import BodyEnum, R_EARTH, R_MOON
 class Plot:
     def __init__(self, df):
         self.fig_2d = plt.figure()
-        self.ax_vel_xs = plt.subplot(321)
-        self.ax_vel_ys = plt.subplot(322)
-        self.ax_vel_zs = plt.subplot(323)
-        self.ax_xs = plt.subplot(324)
-        self.ax_ys = plt.subplot(325)
-        self.ax_zs = plt.subplot(326)
+        self.ax_vel = plt.subplot(221)
+        self.ax_pos = plt.subplot(222)
 
         self.fig_3d = plt.figure()
         self.ax = plt.subplot(111, projection="3d")
@@ -24,27 +20,11 @@ class Plot:
         self.ax.set_ylabel("y")
         self.ax.set_zlabel("z")
 
-        self.ax_vel_xs.set_xlim(-1000, 1000)
-        self.ax_vel_xs.set_ylim(-1000, 1000)
-        self.ax_vel_xs.set_xlabel("t")
-        self.ax_vel_xs.set_ylabel("Velocity x")
+        self.ax_vel.set_xlabel("t")
+        self.ax_vel.set_ylabel("Velocity")
 
-        self.ax_vel_ys.set_xlim(-1000, 1000)
-        self.ax_vel_ys.set_ylim(-1000, 1000)
-        self.ax_vel_ys.set_xlabel("t")
-        self.ax_vel_ys.set_ylabel("Velocity y")
-
-        self.ax_vel_zs.set_xlim(-1000, 1000)
-        self.ax_vel_zs.set_ylim(-1000, 1000)
-        self.ax_vel_zs.set_xlabel("t")
-        self.ax_vel_zs.set_ylabel("Velocity z")
-
-        self.ax_xs.set_xlabel("t")
-        self.ax_xs.set_ylabel("x")
-        self.ax_ys.set_xlabel("t")
-        self.ax_ys.set_ylabel("y")
-        self.ax_zs.set_xlabel("t")
-        self.ax_zs.set_ylabel("z")
+        self.ax_pos.set_xlabel("t")
+        self.ax_pos.set_ylabel("Position")
 
         self.xlocs = df["true_state.state.x"].to_numpy()
         self.ylocs = df["true_state.state.y"].to_numpy()
@@ -72,13 +52,16 @@ class Plot:
 
     def plot_data_2d(self) -> None:
         """Procedure that displays 2d plots of spacecraft data"""
-        self.ax_vel_xs.scatter(self.ts, self.vel_xs, cmap="Greens")
-        self.ax_vel_ys.scatter(self.ts, self.vel_ys, cmap="Greens")
-        self.ax_vel_zs.scatter(self.ts, self.vel_zs, cmap="Greens")
+        self.ax_vel.plot(self.ts, self.vel_xs, "--", c="hotpink", label="x")
+        self.ax_vel.plot(self.ts, self.vel_ys, "--", c="green", label="y")
+        self.ax_vel.plot(self.ts, self.vel_zs, "--", c="blue", label="z")
 
-        self.ax_xs.scatter(self.ts, self.xlocs, cmap="Greens")
-        self.ax_ys.scatter(self.ts, self.ylocs, cmap="Greens")
-        self.ax_zs.scatter(self.ts, self.zlocs, cmap="Greens")
+        self.ax_pos.plot(self.ts, self.xlocs, "--", c="hotpink", label="x")
+        self.ax_pos.plot(self.ts, self.ylocs, "--", c="green", label="y")
+        self.ax_pos.plot(self.ts, self.zlocs, "--", c="blue", label="z")
+
+        self.ax_vel.legend()
+        self.ax_pos.legend()
 
     def plot_data_3d(self):
         """Procedure that plots a model of the earth, moon and the craft's trajectory in R3"""
