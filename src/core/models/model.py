@@ -39,11 +39,11 @@ class EnvironmentModel(Model):
     def __init__(self, parameters: Parameters) -> None:
         super().__init__(parameters)
 
-    def evaluate(self, t: float, state_time: StateTime) -> Dict[str, State_Type]:
-        return self.d_state(t, state_time)
+    def evaluate(self, state_time: StateTime) -> Dict[str, State_Type]:
+        return self.d_state(state_time)
 
     @abstractmethod
-    def d_state(self, t: float, state_time: StateTime) -> Dict[str, State_Type]:
+    def d_state(self, state_time: StateTime) -> Dict[str, State_Type]:
         """Function which evaluates the differential equation:
             dy / dt = f(t, y)
             for the current state. "y" is a state vector (not just one variable)
@@ -81,15 +81,6 @@ class ActuatorModel(Model):
     @abstractmethod
     def evaluate(self, state_time: StateTime) -> Dict[str, Any]:
         ...
-
-
-class DerivedStateModel(Model):
-    def __init__(self, parameters: Parameters) -> None:
-        super().__init__(parameters)
-
-    @abstractmethod
-    def evaluate(self, state_time: StateTime) -> Dict[str, Any]:
-        ...
         
 
-MODEL_TYPES = Union[Type[EnvironmentModel], Type[SensorModel], Type[ActuatorModel], Type[DerivedStateModel]]
+MODEL_TYPES = Union[Type[EnvironmentModel], Type[SensorModel], Type[ActuatorModel]]

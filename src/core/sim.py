@@ -30,11 +30,6 @@ class CislunarSim:
         for actuator_model in self._models.actuator:
             self.state_time.update(actuator_model.evaluate(self.state_time))
 
-        # Propagate derived state
-        for derived_state_model in self._models.derived:
-            self.state_time.derived_state.update(
-                derived_state_model.evaluate(self.state_time))
-
         # Evaluate environmental models to propagate state
         self.state_time = propagate_state(self._models, self.state_time)
 
@@ -67,7 +62,7 @@ class CislunarSim:
 
         state = self.state_time.state
 
-        if not np.isfinite(state.float_fields_to_array()).all():
+        if not np.isfinite(state.to_array()).all():
             # Thank you: https://stackoverflow.com/questions/911871/
             log.error("Stopping sim because of infinite value in state")
             log.debug(f"{state}")
