@@ -7,7 +7,7 @@ from core.state import StateTime, array_to_state
 def propagate_state(
     propagate_state_function: Callable[[float, np.ndarray], np.ndarray],
     state_time: StateTime,
-    dt: float = 1200.0,
+    dt: float = 3.0,
 ) -> StateTime:
     """Takes in a state and propagates it over a timestep of `dt` seconds.
     Returns a new State object at t+dt"""
