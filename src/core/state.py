@@ -46,7 +46,7 @@ class State:
     force_moon: float = 0.0
 
     # derived state
-    derived_state: DerivedState = DerivedState()
+    # derived_state: DerivedState = DerivedState()
 
     # discrete state
     propulsion_on: bool = False
@@ -121,6 +121,7 @@ class StateTime:
     """
 
     state: State = State()
+    derived_state: DerivedState = DerivedState()
     time: float = 0.0
 
     @classmethod
@@ -140,6 +141,12 @@ class StateTime:
             time = 0.0
 
         return cls(State(**statetime_dict), time=time)
+
+    def update(self, state_dict: Dict[str, Union[int, float, bool]]) -> None:
+        """ update() is a procedure that updates the fields of the state with specified key/value pairs in state_dict.
+        If a key in the `state_dict` is not defined as an attribute in State.__init__, it will be ignored.
+        """
+        self.state.update(state_dict)
 
     def __eq__(self, other):
         """

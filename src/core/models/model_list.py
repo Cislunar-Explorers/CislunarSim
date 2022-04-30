@@ -2,7 +2,7 @@ from typing import Callable, List, Dict
 import numpy as np
 from core.models.model import ActuatorModel, EnvironmentModel, SensorModel, DerivedStateModel, MODEL_TYPES
 from core.models.gyro_model import GyroModel
-from core.state import State, array_to_state
+from core.state import StateTime, array_to_state
 from core.config import Config
 from utils.constants import BodyEnum, ModelEnum, State_Type
 from utils.astropy_util import get_body_position
@@ -18,7 +18,11 @@ class DerivedPosition(DerivedStateModel):
     def __init__(self, parameters) -> None:
         super().__init__(parameters)
 
-    def evaluate(self, t: float, state: State) -> Dict[str, np.ndarray]:
+    def evaluate(self, state_time: StateTime) -> Dict[str, np.ndarray]:
+
+        state = state_time.state
+        t = state_time.time
+
         # Position column vectors from moon/sun/earth/craft to the origin, where the origin is 
         # the Earth's center of mass.
         # Craft to origin
@@ -61,10 +65,10 @@ class PositionDynamics(EnvironmentModel):
     def __init__(self, parameters) -> None:
         super().__init__(parameters)
 
-    def evaluate(self, t: float, state: State) -> Dict[str, State_Type]:
-        return super().evaluate(t, state)
+    def evaluate(self, t: float, state_time: StateTime) -> Dict[str, State_Type]:
+        return super().evaluate(t, state_time)
 
-    def d_state(self, t: float, state: State) -> Dict[str, State_Type]:
+    def d_state(self, t: float, state_time: StateTime) -> Dict[str, State_Type]:
         """ Takes the derivative of a vector [r v] to compute [v a], where r is a position vector,
         v is the velocity vector, and a is the acceleration vector
         Args:
@@ -76,9 +80,9 @@ class PositionDynamics(EnvironmentModel):
         """
 
         # Position column vectors from body to the craft
-        r_mc = state.derived_state.r_mc
-        r_sc = state.derived_state.r_sc
-        r_ec = state.derived_state.r_ec
+        r_mc = state_time.derived_state.r_mc
+        r_sc = state_time.derived_state.r_sc
+        r_ec = state_time.derived_state.r_ec
 
         # Mu values of the body, where mu = G * m_body
         G = 6.6743e-11
@@ -97,9 +101,9 @@ class PositionDynamics(EnvironmentModel):
         )
 
         return {
-            "x": state.vel_x,
-            "y": state.vel_y,
-            "z": state.vel_z,
+            "x": state_time.state.vel_x,
+            "y": state_time.state.vel_y,
+            "z": state_time.state.vel_z,
             "vel_x": a[0],
             "vel_y": a[1],
             "vel_z": a[2],
@@ -110,10 +114,10 @@ class TestModel(EnvironmentModel):
     def __init__(self, parameters) -> None:
         super().__init__(parameters)
 
-    def evaluate(self, t: float, state: State) -> Dict[str, State_Type]:
-        return super().evaluate(t, state)
+    def evaluate(self, t: float, state_time: StateTime) -> Dict[str, State_Type]:
+        return super().evaluate(t, state_time)
 
-    def d_state(self, t: float, state: State) -> Dict[str, State_Type]:
+    def d_state(self, t: float, state_time: StateTime) -> Dict[str, State_Type]:
         dx = 0
         dy = 0
         dz = 0
@@ -153,13 +157,13 @@ def build_state_update_function(
         Returns:
             np.ndarray: _description_
         """
-        propagated_state = State()
-        state_in = array_to_state(state_array)
+        propagated_state = StateTime()
+        state_in = StateTime(array_to_state(state_array))
 
         for model in env_models:
-            propagated_state.update(model.evaluate(t, state_in))
+            propagated_state.state.update(model.evaluate(t, state_in))
 
-        propagated_state_array = propagated_state.float_fields_to_array()
+        propagated_state_array = propagated_state.state.float_fields_to_array()
         return propagated_state_array
 
     return update_function
