@@ -1,4 +1,6 @@
 import math
+import numpy as np
+from core.derived_state import DerivedState
 from core.state import State
 
 s_0 = {
@@ -21,7 +23,9 @@ s_0 = {
     "force_moon": 0.0,
     "propulsion_on": False,
     "solenoid_actuation_on": False,
+    "derived_state": DerivedState(),
 }
+
 s_1 = {
     "ang_vel_x": 2.0,
     "ang_vel_y": 3.0,
@@ -42,7 +46,9 @@ s_1 = {
     "force_moon": 18.0,
     "propulsion_on": True,
     "solenoid_actuation_on": False,
+    "derived_state": DerivedState(),
 }
+
 state_1 = State(**s_1)
 
 d3456 = {

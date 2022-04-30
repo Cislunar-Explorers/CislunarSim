@@ -1,11 +1,58 @@
 from typing import Callable, List, Dict
 import numpy as np
-from core.models.model import ActuatorModel, EnvironmentModel, SensorModel, MODEL_TYPES
+from core.models.model import (
+    ActuatorModel,
+    EnvironmentModel,
+    SensorModel,
+    DerivedStateModel,
+    MODEL_TYPES,
+)
 from core.models.gyro_model import GyroModel
 from core.state import State, array_to_state
 from core.config import Config
-from utils.constants import BodyEnum, ModelEnum, State_Type, mu_sun, mu_earth, mu_moon
+from utils.constants import BodyEnum, ModelEnum, State_Type
 from utils.astropy_util import get_body_position
+
+
+class DerivedAttitude(DerivedStateModel):
+    ...
+
+
+class DerivedPosition(DerivedStateModel):
+    """Updates position column vectors for use in the position dynamics model."""
+
+    def __init__(self, parameters) -> None:
+        super().__init__(parameters)
+
+    def evaluate(self, t: float, state: State) -> Dict[str, np.ndarray]:
+        # Position column vectors from moon/sun/earth/craft to the origin, where the origin is
+        # the Earth's center of mass.
+        # Craft to origin
+        r_co = np.array([state.x, state.y, state.z])
+        # Moon to origin
+        r_mo = np.array(get_body_position(t, BodyEnum.Moon))
+        # Sun to origin
+        r_so = np.array(get_body_position(t, BodyEnum.Sun))
+        # Earth to origin (Note: Earth is at the origin in GCRS)
+        r_eo = np.array((0.0, 0.0, 0.0))
+
+        # Position column vectors from body to the craft.
+        # Moon to the craft
+        r_mc = np.subtract(r_mo, r_co)
+        # Sun to the craft
+        r_sc = np.subtract(r_so, r_co)
+        # Earth to the craft
+        r_ec = np.subtract(r_eo, r_co)
+
+        return {
+            "r_co": r_co,
+            "r_mo": r_mo,
+            "r_so": r_so,
+            "r_eo": r_eo,
+            "r_mc": r_mc,
+            "r_sc": r_sc,
+            "r_ec": r_ec,
+        }
 
 
 class AttitudeDynamics(EnvironmentModel):
@@ -24,7 +71,7 @@ class PositionDynamics(EnvironmentModel):
         return super().evaluate(t, state)
 
     def d_state(self, t: float, state: State) -> Dict[str, State_Type]:
-        """ Takes the derivative of a vector [r v] to compute [v a], where r is a position vector,
+        """Takes the derivative of a vector [r v] to compute [v a], where r is a position vector,
         v is the velocity vector, and a is the acceleration vector
         Args:
             t (float): the initial time
@@ -33,36 +80,25 @@ class PositionDynamics(EnvironmentModel):
         Returns:
             Dict[str, State_Type]: The updated vector [v a]
         """
-        # position column vectors from moon/sun/earth/craft to the origin,
-        # where the origin is the Earth's center of mass
 
-        # craft to origin
-        r_co = np.array([state.x, state.y, state.z])
-        # moon to origin
+        # Position column vectors from body to the craft
+        r_mc = state.derived_state.r_mc
+        r_sc = state.derived_state.r_sc
+        r_ec = state.derived_state.r_ec
 
-        # round t to the 10s place
-        r_mo = np.array(get_body_position(t // 10 * 10, BodyEnum.Moon))
-        # sun to origin
-        r_so = np.array(get_body_position(t // 10 * 10, BodyEnum.Sun))
-        # earth to origin
-        r_eo = np.array((0.0, 0.0, 0.0))  # Earth is at the origin in GCRS
+        # Mu values of the body, where mu = G * m_body
+        G = 6.6743e-11
+        mu_moon = G * 7.34767309e22
+        mu_sun = G * 1.988409870698051e30
+        mu_earth = G * 5.972167867791379e24
 
-        # position column vectors from body to the craft
-
-        # moon to the craft
-        r_mc = np.subtract(r_mo, r_co)
-        # sun to the craft
-        r_sc = np.subtract(r_so, r_co)
-        # earth to the craft
-        r_ec = np.subtract(r_eo, r_co)
-
-        # acceleration column vector calculation
+        # Acceleration column vector calculation
         a = (
-            # moon to craft acceleration component
+            # Moon to craft acceleration component
             mu_moon * r_mc / (np.dot(r_mc, r_mc) ** (3 / 2))
-            # sun to craft acceleration component
+            # Sun to craft acceleration component
             + mu_sun * r_sc / (np.dot(r_sc, r_sc) ** (3 / 2))
-            # earth to craft acceleration component
+            # Earth to craft acceleration component
             + mu_earth * r_ec / (np.dot(r_ec, r_ec) ** (3 / 2))
         )
         return {
@@ -100,7 +136,7 @@ class TestModel(EnvironmentModel):
         }
 
 
-# Dict containing all the models that are implemented
+# Dict containing all the models that are implemented.
 MODEL_DICT: Dict[ModelEnum, MODEL_TYPES] = {
     ModelEnum.AttitudeModel: AttitudeDynamics,
     ModelEnum.PositionModel: PositionDynamics,
@@ -128,7 +164,7 @@ def build_state_update_function(
         for model in env_models:
             propagated_state.update(model.evaluate(t, state_in))
 
-        propagated_state_array = propagated_state.to_array()
+        propagated_state_array = propagated_state.float_fields_to_array()
         return propagated_state_array
 
     return update_function
@@ -136,17 +172,22 @@ def build_state_update_function(
 
 class ModelContainer:
     def __init__(self, config: Config) -> None:
-        # env models propagate the state of the spacecraft
+
+        # Derived state models propagate derived values.
+        # They are the same each time, meaning we can simply list them here.
+        # TODO: Determine whether this is the best way to do this.
+        self.derived: List[DerivedStateModel] = [DerivedPosition(config.param)]
+
+        # Environmental models propagate the state of the spacecraft.
         self.environmental: List[EnvironmentModel] = []
 
-        # actuator models convert actions from FSW to changes in (force/torque)
-        # states
+        # Actuator models convert actions from FSW to changes in (force/torque) states.
         self.actuator: List[ActuatorModel] = []
 
-        # sensor models convert a true state to an observed state
+        # Sensor models convert a true state to an observed state.
         self.sensor: List[SensorModel] = []
 
-        # sort models into env/sense/actuate
+        # Sort models into environmental/actuator/sensor.
         for model_name in config.models:
             model = MODEL_DICT[model_name]
             # model_instantiated = model(config.param)

@@ -22,16 +22,19 @@ class CislunarSim:
         self.num_iters = 0
 
     def step(self) -> PropagatedOutput:
-        """
-        step() is the combined true and observed state after one step.
-        """
+        """step() is the combined true and observed state after one step."""
 
         # Evaluate Actuator models to update state
         for actuator_model in self._models.actuator:
             self.state.state.update(actuator_model.evaluate(self.state.state))
 
+        # Propagate derived state
+        for derived_state_model in self._models.derived:
+            self.state.state.derived_state.update(
+                derived_state_model.evaluate(self.state.time, self.state.state))
+
         # Evaluate environmental models to propagate state
-        self.state = propagate_state(self._models.state_update_function, self.state)
+        self.state = propagate_state(self._models, self.state)
 
         # Evaluate sensor models
         temp_state = State()
@@ -63,7 +66,7 @@ class CislunarSim:
 
         state = self.state.state
 
-        if not np.isfinite(state.to_array()).all():
+        if not np.isfinite(state.float_fields_to_array()).all():
             # Thank you: https://stackoverflow.com/questions/911871/
             log.error("Stopping sim because of infinite value in state")
             log.debug(f"{self.state}")

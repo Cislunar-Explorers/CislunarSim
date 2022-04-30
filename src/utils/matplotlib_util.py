@@ -6,21 +6,25 @@ from utils.constants import BodyEnum, R_EARTH, R_MOON
 
 class Plot:
     def __init__(self, df):
-        self.fig = plt.figure(figsize=(16, 8))
-        self.ax_2d = plt.subplot(121)
-        self.ax = plt.subplot(122, projection="3d")
+        self.fig_2d = plt.figure()
+        self.ax_vel = plt.subplot(221)
+        self.ax_pos = plt.subplot(222)
 
-        self.ax.set_xlim(-1e9, 1e9)
-        self.ax.set_ylim(-1e9, 1e9)
-        self.ax.set_zlim(-1e9, 1e9)
+        self.fig_3d = plt.figure()
+        self.ax = plt.subplot(111, projection="3d")
+
+        self.ax.set_xlim(-10000000, 10000000)
+        self.ax.set_ylim(-10000000, 10000000)
+        self.ax.set_zlim(-10000000, 10000000)
         self.ax.set_xlabel("x")
         self.ax.set_ylabel("y")
         self.ax.set_zlabel("z")
 
-        # self.ax_2d.set_xlim(-1000, 1000)
-        # self.ax_2d.set_ylim(-1000, 1000)
-        self.ax_2d.set_xlabel("t")
-        self.ax_2d.set_ylabel("Velocity (m/s)")
+        self.ax_vel.set_xlabel("t")
+        self.ax_vel.set_ylabel("Velocity")
+
+        self.ax_pos.set_xlabel("t")
+        self.ax_pos.set_ylabel("Position")
 
         self.xlocs = df["true_state.state.x"].to_numpy()
         self.ylocs = df["true_state.state.y"].to_numpy()
@@ -41,28 +45,42 @@ class Plot:
         self.annot.set_visible(False)
 
     def plot_data(self) -> None:
+        self.plot_data_2d()
+        self.plot_data_3d()
+        plt.tight_layout()
+        plt.show()
+
+    def plot_data_2d(self) -> None:
+        """Procedure that displays 2d plots of spacecraft data"""
+        self.ax_vel.plot(self.ts, self.vel_xs, "--", c="hotpink", label="x")
+        self.ax_vel.plot(self.ts, self.vel_ys, "--", c="green", label="y")
+        self.ax_vel.plot(self.ts, self.vel_zs, "--", c="blue", label="z")
+
+        self.ax_pos.plot(self.ts, self.xlocs, "--", c="hotpink", label="x")
+        self.ax_pos.plot(self.ts, self.ylocs, "--", c="green", label="y")
+        self.ax_pos.plot(self.ts, self.zlocs, "--", c="blue", label="z")
+
+        self.ax_vel.legend()
+        self.ax_pos.legend()
+
+    def plot_data_3d(self):
         """Procedure that plots a model of the earth, moon and the craft's trajectory in R3"""
         # 3D scatter plot of craft's trajectory
         self.sc = self.ax.scatter3D(self.xlocs, self.ylocs, self.zlocs, cmap="Greens")
-
-        self.ax_2d.plot(self.ts, self.vel_xs, label="x")
-        self.ax_2d.plot(self.ts, self.vel_ys, label="y")
-        self.ax_2d.plot(self.ts, self.vel_zs, label="z")
-        self.ax_2d.legend()
 
         # Calculation and plotting of earth's position
         u, v = np.mgrid[0 : 2 * np.pi : 20j, 0 : np.pi : 10j]
         earth_x = R_EARTH * np.cos(u) * np.sin(v)
         earth_y = R_EARTH * np.sin(u) * np.sin(v)
         earth_z = R_EARTH * np.cos(v)
-        # self.ax.plot_surface(earth_x, earth_y, earth_z, color="g")
+        self.ax.plot_surface(earth_x, earth_y, earth_z, color="g")
 
         # Calculation and plotting of moon's position
         moon_cx, moon_cy, moon_cz = get_body_position(self.ts[-1], BodyEnum.Moon)
         moon_x = moon_cx + R_MOON * np.cos(u) * np.sin(v)
         moon_y = moon_cy + R_MOON * np.sin(u) * np.sin(v)
         moon_z = moon_cz + R_MOON * np.cos(v)
-        # self.ax.plot_surface(moon_x, moon_y, moon_z, color="gray")
+        self.ax.plot_surface(moon_x, moon_y, moon_z, color="gray")
 
         # Calculation and plotting of sun's position
         # sun_cx, sun_cy, sun_cz = get_body_position(self.ts[-1], BodyEnum.Sun)
@@ -71,10 +89,7 @@ class Plot:
         # sun_z = sun_cz + R_SUN * np.cos(v)
         # self.ax.plot_surface(sun_x, sun_y, sun_z, color="y")
 
-        self.fig.canvas.mpl_connect("motion_notify_event", self.hover)
-        plt.savefig("runs/TLI.png")
-        plt.show()
-
+        self.fig_3d.canvas.mpl_connect("motion_notify_event", self.hover)
 
     def update_annot(self, ind):
 
@@ -87,15 +102,16 @@ class Plot:
         # self.annot.get_bbox_patch().set_facecolor(cmap(norm(c[ind["ind"][0]])))
         # self.annot.get_bbox_patch().set_alpha(0.4)
 
-    def hover(self, event):
+    def hover(self, event) -> None:
+        """Procedure that displays the annotation associated with the point that is hovered."""
         vis = self.annot.get_visible()
         if event.inaxes == self.ax:
             cont, ind = self.sc.contains(event)
             if cont:
                 self.update_annot(ind)
                 self.annot.set_visible(True)
-                self.fig.canvas.draw_idle()
+                self.fig_2d.canvas.draw_idle()
             else:
                 if vis:
                     self.annot.set_visible(False)
-                    self.fig.canvas.draw_idle()
+                    self.fig_2d.canvas.draw_idle()
