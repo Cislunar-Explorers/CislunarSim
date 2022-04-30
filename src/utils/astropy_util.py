@@ -32,8 +32,4 @@ def get_body_position(time: int, body: BodyEnum) -> Tuple[float, float, float]:
     x = current.x.value
     y = current.y.value
     z = current.z.value
-<<<<<<< HEAD
     return x, y, z
-=======
-    return x, y, z
->>>>>>> main
