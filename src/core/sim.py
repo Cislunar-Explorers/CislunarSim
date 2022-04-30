@@ -4,7 +4,8 @@ from core.integrator.integrator import propagate_state
 from core.state import State, StateTime, ObservedState, PropagatedOutput
 from core.models.model_list import ModelContainer
 from utils.log import log
-from utils.numbers import R_EARTH
+from utils.constants import R_EARTH
+from utils.matplotlib_util import Plot
 
 
 class CislunarSim:
@@ -22,9 +23,7 @@ class CislunarSim:
         self.num_iters = 0
 
     def step(self) -> PropagatedOutput:
-        """
-        step() is the combined true and observed state after one step.
-        """
+        """step() is the combined true and observed state after one step."""
 
         # Evaluate Actuator models to update state
         for actuator_model in self._models.actuator:
@@ -52,6 +51,7 @@ class CislunarSim:
         # check if we should stop the sim
         self.should_run = not (self.should_stop())
         self.num_iters += 1
+
         log.debug(self.state)
         return PropagatedOutput(self.state, self.observed_state)
 
@@ -77,7 +77,7 @@ class CislunarSim:
             log.error("Stopping sim because it's running too long")
             return True
 
-        if (state.x**2 + state.y**2 + state.z**2)**0.5 < R_EARTH:
+        if (state.x**2 + state.y**2 + state.z**2) ** 0.5 < R_EARTH:
             log.error("Stopping sim because craft is inside the Earth")
             log.debug(f"r={(state.x**2 + state.y**2 + state.z**2)**0.5} < {R_EARTH}")
             return True
