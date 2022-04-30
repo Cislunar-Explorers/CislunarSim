@@ -27,7 +27,6 @@ class Plot:
 
         self.ax_pos.set_xlabel("t")
         self.ax_pos.set_ylabel("Position")
-        
 
         self.xlocs = df["true_state.state.x"].to_numpy()
         self.ylocs = df["true_state.state.y"].to_numpy()
@@ -51,7 +50,7 @@ class Plot:
         self.plot_data_2d()
         self.plot_data_3d()
         plt.tight_layout()
-        #plt.show()
+        # plt.show()
 
     def plot_data_2d(self) -> None:
         """Procedure that displays 2d plots of spacecraft data"""
@@ -65,20 +64,24 @@ class Plot:
 
         self.ax_vel.legend()
         self.ax_pos.legend()
-        
 
     def plot_data_3d(self):
         """Procedure that plots a model of the earth, moon and the craft's trajectory in R3"""
 
-
         dataSet = np.array([self.xlocs, self.ylocs, self.zlocs])
 
-        traj = plt.plot(self.xlocs, self.ylocs, self.zlocs, lw=2, c='blue')[0]
-        line_ani = animation.FuncAnimation(self.fig_3d, self.animate, frames=len(self.xlocs), fargs=(dataSet,traj), interval=5, blit=False)
-
+        traj = plt.plot(self.xlocs, self.ylocs, self.zlocs, lw=2, c="blue")[0]
+        line_ani = animation.FuncAnimation(
+            self.fig_3d,
+            self.animate,
+            frames=len(self.xlocs),
+            fargs=(dataSet, traj),
+            interval=1,
+            blit=False,
+        )
 
         # 3D scatter plot of craft's trajectory
-        #self.sc = self.ax.scatter3D(self.xlocs, self.ylocs, self.zlocs, cmap="Greens")
+        # self.sc = self.ax.scatter3D(self.xlocs, self.ylocs, self.zlocs, cmap="Greens")
 
         # Calculation and plotting of earth's position
         u, v = np.mgrid[0 : 2 * np.pi : 20j, 0 : np.pi : 10j]
@@ -100,10 +103,9 @@ class Plot:
         # sun_y = sun_cy + R_SUN * np.sin(u) * np.sin(v)
         # sun_z = sun_cz + R_SUN * np.cos(v)
         # self.ax.plot_surface(sun_x, sun_y, sun_z, color="y")
-        self.ax.set_box_aspect(aspect = (1,1,1))
-        #self.fig_3d.canvas.mpl_connect("motion_notify_event", self.hover)
+        self.ax.set_box_aspect(aspect=(1, 1, 1))
+        # self.fig_3d.canvas.mpl_connect("motion_notify_event", self.hover)
         plt.show()
-        
 
     def animate(self, num, dataSet, line):
         line.set_data(dataSet[0:2, :num])
