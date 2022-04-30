@@ -1,6 +1,4 @@
-from multiprocessing import dummy
 import unittest
-import numpy as np
 from core.state import State, StateTime, DerivedState
 from utils.test_utils import s_0, state_1
 
