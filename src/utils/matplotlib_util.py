@@ -50,7 +50,7 @@ class Plot:
         self.plot_data_2d()
         self.plot_data_3d()
         plt.tight_layout()
-        # plt.show()
+        plt.show()
 
     def plot_data_2d(self) -> None:
         """Procedure that displays 2d plots of spacecraft data"""
@@ -103,7 +103,6 @@ class Plot:
         # sun_y = sun_cy + R_SUN * np.sin(u) * np.sin(v)
         # sun_z = sun_cz + R_SUN * np.cos(v)
         # self.ax.plot_surface(sun_x, sun_y, sun_z, color="y")
-        self.ax.set_box_aspect(aspect=(1, 1, 1))
         # self.fig_3d.canvas.mpl_connect("motion_notify_event", self.hover)
         plt.show()
 
@@ -112,27 +111,25 @@ class Plot:
         line.set_3d_properties(dataSet[2, :num])
         return line
 
-    def update_annot(self, ind):
+    # def update_annot(self, ind):
 
-        pos = self.sc.get_offsets()[ind["ind"][0]]
-        self.annot.xy = pos
-        # text = " ".join([str(self.ts[n]) for n in ind["ind"]])
-        text = " ".join([str(self.ts[ind["ind"][0]])])
+    #     pos = self.sc.get_offsets()[ind["ind"][0]]
+    #     self.annot.xy = pos
+    #     # text = " ".join([str(self.ts[n]) for n in ind["ind"]])
+    #     text = " ".join([str(self.ts[ind["ind"][0]])])
 
-        self.annot.set_text(text)
-        # self.annot.get_bbox_patch().set_facecolor(cmap(norm(c[ind["ind"][0]])))
-        # self.annot.get_bbox_patch().set_alpha(0.4)
+    #     self.annot.set_text(text)
 
-    def hover(self, event) -> None:
-        """Procedure that displays the annotation associated with the point that is hovered."""
-        vis = self.annot.get_visible()
-        if event.inaxes == self.ax:
-            cont, ind = self.sc.contains(event)
-            if cont:
-                self.update_annot(ind)
-                self.annot.set_visible(True)
-                self.fig_2d.canvas.draw_idle()
-            else:
-                if vis:
-                    self.annot.set_visible(False)
-                    self.fig_2d.canvas.draw_idle()
+    # def hover(self, event) -> None:
+    #     """Procedure that displays the annotation associated with the point that is hovered."""
+    #     vis = self.annot.get_visible()
+    #     if event.inaxes == self.ax:
+    #         cont, ind = self.sc.contains(event)
+    #         if cont:
+    #             self.update_annot(ind)
+    #             self.annot.set_visible(True)
+    #             self.fig_2d.canvas.draw_idle()
+    #         else:
+    #             if vis:
+    #                 self.annot.set_visible(False)
+    #                 self.fig_2d.canvas.draw_idle()
