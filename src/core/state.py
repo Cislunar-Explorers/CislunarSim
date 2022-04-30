@@ -1,17 +1,19 @@
 from dataclasses import dataclass
+from attr import field
 import numpy as np
 from typing import Dict, Union
-
+from core.derived_state import DerivedState
 from utils.constants import State_Type
 
 
 @dataclass
 class State:
-    """ This is a container class for all state variables as defined in this sheet:
-     https://cornell.box.com/s/z20wbp66q0pseqievmadf515ucd971g2.
+    """
+    This is a container class for all state variables as defined in this sheet:
+        https://cornell.box.com/s/z20wbp66q0pseqievmadf515ucd971g2.
 
-     In order to init a class of State, by far the easiest way is via kwarg unpacking:
-     `my_state = State{**state_dict}`
+    In order to init a class of State, by far the easiest way is via kwarg unpacking:
+        `my_state = State{**state_dict}`
     """
 
     # primitive state
@@ -44,6 +46,9 @@ class State:
     force_earth: float = 0.0
     force_moon: float = 0.0
 
+    # derived state
+    derived_state: DerivedState = DerivedState()
+
     # discrete state
     propulsion_on: bool = False
     solenoid_actuation_on: bool = False
@@ -57,12 +62,23 @@ class State:
                 setattr(self, key, value)
 
     def to_array(self):
-        """ to_array() is the representation of the values of the fields as an array.
+        """
+        to_array() is the representation of the values of the fields as an
+            array.
 
         Returns:
             Numpy array: contains all values stored in the fields.
         """
         return np.array(list(self.__dict__.values()))
+
+    def float_fields_to_array(self):
+        """
+        float_fields_to_array() acts like to_array(), but ignores the derived state. This is helpful for functions which wish to evaluate numerical fields of the state, such as should_stop() in sim.py and propagate_state() in integrator.py.
+
+        Returns:
+            Numpy array: contains all values stored in the float or bool fields.
+        """
+        return np.array(list(x for x in self.__dict__.values() if type(x) is not DerivedState))
 
     def from_array(self, state_array: np.ndarray):
 
@@ -84,14 +100,14 @@ class State:
     #    return False
 
 
-STATE_ARRAY_ORDER = list(State().__dict__.keys())
+STATE_ARRAY_ORDER = list(k for k in State().__dict__.keys() if k != "derived_state")
 
 
 def array_to_state(values: np.ndarray) -> State:
     """Converts a numpy array or list into a `State` object.
-     This assumes that the items in `state_array` are consistent with
-     `STATE_ARRAY_ORDER` (which is an assumption that will probably lead
-     to many bugs in the future...)
+        This assumes that the items in `state_array` are consistent with
+        `STATE_ARRAY_ORDER`(which is an assumption that will probably lead
+        to many bugs in the future...)
 
     Args:
         state_array (np.ndarray): n-by-1 numpy array of each state
@@ -110,8 +126,8 @@ class StateTime:
 
     @classmethod
     def from_dict(cls, statetime_dict: Dict[str, State_Type]):
-        """ Generates a new StateTime instance from an input dictionary.
-        Can be called via `StateTime.from_dict(...)` to make a new StateTime object
+        """Generates a new StateTime instance from an input dictionary.
+            Can be called via `StateTime.from_dict(...)` to make a new StateTime object
 
         Args:
             statetime_dict (Dict[str, State_Type]): _description_
@@ -134,7 +150,7 @@ class StateTime:
 
         Returns:
             True iff other is a StateTime object and the states are equal to
-             each other.
+                each other.
         """
         if type(other) == StateTime:
             return self.state.__eq__(other.state)
