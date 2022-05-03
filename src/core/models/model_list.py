@@ -43,7 +43,7 @@ class PositionDynamics(EnvironmentModel):
         mu_moon = G * 7.34767309e22
         mu_sun = G * 1.988409870698051e30
         mu_earth = G * 5.972167867791379e24
-        
+
         # Acceleration column vector calculation
         a = (
             # Moon to craft acceleration component
@@ -53,7 +53,6 @@ class PositionDynamics(EnvironmentModel):
             # Earth to craft acceleration component
             + mu_earth * r_ec / (np.dot(r_ec, r_ec) ** (3 / 2))
         )
-
         return {
             "x": state_time.state.vel_x,
             "y": state_time.state.vel_y,
@@ -154,6 +153,10 @@ class ModelContainer:
                 model_instantiated = model(config.param)
                 self.sensor.append(model_instantiated)
             else:
-                raise RuntimeError(f"The type of `{model_name}` is not an expected type: {model}.")
+                raise RuntimeError(
+                    f"The type of `{model_name}` is not an expected type: {model}."
+                )
 
-        self.state_update_function: Callable = build_state_update_function(self.environmental)
+        self.state_update_function: Callable = build_state_update_function(
+            self.environmental
+        )
