@@ -71,6 +71,7 @@ class SimRunner:
         states = self._run()
         run_df = states_to_df(states)
 
+        log.setLevel(logging.INFO)  # to prevent being spammed by matplotlib's debug logs (doesn't work)
         data_plot = Plot(run_df)
         data_plot.plot_data()
 
@@ -89,6 +90,10 @@ class SimRunner:
         return self.state_history
 
 
-if __name__ == "__main__":
+def run_sim():
     data = SimRunner().run()
     df_to_csv(data)
+
+
+if __name__ == "__main__":
+    run_sim()
