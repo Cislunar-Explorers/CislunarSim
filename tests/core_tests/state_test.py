@@ -68,7 +68,7 @@ class StateTestCases(unittest.TestCase):
         ]
         self.assertEqual(
             state_list,
-            state_1.float_fields_to_array().tolist(),
+            state_1.to_array().tolist(),
         )
 
 

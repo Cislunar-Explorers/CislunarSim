@@ -21,7 +21,7 @@ class Model(ABC):
         self._parameters = parameters
 
     @abstractmethod
-    def evaluate(self, state_time: StateTime):
+    def evaluate(self, s: Union[StateTime, State]):
         """
         Abstract method for any model that evaluates the model based on the
             current state.
