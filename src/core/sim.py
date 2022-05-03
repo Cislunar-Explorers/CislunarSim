@@ -72,7 +72,7 @@ class CislunarSim:
             log.error("Stopping sim because it's running too long")
             return True
 
-        if (self.state.time - self._config.init_cond.time) > 6.312e7:
+        if (self.state_time.time - self._config.init_cond.time) > 6.312e7:
             log.error("Stopping sim because two years have passed")
             log.debug(f"Elapsed time = {int(self.state.time - self._config.init_cond.time)}s > 6.312e7")
             return True
