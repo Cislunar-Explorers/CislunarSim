@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Any, Type, Union
-from core.state import StateTime
+from core.state import State, StateTime
 from core.parameters import Parameters
 from utils.constants import State_Type
 
@@ -65,7 +65,7 @@ class SensorModel(Model):
         super().__init__(parameters)
 
     @abstractmethod
-    def evaluate(self, state_time: StateTime) -> Dict[str, Any]:
+    def evaluate(self, state: State) -> Dict[str, Any]:
         ...
 
 

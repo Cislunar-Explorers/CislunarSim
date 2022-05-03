@@ -1,7 +1,7 @@
 import numpy as np
 from core.config import Config
 from core.integrator.integrator import propagate_state
-from core.state import StateTime, ObservedState, PropagatedOutput
+from core.state import StateTime, ObservedState, PropagatedOutput, State
 from core.models.model_list import ModelContainer
 from utils.log import log
 from utils.numbers import R_EARTH
@@ -34,7 +34,8 @@ class CislunarSim:
         self.state_time = propagate_state(self._models, self.state_time)
 
         # Evaluate sensor models
-        temp_state = StateTime()
+        temp_state = State()
+
         for sensor_model in self._models.sensor:
             temp_state.update(sensor_model.evaluate(self.state_time))
 
@@ -48,6 +49,7 @@ class CislunarSim:
         self.should_run = not (self.should_stop())
         self.num_iters += 1
         log.debug(self.state_time.state)
+        # log.debug(self.state_time.derived_state)
         return PropagatedOutput(self.state_time, self.observed_state)
 
     def should_stop(self) -> bool:

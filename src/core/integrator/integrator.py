@@ -5,7 +5,6 @@ from core.models.model_list import ModelContainer
 
 def propagate_state(
     models: ModelContainer,
-    # propagate_state_function: Callable[[float, np.ndarray], np.ndarray],
     state_time: StateTime,
     dt: float = 3.0,
 ) -> StateTime:

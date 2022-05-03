@@ -121,10 +121,8 @@ class StateTime:
     state: State = State()
     time: float = 0.0
     derived_state: DerivedState = DerivedState()
-
-    def __init__(self, state: State = State(), time: float = 0.0, derived_state: DerivedState = DerivedState()):
-        self.state = state
-        self.time = time
+    
+    def __post_init__(self):
         for derived_state_model in DERIVED_MODEL_LIST:
             self.update_derived(
                 derived_state_model.evaluate(self.time, self.state.__dict__))
@@ -175,7 +173,7 @@ class StateTime:
 
 
 @dataclass
-class ObservedState(StateTime):
+class ObservedState(State):
     # This is the true state with some noise applied
     pass  # TODO
 
