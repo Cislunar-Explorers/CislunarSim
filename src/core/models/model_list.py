@@ -68,8 +68,8 @@ class TestModel(EnvironmentModel):
     def __init__(self, parameters) -> None:
         super().__init__(parameters)
 
-    def evaluate(self, t: float, state_time: StateTime) -> Dict[str, State_Type]:
-        return super().evaluate(t, state_time)
+    def evaluate(self, state_time: StateTime) -> Dict[str, State_Type]:
+        return super().evaluate(state_time)
 
     def d_state(self, state_time: StateTime) -> Dict[str, State_Type]:
         dx = 0
@@ -107,17 +107,17 @@ def build_state_update_function(
 
         Args:
             state (np.ndarray): _description_
-
+            
         Returns:
             np.ndarray: _description_
         """
-        propagated_state = StateTime(State(array_to_state(state_array)), t)
-        state_in = StateTime(State(array_to_state(state_array)), t)
+        propagated_state = State()
+        state_in = StateTime(array_to_state(state_array), t)
 
         for model in env_models:
             propagated_state.update(model.evaluate(state_in))
 
-        propagated_state_array = propagated_state.state.to_array()
+        propagated_state_array = propagated_state.float_fields_to_array()
         return propagated_state_array
 
     return update_function

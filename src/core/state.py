@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 import numpy as np
 from typing import Dict, Union
 from core.derived_state import DerivedState
@@ -119,12 +119,15 @@ class StateTime:
     """
 
     state: State = State()
-    derived_state: DerivedState = field(init=False)
     time: float = 0.0
+    derived_state: DerivedState = DerivedState()
 
-    def __init__(self, state: State, time: float):
+    def __init__(self, state: State = State(), time: float = 0.0, derived_state: DerivedState = DerivedState()):
         self.state = state
         self.time = time
+        for derived_state_model in DERIVED_MODEL_LIST:
+            self.update_derived(
+                derived_state_model.evaluate(self.time, self.state.__dict__))
 
     @classmethod
     def from_dict(cls, statetime_dict: Dict[str, State_Type]):
@@ -143,16 +146,6 @@ class StateTime:
             time = 0.0
 
         return cls(State(**statetime_dict), time=time)
-
-    def __post_init__(self):
-
-        self.derived_state = DerivedState()
-
-        # Propagate derived state
-        for derived_state_model in DERIVED_MODEL_LIST:
-            self.update_derived(
-                derived_state_model.evaluate(self.time, self.state.__dict__))
-
 
     def update(self, state_dict: Dict[str, Union[int, float, bool]]) -> None:
         """ update() is a procedure that updates the fields of the state with specified key/value pairs in state_dict.
