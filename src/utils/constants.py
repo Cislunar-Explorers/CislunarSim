@@ -1,7 +1,6 @@
 from enum import Enum, IntEnum
 from typing import Union
 from pathlib import Path
-import numpy as np
 
 
 SIM_ROOT = (Path(__file__).parent / "../..").resolve()

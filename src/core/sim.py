@@ -40,7 +40,7 @@ class CislunarSim:
 
         # synchronize observed state time with true state time
         # TODO: clock drift?
-        self.observed_state = ObservedState(temp_state, self.state_time.time)
+        self.observed_state = ObservedState(temp_state)
 
         # TODO: Feed outputs of sensor models into FSW and return actuator's state as part of `PropagatedOutput`
 
