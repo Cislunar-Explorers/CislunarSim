@@ -5,7 +5,6 @@ from core.state import StateTime, ObservedState, PropagatedOutput, State
 from core.models.model_list import ModelContainer
 from utils.log import log
 from utils.constants import R_EARTH
-from utils.matplotlib_util import Plot
 
 
 class CislunarSim:
