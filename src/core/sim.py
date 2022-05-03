@@ -16,7 +16,7 @@ class CislunarSim:
         self._config = config
         self._models = ModelContainer(self._config)
         self.state_time: StateTime = self._config.init_cond
-        self.observed_state = ObservedState()
+        self.observed_state: ObservedState = ObservedState()
 
         self.should_run = True
         self.num_iters = 0
@@ -41,7 +41,7 @@ class CislunarSim:
 
         # synchronize observed state time with true state time
         # TODO: clock drift?
-        self.observed_state = ObservedState(temp_state)
+        self.observed_state.init_from_state(temp_state)
 
         # TODO: Feed outputs of sensor models into FSW and return actuator's state as part of `PropagatedOutput`
 
@@ -49,7 +49,7 @@ class CislunarSim:
         self.should_run = not (self.should_stop())
         self.num_iters += 1
         log.debug(self.state_time.state)
-        # log.debug(self.state_time.derived_state)
+        log.debug(self.state_time.derived_state)
         return PropagatedOutput(self.state_time, self.observed_state)
 
     def should_stop(self) -> bool:

@@ -68,15 +68,6 @@ class State:
         """
         return np.array(list(self.__dict__.values()))
 
-    def float_fields_to_array(self):
-        """
-        float_fields_to_array() acts like to_array(), but ignores the derived state. This is helpful for functions which wish to evaluate numerical fields of the state, such as should_stop() in sim.py and propagate_state() in integrator.py.
-
-        Returns:
-            Numpy array: contains all values stored in the float or bool fields.
-        """
-        return np.array(list(x for x in self.__dict__.values() if type(x) is not DerivedState))
-
     def from_array(self, state_array: np.ndarray):
 
         new_state = dict(zip(self.__dict__.keys(), state_array))
@@ -175,7 +166,53 @@ class StateTime:
 @dataclass
 class ObservedState(State):
     # This is the true state with some noise applied
-    pass  # TODO
+    # TODO: Implement noise application
+
+    # angular velocity (radians/second)
+    ang_vel_x: float = 0.0
+    ang_vel_y: float = 0.0
+    ang_vel_z: float = 0.0
+
+    # angular position
+    gnc_pos_q1: float = 0.0
+    gnc_pos_q2: float = 0.0
+    gnc_pos_q3: float = 0.0
+    gnc_pos_q4: float = 0.0
+
+    # velocity (meters / second)
+    vel_x: float = 0.0
+    vel_y: float = 0.0
+    vel_z: float = 0.0
+
+    # position (meters)
+    x: float = 0.0
+    y: float = 0.0
+    z: float = 0.0
+
+    force_propulsion_thrusters: float = 0.0
+    fuel_mass: float = 0.0
+
+    # derived state (Newtons)
+    force_earth: float = 0.0
+    force_moon: float = 0.0
+
+    # discrete state
+    propulsion_on: bool = False
+    solenoid_actuation_on: bool = False
+
+    def init_from_state(self, state: State):
+        for key, value in state.__dict__.items():
+            if key in self.__dict__.keys():
+                setattr(self, key, value)
+
+    def gaussian_noise(self, mu: float, sigma: float):
+        """
+        Args:
+            sigma (float): standard deviation of the noise
+        """
+        noise = np.random.normal(mu, sigma)
+        self.mu = noise
+
 
 
 @dataclass
