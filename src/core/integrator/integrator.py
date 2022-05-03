@@ -1,6 +1,3 @@
-from typing import Callable
-import numpy as np
-from core.config import Config
 from scipy.integrate import solve_ivp
 from core.state import StateTime, array_to_state
 from core.models.model_list import ModelContainer
