@@ -106,7 +106,7 @@ def build_state_update_function(
 
         Args:
             state (np.ndarray): _description_
-            
+
         Returns:
             np.ndarray: _description_
         """
