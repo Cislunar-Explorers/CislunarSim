@@ -1,5 +1,4 @@
-from os import stat
-from typing import Callable, List, Dict, Type
+from typing import Callable, List, Dict
 import numpy as np
 from core.models.model import (
     ActuatorModel,

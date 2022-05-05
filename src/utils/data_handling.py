@@ -21,4 +21,4 @@ def states_to_df(states: List[PropagatedOutput]) -> pd.DataFrame:
 def df_to_csv(dataframe: pd.DataFrame, path: Optional[Union[str, Path]] = None):
     if path is None:
         path = SIM_ROOT / "runs"
-    dataframe.to_csv(f"{path}/cislunarsim-{time.time()}.csv")
+    dataframe.to_csv(f"{path}/cislunarsim-{int(time.time())}.csv")
