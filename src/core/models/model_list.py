@@ -125,11 +125,6 @@ def build_state_update_function(
 class ModelContainer:
     def __init__(self, config: Config) -> None:
 
-        # Derived state models propagate derived values.
-        # They are the same each time, meaning we can simply list them here.
-        # TODO: Determine whether this is the best way to do this.
-        # self.derived: List[DerivedStateModel] = [DerivedPosition(config.param)]
-
         # Environmental models propagate the state of the spacecraft.
         self.environmental: List[EnvironmentModel] = []
 
