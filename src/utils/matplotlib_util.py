@@ -11,6 +11,7 @@ class Plot:
         self.fig_2d = plt.figure()
         self.ax_vel = plt.subplot(221)
         self.ax_pos = plt.subplot(222)
+        self.ax_ang_vel_x = plt.subplot(223)
 
         self.fig_3d = plt.figure()
         self.ax = plt.subplot(111, projection="3d")
@@ -28,13 +29,17 @@ class Plot:
         self.ax_pos.set_xlabel("t")
         self.ax_pos.set_ylabel("Position")
 
+        self.ts = df["true_state.time"].to_numpy()
+
         self.xlocs = df["true_state.state.x"].to_numpy()
         self.ylocs = df["true_state.state.y"].to_numpy()
         self.zlocs = df["true_state.state.z"].to_numpy()
-        self.ts = df["true_state.time"].to_numpy()
         self.vel_xs = df["true_state.state.vel_x"].to_numpy()
         self.vel_ys = df["true_state.state.vel_y"].to_numpy()
         self.vel_zs = df["true_state.state.vel_z"].to_numpy()
+
+        self.ang_x = df["true_state.state.ang_vel_x"].to_numpy()
+        self.ang_x_obs = df["observed_state.state.ang_vel_x"].to_numpy()
 
         self.annot = self.ax.annotate(
             "",
@@ -62,8 +67,15 @@ class Plot:
         self.ax_pos.plot(self.ts, self.ylocs, "--", c="green", label="y")
         self.ax_pos.plot(self.ts, self.zlocs, "--", c="blue", label="z")
 
+        self.ax_ang_vel_x.plot(self.ts, self.ang_x, "--", c="hotpink", label="x (true)")
+        self.ax_ang_vel_x.plot(
+            self.ts, self.ang_x_obs, "--", c="green", label="x (observed)"
+        )
+
         self.ax_vel.legend()
         self.ax_pos.legend()
+
+        self.ax_ang_vel_x.legend()
 
     def plot_data_3d(self):
         """Procedure that plots a model of the earth, moon and the craft's trajectory in R3"""
