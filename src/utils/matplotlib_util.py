@@ -4,16 +4,23 @@ from utils.astropy_util import get_body_position
 import matplotlib.animation as animation
 from mpl_toolkits.mplot3d import Axes3D
 from utils.constants import BodyEnum, R_EARTH, R_MOON
+from datetime import datetime
 
 
 class Plot:
+
+   
+
     def __init__(self, df):
         self.fig_2d = plt.figure()
         self.ax_vel = plt.subplot(221)
         self.ax_pos = plt.subplot(222)
 
-        self.fig_3d = plt.figure()
-        self.ax = plt.subplot(111, projection="3d")
+        self.fig_3d = plt.figure("CislunarSim")
+        self.ax = self.fig_3d.gca(projection='3d')
+
+        self.u = np.linspace(0, 2 * np.pi, 60)
+        self.v = np.linspace(0, np.pi, 60)
 
         self.ax.set_xlim(-10000000, 10000000)
         self.ax.set_ylim(-10000000, 10000000)
@@ -36,6 +43,10 @@ class Plot:
         self.vel_ys = df["true_state.state.vel_y"].to_numpy()
         self.vel_zs = df["true_state.state.vel_z"].to_numpy()
 
+        self.times = df["true_state.time"].to_numpy()
+
+        self.locs = np.array([self.xlocs, self.ylocs, self.zlocs])
+
         self.annot = self.ax.annotate(
             "",
             xy=(0, 0),
@@ -47,9 +58,9 @@ class Plot:
         self.annot.set_visible(False)
 
     def plot_data(self) -> None:
-        #self.plot_data_2d()
+        self.plot_data_2d()
         self.plot_data_3d()
-        #plt.tight_layout()
+        plt.tight_layout()
         #plt.show()
 
     def plot_data_2d(self) -> None:
@@ -70,51 +81,88 @@ class Plot:
 
         locs = np.array([self.xlocs, self.ylocs, self.zlocs])
         traj = plt.plot(self.xlocs, self.ylocs, self.zlocs, lw=2, c="blue")[0]
-
+        #self.ax.plot3D(self.xlocs, self.ylocs, self.zlocs, "blue")
+        print(traj)
         line_ani = animation.FuncAnimation(
             self.fig_3d,
-            self.animate,
+            self.animate_traj,
             frames=len(self.xlocs),
             fargs=(locs, traj),
             interval=1,
             blit=False,
         )
 
-        # moon_ani = animation.FuncAnimation(
-        #     self.fig_3d,
-        #     self.animate_bodies,
-        #     frames=len(self.xlocs),
-        #     interval=1,
-        #     blit=False
-        # )
-
         self.ax.set_box_aspect(aspect = (1,1,1))
         # 3D scatter plot of craft's trajectory
-        self.sc = self.ax.scatter3D(self.xlocs, self.ylocs, self.zlocs, cmap="Greens")
+        #self.sc = self.ax.scatter3D(self.xlocs, self.ylocs, self.zlocs, cmap="Greens")
 
         # Calculation and plotting of earth's position
-        u = np.linspace(0, 2 * np.pi, 60)
-        v = np.linspace(0, np.pi, 60)
-        earth_x = R_EARTH * np.outer(np.cos(u), np.sin(v))
-        earth_y = R_EARTH * np.outer(np.sin(u), np.sin(v))
-        earth_z = R_EARTH * np.outer(np.ones(np.size(u)), np.cos(v))
+       
+        earth_x = R_EARTH * np.outer(np.cos(self.u), np.sin(self.v))
+        earth_y = R_EARTH * np.outer(np.sin(self.u), np.sin(self.v))
+        earth_z = R_EARTH * np.outer(np.ones(np.size(self.u)), np.cos(self.v))
 
-        self.ax.plot_surface(earth_x, earth_y, earth_z, color="g")
+        self.earth = self.ax.plot_surface(earth_x, earth_y, earth_z, color="g")
 
         # Calculation and plotting of moon's position
         moon_cx, moon_cy, moon_cz = get_body_position(self.ts[-1], BodyEnum.Moon)
-        moon_x = moon_cx + R_MOON * np.outer(np.cos(u), np.sin(v))
-        moon_y = moon_cy + R_MOON * np.outer(np.sin(u), np.sin(v))
-        moon_z = moon_cz + R_MOON * np.outer(np.ones(np.size(u)), np.cos(v))
+        moon_x = moon_cx + R_MOON * np.outer(np.cos(self.u), np.sin(self.v))
+        moon_y = moon_cy + R_MOON * np.outer(np.sin(self.u), np.sin(self.v))
+        moon_z = moon_cz + R_MOON * np.outer(np.ones(np.size(self.u)), np.cos(self.v))
 
         self.ax.plot_surface(moon_x, moon_y, moon_z, color="gray")
 
+        #moon = self.plot_moon()
+
+        # moon_ani = animation.FuncAnimation(
+        #     self.fig_3d,
+        #     self.animate_moon,
+        #     frames=len(self.xlocs),
+        #     fargs=(locs, moon),
+        #     interval=100,
+        #     blit=False
+        # )
+
         plt.show()
 
-    def animate(self, num, locs, line):
+    def animate_traj(self, num, locs, line):
+        #print(self.ts)
+        #self.ax.clear()
+
+        #self.ax.plot3D(self.locs[0, :num+1], self.locs[1, :num+1], self.locs[2, :num+1], c='blue')
+        #self.ax.scatter(self.locs[0, num], self.locs[1, num], self.locs[2, num], c='blue', marker='o')
+        #self.ax.plot3D(self.locs[0, 0], self.locs[1, 0], self.locs[2, 0], c='black', marker='o')
+        self.ax.set_title('Trajectory \nTime = ' + datetime.utcfromtimestamp(self.times[num]).strftime('%Y-%m-%d %H:%M:%S') + ' sec')
+        
         line.set_data(locs[0:2, :num])
         line.set_3d_properties(locs[2, :num])
         return line
+
+    # def animate_moon(self, num, locs, moon):
+        
+    #     moon_cx, moon_cy, moon_cz = get_body_position(self.ts[-1], BodyEnum.Moon)
+    #     moon_x = moon_cx + R_MOON * np.outer(np.cos(self.u), np.sin(self.v))
+    #     moon_y = moon_cy + R_MOON * np.outer(np.sin(self.u), np.sin(self.v))
+    #     moon_z = moon_cz + R_MOON * np.outer(np.ones(np.size(self.u)), np.cos(self.v))
+
+    #     moon[0].remove()
+    #     moon[0] = self.ax.plot_surface(moon_x, moon_y, moon_z, color="gray")
+
+
+        #moon = self.plot_moon()
+        #return moon
+
+    # def plot_moon(self):
+    #     u = np.linspace(0, 2 * np.pi, 60)
+    #     v = np.linspace(0, np.pi, 60)
+    #     moon_cx, moon_cy, moon_cz = get_body_position(self.ts[-1], BodyEnum.Moon)
+        
+    #     moon_x = moon_cx + R_MOON * np.outer(np.cos(u), np.sin(v))
+    #     moon_y = moon_cy + R_MOON * np.outer(np.sin(u), np.sin(v))
+    #     moon_z = moon_cz + R_MOON * np.outer(np.ones(np.size(u)), np.cos(v))
+    #     return self.ax.plot_surface(moon_x, moon_y, moon_z, color="gray")
+
+
 
     # def update_annot(self, ind):
 
