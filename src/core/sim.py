@@ -72,7 +72,7 @@ class CislunarSim:
             log.debug(f"{self.state}")
             return True
 
-        if self.num_iters > 1e6:
+        if self.num_iters > self._config.param.max_iter:
             log.error("Stopping sim because it's running too long")
             return True
 

@@ -1,6 +1,7 @@
 {
 	"$schema": "http://json-schema.org/draft-04/schema#",
 	"type": "object",
+	"description": "This is the schema that is used to validate json files, none of the fields are required, if they are not specified, a default value will be substituted. Type check and spell check are handled by the validation process, so no typo will be allowed. *Be careful to not miss declaring any properties of customization, the program will still run without warning but might not behave as expected!* ",
 	"properties": {
 		"parameters": {
 			"type": "object",
@@ -31,8 +32,12 @@
 				},
 				"thruster_force": {
 					"type": "number"
+				},
+				"max_iter": {
+					"type": "number"
 				}
-			}
+			},
+			"additionalProperties": false
 		},
 		"initial_condition": {
 			"type": "object",
@@ -94,7 +99,8 @@
 				"solenoid_actuation_on": {
 					"type": "boolean"
 				}
-			}
+			},
+			"additionalProperties": false
 		},
 		"models": {
 			"type": "array",
@@ -102,5 +108,6 @@
 				"type": "string"
 			}
 		}
-	}
+	},
+	"additionalProperties": false
 }
