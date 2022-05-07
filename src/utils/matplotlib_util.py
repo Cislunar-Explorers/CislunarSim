@@ -82,7 +82,7 @@ class Plot:
         locs = np.array([self.xlocs, self.ylocs, self.zlocs])
         traj = plt.plot(self.xlocs, self.ylocs, self.zlocs, lw=2, c="blue")[0]
         #self.ax.plot3D(self.xlocs, self.ylocs, self.zlocs, "blue")
-        print(traj)
+        
         line_ani = animation.FuncAnimation(
             self.fig_3d,
             self.animate_traj,
@@ -132,7 +132,7 @@ class Plot:
         #self.ax.plot3D(self.locs[0, :num+1], self.locs[1, :num+1], self.locs[2, :num+1], c='blue')
         #self.ax.scatter(self.locs[0, num], self.locs[1, num], self.locs[2, num], c='blue', marker='o')
         #self.ax.plot3D(self.locs[0, 0], self.locs[1, 0], self.locs[2, 0], c='black', marker='o')
-        self.ax.set_title('Trajectory \nTime = ' + datetime.utcfromtimestamp(self.times[num]).strftime('%Y-%m-%d %H:%M:%S') + ' sec')
+        self.ax.set_title('Trajectory \nTime = ' + datetime.utcfromtimestamp(self.times[num]).strftime('%Y-%m-%d %H:%M:%S'))
         
         line.set_data(locs[0:2, :num])
         line.set_3d_properties(locs[2, :num])
