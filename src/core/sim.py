@@ -47,6 +47,7 @@ class CislunarSim:
         self.should_run = not (self.should_stop())
         self.num_iters += 1
         log.debug(self.state_time)
+        print("\n", self.num_iters, "\n")
         return PropagatedOutput(self.state_time, self.observed_state)
 
     def should_stop(self) -> bool:

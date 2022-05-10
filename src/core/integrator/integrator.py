@@ -6,7 +6,7 @@ from core.models.model_list import ModelContainer
 def propagate_state(
     models: ModelContainer,
     state_time: StateTime,
-    dt: float = 3.0,
+    dt: float = 50.0,
 ) -> StateTime:
     """Takes in a state and propagates it over a timestep of `dt` seconds.
     Returns a new State object at t+dt"""

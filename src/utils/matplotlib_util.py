@@ -66,7 +66,8 @@ class Plot:
     def plot_data_3d(self):
         """Procedure that plots a model of the earth, moon and the craft's trajectory in R3"""
         # 3D scatter plot of craft's trajectory
-        self.sc = self.ax.scatter3D(self.xlocs, self.ylocs, self.zlocs, cmap="Greens")
+        # self.sc = self.ax.scatter3D(self.xlocs, self.ylocs, self.zlocs, cmap="Greens")
+        plt.plot(self.xlocs, self.ylocs, self.zlocs, lw=2, c="blue")[0]
 
         # Calculation and plotting of earth's position
         u, v = np.mgrid[0 : 2 * np.pi : 20j, 0 : np.pi : 10j]
