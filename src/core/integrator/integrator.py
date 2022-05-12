@@ -7,7 +7,7 @@ def propagate_state(
     models: ModelContainer,
     # propagate_state_function: Callable[[float, np.ndarray], np.ndarray],
     state_time: StateTime,
-    dt: float = 1.0,
+    dt: float = 100.0,
 ) -> StateTime:
     """Takes in a state and propagates it over a timestep of `dt` seconds.
     Returns a new State object at t+dt"""
