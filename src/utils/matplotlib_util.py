@@ -9,7 +9,7 @@ from datetime import datetime
 class Plot:
 
     def __init__(self, df):
-        print(df["true_state.derived_state.r_mo"])
+        self.df = df
         self.fig_2d = plt.figure()
         self.ax_vel = plt.subplot(221)
         self.ax_pos = plt.subplot(222)
@@ -125,18 +125,16 @@ class Plot:
         moon_y = moon_cy + R_MOON * np.outer(np.sin(self.u), np.sin(self.v))
         moon_z = moon_cz + R_MOON * np.outer(np.ones(np.size(self.u)), np.cos(self.v))
 
-        self.ax.plot_surface(moon_x, moon_y, moon_z, color="gray")
+        moon = [self.ax.plot_surface(moon_x, moon_y, moon_z, color="gray")]
 
-        #moon = self.plot_moon()
+    
 
-        # moon_ani = animation.FuncAnimation(
-        #     self.fig_3d,
-        #     self.animate_moon,
-        #     frames=len(self.xlocs),
-        #     fargs=(locs, moon),
-        #     interval=100,
-        #     blit=False
-        # )
+        moon_ani = animation.FuncAnimation(
+            self.fig_3d,
+            self.animate_moon,
+            frames=len(self.xlocs),
+            fargs=(locs, moon)
+        )
 
         plt.show()
 
@@ -154,13 +152,17 @@ class Plot:
     #     earth[0].remove()
     #     earth[0] = self.ax.plot_surface(earth_x, earth_y, earth_z, color="g")
 
-    # def animate_moon(self, num, locs, moon):
-        # moon_x = moon_cx + R_MOON * np.outer(np.cos(self.u), np.sin(self.v))
-        # moon_y = moon_cy + R_MOON * np.outer(np.sin(self.u), np.sin(self.v))
-        # moon_z = moon_cz + R_MOON * np.outer(np.ones(np.size(self.u)), np.cos(self.v))
+    def animate_moon(self, num, locs, moon):
+        moon_cx = float(self.df["true_state.derived_state.r_mo"][num].strip("[]").split(" ")[0])
+        moon_cy = float(self.df["true_state.derived_state.r_mo"][num].strip("[]").split(" ")[1])
+        moon_cz = float(self.df["true_state.derived_state.r_mo"][num].strip("[]").split(" ")[2])
+        
+        moon_x = moon_cx + R_MOON * np.outer(np.cos(self.u), np.sin(self.v))
+        moon_y = moon_cy + R_MOON * np.outer(np.sin(self.u), np.sin(self.v))
+        moon_z = moon_cz + R_MOON * np.outer(np.ones(np.size(self.u)), np.cos(self.v))
 
-        # moon[0].remove()
-        # moon[0] = self.ax.plot_surface(moon_x, moon_y, moon_z, color="gray")
+        moon[0].remove()
+        moon[0] = self.ax.plot_surface(moon_x, moon_y, moon_z, color="gray")
 
     # def plot_moon(self):
     #     u = np.linspace(0, 2 * np.pi, 60)
