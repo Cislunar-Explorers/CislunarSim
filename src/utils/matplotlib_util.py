@@ -9,6 +9,7 @@ from datetime import datetime
 class Plot:
 
     def __init__(self, df):
+        print(df["true_state.derived_state.r_mo"])
         self.fig_2d = plt.figure()
         self.ax_vel = plt.subplot(221)
         self.ax_pos = plt.subplot(222)
@@ -46,7 +47,7 @@ class Plot:
 
         self.locs = np.array([self.xlocs, self.ylocs, self.zlocs])
         self.ang_x = df["true_state.state.ang_vel_x"].to_numpy()
-        self.ang_x_obs = df["observed_state.state.ang_vel_x"].to_numpy()
+        self.ang_x_obs = df["observed_state.ang_vel_x"].to_numpy()
 
         self.annot = self.ax.annotate(
             "",
@@ -110,13 +111,13 @@ class Plot:
         earth = [self.ax.plot_surface(earth_x, earth_y, earth_z, color="g")]
 
 
-        earth_ani = animation.FuncAnimation(
-            self.fig_3d,
-            self.animate_earth,
-            frames=len(self.xlocs),
-            fargs=(locs, earth),
+        # earth_ani = animation.FuncAnimation(
+        #     self.fig_3d,
+        #     self.animate_earth,
+        #     frames=len(self.xlocs),
+        #     fargs=(locs, earth),
 
-        )
+        # )
 
         # Calculation and plotting of moon's position
         moon_cx, moon_cy, moon_cz = get_body_position(self.ts[-1], BodyEnum.Moon)
@@ -154,17 +155,12 @@ class Plot:
     #     earth[0] = self.ax.plot_surface(earth_x, earth_y, earth_z, color="g")
 
     # def animate_moon(self, num, locs, moon):
-        #print()
         # moon_x = moon_cx + R_MOON * np.outer(np.cos(self.u), np.sin(self.v))
         # moon_y = moon_cy + R_MOON * np.outer(np.sin(self.u), np.sin(self.v))
         # moon_z = moon_cz + R_MOON * np.outer(np.ones(np.size(self.u)), np.cos(self.v))
 
         # moon[0].remove()
         # moon[0] = self.ax.plot_surface(moon_x, moon_y, moon_z, color="gray")
-
-
-        #moon = self.plot_moon()
-        #return moon
 
     # def plot_moon(self):
     #     u = np.linspace(0, 2 * np.pi, 60)

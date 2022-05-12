@@ -46,6 +46,9 @@ class DerivedState:
 
 
     def update(self, derived_state_dict: Dict) -> None:
+        
+        print(derived_state_dict["r_mo"])
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         """
         update() is a procedure that updates the fields of the derived state with specified 
             key/value pairs in derived_state_dict.
@@ -55,3 +58,4 @@ class DerivedState:
         for key, value in derived_state_dict.items():
             if key in self.__dict__.keys():
                 setattr(self, key, value)
+        print(derived_state_dict["r_mo"])
