@@ -16,6 +16,7 @@ class Parameters:
         self.com = 0
         self.tank_volume = 0
         self.thruster_force = 0
+        self.max_iter = 1e6
 
         for key, value in param_dict.items():
             if key in self.__dict__.keys():

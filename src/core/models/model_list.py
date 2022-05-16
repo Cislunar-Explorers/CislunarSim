@@ -43,6 +43,8 @@ class PositionDynamics(EnvironmentModel):
         mu_moon = G * 7.34767309e22
         mu_sun = G * 1.988409870698051e30
         mu_earth = G * 5.972167867791379e24
+        # mu_moon = 0
+        # mu_sun = 0
 
         # Acceleration column vector calculation
         a = (

@@ -6,10 +6,14 @@ from utils.constants import BodyEnum
 from astropy.coordinates import SkyCoord
 
 
+# TODO: create a wrapper function with the rounding
+
+
 # Heavily reference the get_ephemeris function here: https://github.com/Cislunar-Explorers/FlightSoftware/blob/master/OpticalNavigation/core/observe_functions.py
 @lru_cache
 def get_body_position(time: int, body: BodyEnum) -> Tuple[float, float, float]:
-    """ Gets position vector of [body] based on [time]
+    #print(time)
+    """Gets position vector of [body] based on [time]
 
     Args:
         time (float): the current time being queried
