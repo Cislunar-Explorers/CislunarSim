@@ -99,7 +99,7 @@
 				"solenoid_actuation_on": {
 					"type": "boolean"
 				},
-        "time": {
+				"time": {
 					"type": "number"
 				}
 			},
