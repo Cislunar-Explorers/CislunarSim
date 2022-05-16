@@ -50,7 +50,7 @@ class Plot:
 
         self.locs = np.array([self.xlocs, self.ylocs, self.zlocs])
         self.ang_x = df["true_state.state.ang_vel_x"].to_numpy()
-        self.ang_x_obs = df["observed_state.ang_vel_x"].to_numpy()
+        self.ang_x_obs = df["observed_state.state.ang_vel_x"].to_numpy()
 
         self.annot = self.ax.annotate(
             "",
