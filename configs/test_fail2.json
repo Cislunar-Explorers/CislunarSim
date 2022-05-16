@@ -1,0 +1,7 @@
+{
+    "description": "This test case violates the requirement that the gyro_bias should have three element in the array. ",
+    "parameters": {
+        "gyro_bias" : [0.0, 0.0],
+        "gyro_noise" : [0.0, 0.0, 0.0]
+    }
+ }

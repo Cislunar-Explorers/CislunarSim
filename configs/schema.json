@@ -1,0 +1,116 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"description": "This is the schema that is used to validate json files, none of the fields are required, if they are not specified, a default value will be substituted. Type check and spell check are handled by the validation process, so no typo will be allowed. *Be careful to not miss declaring any properties of customization, the program will still run without warning but might not behave as expected!* ",
+	"properties": {
+		"parameters": {
+			"type": "object",
+			"properties": {
+				"gyro_bias": {
+					"type": "array",
+					"items": {
+						"type": "number"
+					}
+				},
+				"gyro_noise": {
+					"type": "array",
+					"items": {
+						"type": "number"
+					}
+				},
+				"gyro_sensitivity": {
+					"type": "number"
+				},
+				"dry_mass": {
+					"type": "number"
+				},
+				"com": {
+					"type": "number"
+				},
+				"tank_volume": {
+					"type": "number"
+				},
+				"thruster_force": {
+					"type": "number"
+				},
+				"max_iter": {
+					"type": "number"
+				}
+			},
+			"additionalProperties": false
+		},
+		"initial_condition": {
+			"type": "object",
+			"properties": {
+				"ang_vel_x": {
+					"type": "number"
+				},
+				"ang_vel_y": {
+					"type": "number"
+				},
+				"ang_vel_z": {
+					"type": "number"
+				},
+				"gnc_pos_q1": {
+					"type": "number"
+				},
+				"gnc_pos_q2": {
+					"type": "number"
+				},
+				"gnc_pos_q3": {
+					"type": "number"
+				},
+				"gnc_pos_q4": {
+					"type": "number"
+				},
+				"vel_x": {
+					"type": "number"
+				},
+				"vel_y": {
+					"type": "number"
+				},
+				"vel_z": {
+					"type": "number"
+				},
+				"x": {
+					"type": "number"
+				},
+				"y": {
+					"type": "number"
+				},
+				"z": {
+					"type": "number"
+				},
+				"force_propulsion_thrusters": {
+					"type": "number"
+				},
+				"fuel_mass": {
+					"type": "number"
+				},
+				"force_earth": {
+					"type": "number"
+				},
+				"force_moon": {
+					"type": "number"
+				},
+				"propulsion_on": {
+					"type": "boolean"
+				},
+				"solenoid_actuation_on": {
+					"type": "boolean"
+				},
+				"time": {
+					"type": "number"
+				}
+			},
+			"additionalProperties": false
+		},
+		"models": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		}
+	},
+	"additionalProperties": false
+}

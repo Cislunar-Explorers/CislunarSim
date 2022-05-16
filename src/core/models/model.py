@@ -1,31 +1,49 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Any
-from core.state import State
+from typing import Dict, Any, Type, Union
+from core.state import StateTime
 from core.parameters import Parameters
+from utils.constants import State_Type
 
 
 class Model(ABC):
+    """
+    Abstract Base class for all models this sim uses.
+    """
+
     def __init__(self, parameters: Parameters) -> None:
+        """Model __init__
+        All models will be dependent on some parameters, so we load them in
+        here.
+        Args:
+            parameters (Parameters): Instance of the parameters class gets
+            passed in to be accessible by the model.
+        """
         self._parameters = parameters
 
-    def evaluate(self, state: State) -> Dict[str, Any]:
-        # TODO: wrap d_state with something (error checking?)
-        delta_state = self.d_state(state)
-        return delta_state
-
     @abstractmethod
-    def d_state(self, state: State)  -> Dict[str, Any]:
-        ...
+    def evaluate(self, state_time: StateTime):
+        """
+        Abstract method for any model that evaluates the model based on the
+            current state.
+        An instance of State is required to evaluate the model, (because each
+            model should be dependent on the state of the system.)
+        Args:
+            state (State): a instance of a State class.
+
+        Returns:
+            _type_: Defined in concrete instantiation of subclasses.
+        """
+
 
 class EnvironmentModel(Model):
     def __init__(self, parameters: Parameters) -> None:
         super().__init__(parameters)
 
-    def evaluate(self, t: float, state: State) -> Dict[str, Any]:
-        return self.d_state(t, state)
+    def evaluate(self, state_time: StateTime) -> Dict[str, State_Type]:
+        return self.d_state(state_time)
 
     @abstractmethod
-    def d_state(self, t: float, state: State) -> Dict[str, Any]:
+    def d_state(self, state_time: StateTime) -> Dict[str, State_Type]:
         """Function which evaluates the differential equation:
             dy / dt = f(t, y)
             for the current state. "y" is a state vector (not just one variable)
@@ -41,15 +59,14 @@ class EnvironmentModel(Model):
         """
         ...
 
+
 class SensorModel(Model):
     def __init__(self, parameters: Parameters) -> None:
         super().__init__(parameters)
 
-    def evaluate(self, state: State) -> Dict[str, Any]:
-        return super().evaluate(state)
-
-    def d_state(self, state: State) -> Dict[str, Any]:
-        pass
+    @abstractmethod
+    def evaluate(self, state: StateTime) -> Dict[str, Any]:
+        ...
 
 
 class ActuatorModel(Model):
@@ -61,17 +78,9 @@ class ActuatorModel(Model):
         """
         super().__init__(parameters)
 
-    def evaluate(self, state: State) -> Dict[str, Any]:
-        """Evaluates the model for a given state
+    @abstractmethod
+    def evaluate(self, state_time: StateTime) -> Dict[str, Any]:
+        ...
+        
 
-        Args:
-            state (State): state of model
-
-        Returns:
-            Dict[str, Any]: idk
-        """
-        return super().evaluate(state)
-
-    def d_state(self, state: State) -> Dict[str, Any]:
-        pass
-
+MODEL_TYPES = Union[Type[EnvironmentModel], Type[SensorModel], Type[ActuatorModel]]
