@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Any, Type, Union
-from core.state import State
+from core.state import StateTime
 from core.parameters import Parameters
 from utils.constants import State_Type
 
@@ -21,7 +21,7 @@ class Model(ABC):
         self._parameters = parameters
 
     @abstractmethod
-    def evaluate(self, state: State):
+    def evaluate(self, state_time: StateTime):
         """
         Abstract method for any model that evaluates the model based on the
             current state.
@@ -39,11 +39,11 @@ class EnvironmentModel(Model):
     def __init__(self, parameters: Parameters) -> None:
         super().__init__(parameters)
 
-    def evaluate(self, t: float, state: State) -> Dict[str, State_Type]:
-        return self.d_state(t, state)
+    def evaluate(self, state_time: StateTime) -> Dict[str, State_Type]:
+        return self.d_state(state_time)
 
     @abstractmethod
-    def d_state(self, t: float, state: State) -> Dict[str, State_Type]:
+    def d_state(self, state_time: StateTime) -> Dict[str, State_Type]:
         """Function which evaluates the differential equation:
             dy / dt = f(t, y)
             for the current state. "y" is a state vector (not just one variable)
@@ -65,7 +65,7 @@ class SensorModel(Model):
         super().__init__(parameters)
 
     @abstractmethod
-    def evaluate(self, state: State) -> Dict[str, Any]:
+    def evaluate(self, state: StateTime) -> Dict[str, Any]:
         ...
 
 
@@ -79,17 +79,8 @@ class ActuatorModel(Model):
         super().__init__(parameters)
 
     @abstractmethod
-    def evaluate(self, state: State) -> Dict[str, Any]:
-        ...
-
-
-class DerivedStateModel(Model):
-    def __init__(self, parameters: Parameters) -> None:
-        super().__init__(parameters)
-
-    @abstractmethod
-    def evaluate(self, t: float, state: State) -> Dict[str, Any]:
+    def evaluate(self, state_time: StateTime) -> Dict[str, Any]:
         ...
         
 
-MODEL_TYPES = Union[Type[EnvironmentModel], Type[SensorModel], Type[ActuatorModel], Type[DerivedStateModel]]
+MODEL_TYPES = Union[Type[EnvironmentModel], Type[SensorModel], Type[ActuatorModel]]

@@ -1,6 +1,4 @@
-from multiprocessing import dummy
 import unittest
-import numpy as np
 from core.state import State, StateTime, DerivedState
 from utils.test_utils import s_0, state_1
 
@@ -70,7 +68,7 @@ class StateTestCases(unittest.TestCase):
         ]
         self.assertEqual(
             state_list,
-            state_1.float_fields_to_array().tolist(),
+            state_1.to_array().tolist(),
         )
 
 
