@@ -2,7 +2,7 @@ import time
 import unittest
 from core.config import Config
 from core.sim import CislunarSim
-from utils.constants import ModelEnum
+from utils.constants import ModelEnum, D_T
 
 
 class SimTest(unittest.TestCase):
@@ -22,7 +22,7 @@ class SimTest(unittest.TestCase):
         self.assertEqual(initial_conditions.state, next_conditions.true_state.state)
 
         # Verify that time incremented in the sim by the expected amount
-        self.assertEqual(next_conditions.true_state.time, sim._config.init_cond.time + 3)
+        self.assertEqual(next_conditions.true_state.time, sim._config.init_cond.time + D_T)
 
 
 if __name__ == "__main__":

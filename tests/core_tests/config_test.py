@@ -2,7 +2,6 @@ import unittest
 from core.config import Config, JsonError, MutationException
 from core.parameters import Parameters
 from core.state import StateTime
-from jsonschema import SchemaError, ValidationError
 
 
 class ConfigTestCases(unittest.TestCase):
