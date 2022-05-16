@@ -73,7 +73,7 @@ class CislunarSim:
 
         if (self.state_time.time - self._config.init_cond.time) > 6.312e7:
             log.error("Stopping sim because two years have passed")
-            log.debug(f"Elapsed time = {int(self.state.time - self._config.init_cond.time)}s > 6.312e7")
+            log.debug(f"Elapsed time = {int(self.state_time.time - self._config.init_cond.time)}s > 6.312e7")
             return True
         
         r_e = (state.x**2 + state.y**2 + state.z**2) ** 0.5
