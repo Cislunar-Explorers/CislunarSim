@@ -14,7 +14,7 @@ def propagate_state(
     t = state_time.time
     propagate_state_function = models.state_update_function
     state_array = state_time.state.float_fields_to_array()
-    solution = solve_ivp(propagate_state_function, (t, t + dt), state_array)
+    solution = solve_ivp(propagate_state_function, (t, t + dt), state_array, rtol=1e-13,atol=1e-13, method="Radau")
     propagated_state = solution.y[:, -1]  # get the last state in the solution
     propagated_state_obj = StateTime(array_to_state(propagated_state), solution.t[-1])
     return propagated_state_obj

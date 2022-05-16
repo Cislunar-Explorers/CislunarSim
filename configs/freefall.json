@@ -1,4 +1,6 @@
 {
+    "description": "This config models the satellite in free fall motion. The sim runs until the satellite hits the earth. The visualization should display a relatively straight path towards the earth. ",
+	
     "initial_condition": {
 
         "x": 100000000.0,

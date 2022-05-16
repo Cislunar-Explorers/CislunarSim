@@ -1,12 +1,13 @@
-{
+{   
+    "description": "This test case models a json file that has vel_x mistyped. A JsonError should be raised. ",
     "parameters": {
         "thruster_force": 30.0
     },
     "initial_condition": {
 
-        "vel_x" : 38.0, 
+        "velx" : 38.0, 
         "vel_y" : 37.0, 
-        "vel_z" : false, 
+        "vel_z" : 30.0, 
         "propulsion_on": false,
         "solenoid_actuation_on": false
     }

@@ -9,7 +9,6 @@
         "thruster_force": 0.0
     },
     "initial_condition": {
-        "time" : 0.0,
         
         "ang_vel_x" : 0.0, 
         "ang_vel_y" : 0.0, 

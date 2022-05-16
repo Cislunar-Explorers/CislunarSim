@@ -12,7 +12,7 @@ from astropy.coordinates import SkyCoord
 # Heavily reference the get_ephemeris function here: https://github.com/Cislunar-Explorers/FlightSoftware/blob/master/OpticalNavigation/core/observe_functions.py
 @lru_cache
 def get_body_position(time: int, body: BodyEnum) -> Tuple[float, float, float]:
-    print(time)
+    #print(time)
     """Gets position vector of [body] based on [time]
 
     Args:

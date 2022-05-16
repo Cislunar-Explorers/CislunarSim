@@ -59,4 +59,5 @@ d3456 = {
     "com": 4,
     "tank_volume": 5,
     "thruster_force": 6,
+    "max_iter": 1000000
 }
