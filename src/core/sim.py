@@ -72,11 +72,7 @@ class CislunarSim:
             log.debug(f"{self.state}")
             return True
 
-<<<<<<< HEAD
-        if self.num_iters > 1e4:
-=======
         if self.num_iters > self._config.param.max_iter:
->>>>>>> main
             log.error("Stopping sim because it's running too long")
             return True
 
@@ -91,9 +87,9 @@ class CislunarSim:
             log.debug(f"r={r_e} < {R_EARTH}")
             return True
 
-        # if r_e > 5 * EARTH_SOI:
-        #     log.error("Stopping sim because craft in Heliocentric orbit (way outside of Earth's SOI)")
-        #     log.debug(f"r={r_e} > 5xEARTH_SOI")
-        #     return True
+        if r_e > 5 * EARTH_SOI:
+            log.error("Stopping sim because craft in Heliocentric orbit (way outside of Earth's SOI)")
+            log.debug(f"r={r_e} > 5xEARTH_SOI")
+            return True
 
         return False
