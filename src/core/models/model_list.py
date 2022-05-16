@@ -30,9 +30,9 @@ class DerivedPosition(DerivedStateModel):
         # Craft to origin
         r_co = np.array([state.x, state.y, state.z])
         # Moon to origin
-        r_mo = np.array(get_body_position(t, BodyEnum.Moon))
+        r_mo = np.array(get_body_position(t//10*10, BodyEnum.Moon))
         # Sun to origin
-        r_so = np.array(get_body_position(t, BodyEnum.Sun))
+        r_so = np.array(get_body_position(t//10*10, BodyEnum.Sun))
         # Earth to origin (Note: Earth is at the origin in GCRS)
         r_eo = np.array((0.0, 0.0, 0.0))
 
@@ -91,6 +91,8 @@ class PositionDynamics(EnvironmentModel):
         mu_moon = G * 7.34767309e22
         mu_sun = G * 1.988409870698051e30
         mu_earth = G * 5.972167867791379e24
+        # mu_moon = 0
+        # mu_sun = 0
 
         # Acceleration column vector calculation
         a = (
