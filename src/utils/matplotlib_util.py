@@ -29,6 +29,9 @@ class Plot:
         self.ax_pos.set_xlabel("t")
         self.ax_pos.set_ylabel("Position")
 
+        self.ax_ang_vel_x.set_xlabel("t")
+        self.ax_ang_vel_x.set_ylabel("Angular Velocity")
+
         self.ts = df["true_state.time"].to_numpy()
 
         self.xlocs = df["true_state.state.x"].to_numpy()
@@ -52,10 +55,10 @@ class Plot:
         self.annot.set_visible(False)
 
     def plot_data(self) -> None:
-        #self.plot_data_2d()
+        self.plot_data_2d()
         self.plot_data_3d()
-        #plt.tight_layout()
-        #plt.show()
+        # plt.tight_layout()
+        # plt.show()
 
     def plot_data_2d(self) -> None:
         """Procedure that displays 2d plots of spacecraft data"""
@@ -100,7 +103,7 @@ class Plot:
         #     blit=False
         # )
 
-        self.ax.set_box_aspect(aspect = (1,1,1))
+        self.ax.set_box_aspect(aspect=(1, 1, 1))
         # 3D scatter plot of craft's trajectory
         self.sc = self.ax.scatter3D(self.xlocs, self.ylocs, self.zlocs, cmap="Greens")
 
