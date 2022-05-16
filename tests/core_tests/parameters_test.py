@@ -18,6 +18,7 @@ class ParametersTestCase(unittest.TestCase):
             "gyro_sensitivity": 0.015625 * (math.pi / 180),
             "dry_mass": 0,
             "com": 0,
+            "max_iter": 1000000,
             "tank_volume": 0,
             "thruster_force": 0,
         }
@@ -65,6 +66,7 @@ class ParametersTestCase(unittest.TestCase):
                 "com": 0,
                 "tank_volume": 0,
                 "thruster_force": 0,
+                "max_iter": 1000000
             },
             Parameters({}).__dict__,
         )
