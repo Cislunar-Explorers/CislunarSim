@@ -1,12 +1,13 @@
 from scipy.integrate import solve_ivp
 from core.state import StateTime, array_to_state
 from core.models.model_list import ModelContainer
+from utils.constants import D_T
 
 
 def propagate_state(
     models: ModelContainer,
     state_time: StateTime,
-    dt: float = 50.0,
+    dt: float = D_T,
 ) -> StateTime:
     """Takes in a state and propagates it over a timestep of `dt` seconds.
     Returns a new State object at t+dt"""
