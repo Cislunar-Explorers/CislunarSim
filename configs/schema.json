@@ -98,6 +98,9 @@
 				},
 				"solenoid_actuation_on": {
 					"type": "boolean"
+				},
+        "time": {
+					"type": "number"
 				}
 			},
 			"additionalProperties": false

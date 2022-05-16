@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from utils.astropy_util import get_body_position
 import matplotlib.animation as animation
-from mpl_toolkits.mplot3d import Axes3D
 from utils.constants import BodyEnum, R_EARTH, R_MOON
 from datetime import datetime
 
