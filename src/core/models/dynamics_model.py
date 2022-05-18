@@ -117,7 +117,8 @@ def cross_product_matrix(vector: np.array) -> np.matrix:
         vector (np.array): a 3x1 vector
 
     Returns:
-        np.matrix: a 3x3 matrix which when matrix multiplied
+        np.matrix: a 3x3 matrix which when matrix multiplied with another vector, b, has the same results as the input
+        vector cross-product with b
     """
     return np.matrix([[0, -vector[2], vector[1]], [vector[2], 0, -vector[0]], [-vector[1], vector[0], 0]])
 
@@ -152,3 +153,5 @@ class AttitudeModel(EnvironmentModel):
 
         # TODO: Use angular momentum as state variable and for most dynamics evaluation
         # then calculate angular rates from momenta b/c inertia matricies change over time
+
+        return {"quat_1": d_quat[0], "quat_2": d_quat[1], "quat_3": d_quat[2], "quat_4": d_quat[3]}
