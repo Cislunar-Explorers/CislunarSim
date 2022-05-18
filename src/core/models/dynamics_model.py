@@ -107,6 +107,21 @@ class KaneModel(DerivedStateModel):
 #         ...
 
 
+def cross_product_matrix(vector: np.array) -> np.matrix:
+    """Creates a cross-multiplication matrix for a length 3 vector
+    See bottom of page 2 of https://cornell.app.box.com/file/809903125394
+    for brief reference.
+
+
+    Args:
+        vector (np.array): a 3x1 vector
+
+    Returns:
+        np.matrix: a 3x3 matrix which when matrix multiplied
+    """
+    return np.matrix([[0, -vector[2], vector[1]], [vector[2], 0, -vector[0]], [-vector[1], vector[0], 0]])
+
+
 class AttitudeModel(EnvironmentModel):
     """Class for the angular velocity and position model."""
 
@@ -129,24 +144,6 @@ class AttitudeModel(EnvironmentModel):
         cur_quat = np.array([s.quat_1, s.quat_2, s.quat_3, s.quat_4]).T
         v = cur_quat[1:3]
         r = cur_quat[4]
-
-        def cross_product_matrix(vector: np.array) -> np.matrix:
-            """Creates a cross-multiplication matrix for a length 3 vector
-            See bottom of page 2 of https://cornell.app.box.com/file/809903125394
-            for brief reference.
-
-
-            Args:
-                vector (np.array): a 3x1 vector
-
-            Returns:
-                np.matrix: a 3x3 matrix which when matrix multiplied
-            """
-            return np.matrix([
-                [0, -vector[2], vector[1]],
-                [vector[2], 0, -vector[0]],
-                [-vector[1], vector[0], 0]
-            ])
 
         xi = np.array([r * np.eye(3) + cross_product_matrix(v), -v.T])
         q_odot = np.array([xi, cur_quat])
