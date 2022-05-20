@@ -2,7 +2,8 @@ import numpy as np
 from core.models.model import EnvironmentModel
 from core.models.derived_models import DerivedStateModel
 from typing import Dict, Any
-from core.state import State, StateTime
+from core.state.state import State
+from core.state.statetime import StateTime
 
 
 class InertiaModel(DerivedStateModel):
@@ -107,7 +108,7 @@ class KaneModel(DerivedStateModel):
 #         ...
 
 
-def cross_product_matrix(vector: np.array) -> np.matrix:
+def cross_product_matrix(vector: np.ndarray) -> np.matrix:  # type: ignore
     """Creates a cross-multiplication matrix for a length 3 vector
     See bottom of page 2 of https://cornell.app.box.com/file/809903125394
     for brief reference.
@@ -120,7 +121,8 @@ def cross_product_matrix(vector: np.array) -> np.matrix:
         np.matrix: a 3x3 matrix which when matrix multiplied with another vector, b, has the same results as the input
         vector cross-product with b
     """
-    return np.matrix([[0, -vector[2], vector[1]], [vector[2], 0, -vector[0]], [-vector[1], vector[0], 0]])
+
+    return np.matrix([[0, -vector[2], vector[1]], [vector[2], 0, -vector[0]], [-vector[1], vector[0], 0]])  # type: ignore
 
 
 class AttitudeModel(EnvironmentModel):
@@ -137,21 +139,21 @@ class AttitudeModel(EnvironmentModel):
         """
 
         s = state_time.state
-        d = state_time.derived_state
+        # d = state_time.derived_state
 
         # angular position (quaternion dynamics)
         # taken from page 11 of https://cornell.app.box.com/file/809903125394
 
-        cur_quat = np.array([s.quat_1, s.quat_2, s.quat_3, s.quat_4]).T
-        v = cur_quat[1:3]
-        r = cur_quat[4]
+        cur_quat = np.array([s.quat_v1, s.quat_v2, s.quat_v3, s.quat_r]).T
+        v = cur_quat[0:3]
+        r = cur_quat[3]
 
         xi = np.array([r * np.eye(3) + cross_product_matrix(v), -v.T])
         q_odot = np.array([xi, cur_quat])
 
-        d_quat = 0.5 * np.matmul(q_odot, np.array([d.omega_x, d.omega_y, d.omega_z]))
+        d_quat = 0.5 * np.matmul(q_odot, np.array([s.ang_vel_x, s.ang_vel_y, s.ang_vel_z]))
 
         # TODO: Use angular momentum as state variable and for most dynamics evaluation
         # then calculate angular rates from momenta b/c inertia matricies change over time
 
-        return {"quat_1": d_quat[0], "quat_2": d_quat[1], "quat_3": d_quat[2], "quat_4": d_quat[3]}
+        return {"quat_v1": d_quat[0], "quat_v2": d_quat[1], "quat_v3": d_quat[2], "quat_r": d_quat[3]}

@@ -1,8 +1,7 @@
 from dataclasses import dataclass
 import numpy as np
-from typing import Dict, Union
-from core.derived_state import DerivedState
-from core.models.derived_models import DERIVED_MODEL_LIST
+from typing import Dict
+
 from utils.constants import State_Type
 
 
@@ -20,15 +19,15 @@ class State:
     fill_frac: float = 0.88  # TODO, decouple with fuel_mass
 
     # angular momentum (kg*m^2/s)
-    L_x: float = 0.0
-    L_y: float = 0.0
-    L_z: float = 0.0
+    ang_vel_x: float = 0.0
+    ang_vel_y: float = 0.0
+    ang_vel_z: float = 0.0
 
     # angular position (quaternion)
-    quat_1: float = 0.0
-    quat_2: float = 0.0
-    quat_3: float = 0.0
-    quat_4: float = 0.0
+    quat_v1: float = 1.0
+    quat_v2: float = 1.0
+    quat_v3: float = 1.0
+    quat_r: float = 1.0
 
     # velocity (meters / second)
     vel_x: float = 0.0
@@ -51,7 +50,7 @@ class State:
     propulsion_on: bool = False
     solenoid_actuation_on: bool = False
 
-    def update(self, state_dict: Dict[str, Union[int, float, bool]]) -> None:
+    def update(self, state_dict: Dict[str, State_Type]) -> None:
         """update() is a procedure that updates the fields of the state with specified key/value pairs in state_dict.
         If a key in the `state_dict` is not defined as an attribute in State.__init__, it will be ignored.
         """
@@ -70,26 +69,10 @@ class State:
         return np.array(list(self.__dict__.values()))
 
     def from_array(self, state_array: np.ndarray):
-
         new_state = dict(zip(self.__dict__.keys(), state_array))
         self.update(new_state)
 
-    # being a dataclass means __eq__ is automatically generated for you!
-    # def __eq__(self, other):
-    #    """
-    #
-    #    Args:
-    #        other (State): the "other" object self is being compared to.
-    #
-    #    Returns:
-    #        True iff other is a State object with equal attributes.
-    #    """
-    #    if type(other) == State:
-    #        return self.__dict__ == other.__dict__
-    #    return False
-
-
-STATE_ARRAY_ORDER = list(k for k in State().__dict__.keys() if k != "derived_state")
+STATE_ARRAY_ORDER = [k for k in State().__dict__.keys()]
 
 
 def array_to_state(values: np.ndarray) -> State:
@@ -105,65 +88,6 @@ def array_to_state(values: np.ndarray) -> State:
 
 
 @dataclass
-class StateTime:
-    """
-    This class associates the state with the time.
-    """
-
-    state: State = State()
-    time: float = 0.0
-    derived_state: DerivedState = DerivedState()
-
-    def __post_init__(self):
-        for derived_state_model in DERIVED_MODEL_LIST:
-            self.update_derived(derived_state_model.evaluate(self.time, self.state.__dict__))
-
-    @classmethod
-    def from_dict(cls, statetime_dict: Dict[str, State_Type]):
-        """Generates a new StateTime instance from an input dictionary.
-            Can be called via `StateTime.from_dict(...)` to make a new StateTime object
-
-        Args:
-            statetime_dict (Dict[str, State_Type]): _description_
-
-        Returns:
-            StateTime: _description_
-        """
-        try:
-            time = statetime_dict.pop("time")
-        except KeyError:
-            time = 0.0
-
-        return cls(State(**statetime_dict), time=time)
-
-    def update(self, state_dict: Dict[str, Union[int, float, bool]]) -> None:
-        """update() is a procedure that updates the fields of the state with specified key/value pairs in state_dict.
-        If a key in the `state_dict` is not defined as an attribute in State.__init__, it will be ignored.
-        """
-        self.state.update(state_dict)
-
-    def update_derived(self, state_dict: Dict) -> None:
-        """update_derived() is a procedure that updates the fields of the derived state with specified key/value pairs in state_dict.
-        If a key in the `state_dict` is not defined as an attribute in DerivedState.__init__, it will be ignored.
-        """
-        self.derived_state.update(state_dict)
-
-    def __eq__(self, other):
-        """
-
-        Args:
-            other (StateTime): the "other" object self is being compared to.
-
-        Returns:
-            True iff other is a StateTime object and the states are equal to
-                each other.
-        """
-        if type(other) == StateTime:
-            return self.state.__eq__(other.state)
-        return False
-
-
-@dataclass
 class ObservedState(State):
     # This is the true state with some noise applied
     # TODO: Implement noise application
@@ -174,10 +98,10 @@ class ObservedState(State):
     ang_vel_z: float = 0.0
 
     # angular position
-    gnc_pos_q1: float = 0.0
-    gnc_pos_q2: float = 0.0
-    gnc_pos_q3: float = 0.0
-    gnc_pos_q4: float = 0.0
+    quat_v1: float = 0.0
+    quat_v2: float = 0.0
+    quat_v3: float = 0.0
+    quat_r: float = 0.0
 
     # velocity (meters / second)
     vel_x: float = 0.0
@@ -212,14 +136,3 @@ class ObservedState(State):
         """
         noise = np.random.normal(mu, sigma)
         self.mu = noise
-
-
-@dataclass
-class PropagatedOutput:
-    """
-    This is a container class that holds a true_state and its corresponding observed_state.
-    """
-
-    true_state: StateTime
-    observed_state: ObservedState
-    # commanded_actuations
