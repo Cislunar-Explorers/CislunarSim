@@ -6,11 +6,7 @@ from core.state.state import State, array_to_state
 from core.state.statetime import StateTime
 from core.config import Config
 from utils.constants import ModelEnum, State_Type
-
-
-class AttitudeDynamics(EnvironmentModel):
-    ...
-
+from core.models.dynamics_model import AttitudeDynamics
 
 class PositionDynamics(EnvironmentModel):
     """

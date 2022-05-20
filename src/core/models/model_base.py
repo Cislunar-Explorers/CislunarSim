@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Any
-from core.config import Parameters
+from core.parameters import Parameters
 
 
 class Model(ABC):

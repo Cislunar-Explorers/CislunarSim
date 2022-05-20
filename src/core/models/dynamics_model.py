@@ -125,7 +125,41 @@ def cross_product_matrix(vector: np.ndarray) -> np.matrix:  # type: ignore
     return np.matrix([[0, -vector[2], vector[1]], [vector[2], 0, -vector[0]], [-vector[1], vector[0], 0]])  # type: ignore
 
 
-class AttitudeModel(EnvironmentModel):
+def calc_xi(v: np.ndarray, r: float) -> np.matrix:
+    """Xi function as defined on page 7 of https://cornell.app.box.com/file/809903125394
+
+    Args:
+        v (np.ndarray): 3-by-1 numpy array (column vector) representing the vector component of a quaternion.
+        r (float): scalar component of the quaternion
+
+    Returns:
+        NumPy matrix: 4-by-3 Xi matrix
+    """
+    top = r * np.eye(3) + cross_product_matrix(v)  # 3-by-3 matrix
+    bot = -v.T  # 1-by-3 matrix
+    return np.vstack((top, bot))  # stacked to be a 4-by-3
+
+
+def quaternion_derivative(current_quat: np.ndarray, angular_velocity: np.ndarray) -> np.ndarray:
+
+    # angular position (quaternion dynamics)
+    # taken from page 11 of https://cornell.app.box.com/file/809903125394
+
+    current_quat.shape = (4, 1)  # enforces a column vector
+    angular_velocity.shape = (3, 1)
+
+    v = current_quat[0:3]
+    r = current_quat[3]
+
+    xi = calc_xi(v, r)
+    q_odot_matrix = np.hstack((xi, current_quat))  # 4-by-4 matrix
+    augmented_ang_vel = np.vstack((angular_velocity, [0]))  # 4-by-1 matrix
+    quat_derivative = 0.5 * np.matmul(q_odot_matrix, augmented_ang_vel)  # 4x4 times a 4x1 = 4x1
+
+    return quat_derivative
+
+
+class AttitudeDynamics(EnvironmentModel):
     """Class for the angular velocity and position model."""
 
     def d_state(self, state_time: StateTime) -> Dict[str, Any]:
@@ -141,18 +175,10 @@ class AttitudeModel(EnvironmentModel):
         s = state_time.state
         # d = state_time.derived_state
 
-        # angular position (quaternion dynamics)
-        # taken from page 11 of https://cornell.app.box.com/file/809903125394
+        cur_quat = np.array([s.quat_v1, s.quat_v2, s.quat_v3, s.quat_r])
+        angular_vel = np.array([s.ang_vel_x, s.ang_vel_y, s.ang_vel_z])
 
-        cur_quat = np.array([s.quat_v1, s.quat_v2, s.quat_v3, s.quat_r]).T
-        v = cur_quat[0:3]
-        r = cur_quat[3]
-
-        xi = np.array([r * np.eye(3) + cross_product_matrix(v), -v.T])
-        q_odot = np.array([xi, cur_quat])
-
-        d_quat = 0.5 * np.matmul(q_odot, np.array([s.ang_vel_x, s.ang_vel_y, s.ang_vel_z]))
-
+        d_quat = quaternion_derivative(cur_quat, angular_vel)
         # TODO: Use angular momentum as state variable and for most dynamics evaluation
         # then calculate angular rates from momenta b/c inertia matricies change over time
 
