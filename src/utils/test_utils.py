@@ -2,14 +2,14 @@ import math
 from core.state.state import State
 
 s_0 = {
-    "fill_frac": 0.88,
+    "fill_frac": 0.0,
     "ang_vel_x": 0.0,
     "ang_vel_y": 0.0,
     "ang_vel_z": 0.0,
-    "quat_v1": 1.0,
-    "quat_v2": 1.0,
-    "quat_v3": 1.0,
-    "quat_r": 1.0,
+    "quat_v1": 0.0,
+    "quat_v2": 0.0,
+    "quat_v3": 0.0,
+    "quat_r": 0.0,
     "vel_x": 0.0,
     "vel_y": 0.0,
     "vel_z": 0.0,

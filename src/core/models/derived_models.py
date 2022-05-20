@@ -5,7 +5,7 @@ from typing import Dict
 import numpy as np
 from utils.constants import BodyEnum
 from core.models.model_base import Model
-from typing import Union, Tuple, List, Type
+from typing import Union, Tuple, List
 
 
 class DerivedStateModel(Model):
@@ -37,7 +37,11 @@ def quat_to_rotvec(q: Tuple[float, float, float, float]) -> np.ndarray:
 
     Uses the vector/scalar convention used in Markley and Crassidis (vector is the first 3 elements,
     scalar is the 4th element)"""
-    rotvec = np.array(q[:3]) / np.linalg.norm(q[:3])
+    norm = np.linalg.norm(q[:3])
+    if not norm:
+        return np.array([0, 0, 0])
+
+    rotvec = np.array(q[:3]) / norm
     return rotvec
 
 
@@ -46,7 +50,10 @@ def cartesian_to_spherical(x: float, y: float, z: float) -> Tuple[float, float, 
 
     r = np.sqrt(x * x + y * y + z * z)
     phi = np.arctan2(y, x)  # azimuth angle
-    theta = np.arccos(z/r)  # elevation angle
+    if r == 0:
+        theta = 0
+    else:
+        theta = np.arccos(z / r)  # elevation angle
 
     return (r, phi, theta)
 

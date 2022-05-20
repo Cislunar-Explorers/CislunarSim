@@ -16,7 +16,7 @@ class State:
     """
 
     # primitive state
-    fill_frac: float = 0.88  # TODO, decouple with fuel_mass
+    fill_frac: float = 0.0  # TODO, decouple with fuel_mass
 
     # angular momentum (kg*m^2/s)
     ang_vel_x: float = 0.0
@@ -24,10 +24,10 @@ class State:
     ang_vel_z: float = 0.0
 
     # angular position (quaternion)
-    quat_v1: float = 1.0
-    quat_v2: float = 1.0
-    quat_v3: float = 1.0
-    quat_r: float = 1.0
+    quat_v1: float = 0.0
+    quat_v2: float = 0.0
+    quat_v3: float = 0.0
+    quat_r: float = 0.0
 
     # velocity (meters / second)
     vel_x: float = 0.0
@@ -72,7 +72,8 @@ class State:
         new_state = dict(zip(self.__dict__.keys(), state_array))
         self.update(new_state)
 
-STATE_ARRAY_ORDER = [k for k in State().__dict__.keys()]
+
+STATE_ARRAY_ORDER = list(State().__dict__.keys())
 
 
 def array_to_state(values: np.ndarray) -> State:
