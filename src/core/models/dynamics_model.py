@@ -122,7 +122,9 @@ def cross_product_matrix(vector: np.ndarray) -> np.matrix:  # type: ignore
         vector cross-product with b
     """
 
-    return np.matrix([[0, -vector[2], vector[1]], [vector[2], 0, -vector[0]], [-vector[1], vector[0], 0]])  # type: ignore
+    return np.matrix(
+        [[0, -vector[2], vector[1]], [vector[2], 0, -vector[0]], [-vector[1], vector[0], 0]]  # type: ignore
+    )
 
 
 def calc_xi(v: np.ndarray, r: float) -> np.matrix:
@@ -137,11 +139,21 @@ def calc_xi(v: np.ndarray, r: float) -> np.matrix:
     """
     top = r * np.eye(3) + cross_product_matrix(v)  # 3-by-3 matrix
     bot = -v.T  # 1-by-3 matrix
-    return np.vstack((top, bot))  # stacked to be a 4-by-3
+    return np.matrix(np.vstack((top, bot)))  # stacked to be a 4-by-3
 
 
 def quaternion_derivative(current_quat: np.ndarray, angular_velocity: np.ndarray) -> np.ndarray:
+    """Calculates the time derivative of a given quaternion based on angular velocity.
 
+    Args:
+        current_quat (np.ndarray): length-4 array describing the current quaternion
+        (first 3 elements describe the vector, last one describes the scalar component)
+
+        angular_velocity (np.ndarray): length-3 array of the angular velocities in rad/s
+
+    Returns:
+        np.ndarray: _description_
+    """
     # angular position (quaternion dynamics)
     # taken from page 11 of https://cornell.app.box.com/file/809903125394
 
