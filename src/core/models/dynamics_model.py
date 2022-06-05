@@ -135,7 +135,7 @@ def calc_xi(v: np.ndarray, r: float) -> np.matrix:
         r (float): scalar component of the quaternion
 
     Returns:
-        NumPy matrix: 4-by-3 Xi matrix
+        Numpy matrix: 4-by-3 Xi matrix
     """
     top = r * np.eye(3) + cross_product_matrix(v)  # 3-by-3 matrix
     bot = -v.T  # 1-by-3 matrix
@@ -144,18 +144,18 @@ def calc_xi(v: np.ndarray, r: float) -> np.matrix:
 
 def quaternion_derivative(current_quat: np.ndarray, angular_velocity: np.ndarray) -> np.ndarray:
     """Calculates the time derivative of a given quaternion based on angular velocity.
+    The algo implemented here is based off the math on page 11 of taken from page 11 of
+    https://cornell.app.box.com/file/809903125394
 
     Args:
-        current_quat (np.ndarray): length-4 array describing the current quaternion
+        current_quat (np.ndarray): length-4 array describing the quaternion of the spacecraft's angular position in ECI.
         (first 3 elements describe the vector, last one describes the scalar component)
 
-        angular_velocity (np.ndarray): length-3 array of the angular velocities in rad/s
+        angular_velocity (np.ndarray): length-3 array of the angular velocities in rad/s (in the body frame, i think)
 
     Returns:
-        np.ndarray: _description_
+        np.ndarray: the time derivative of each element of the quaternion
     """
-    # angular position (quaternion dynamics)
-    # taken from page 11 of https://cornell.app.box.com/file/809903125394
 
     current_quat.shape = (4, 1)  # enforces a column vector
     angular_velocity.shape = (3, 1)
