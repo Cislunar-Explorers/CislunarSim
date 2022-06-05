@@ -19,9 +19,9 @@ class State:
     fill_frac: float = 0.0  # TODO, decouple with fuel_mass
 
     # angular momentum (kg*m^2/s)
-    ang_vel_x: float = 0.0
-    ang_vel_y: float = 0.0
-    ang_vel_z: float = 0.0
+    h_x: float = 0.0
+    h_y: float = 0.0
+    h_z: float = 0.0
 
     # angular position (quaternion)
     quat_v1: float = 0.0

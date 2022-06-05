@@ -14,15 +14,7 @@ class DerivedState:
     # [[Ixx, Ixy, Ixz],
     #  [Iyx, Iyy, Iyz],
     #  [Izx, Izy, Izz]].
-    Ixx: float = 0.0
-    Ixy: float = 0.0
-    Ixz: float = 0.0
-    Iyx: float = 0.0
-    Iyy: float = 0.0
-    Iyz: float = 0.0
-    Izx: float = 0.0
-    Izy: float = 0.0
-    Izz: float = 0.0
+    I: np.ndarray[float] = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]])
 
     # Kane damping constant
     kane_c: float = 0.0
