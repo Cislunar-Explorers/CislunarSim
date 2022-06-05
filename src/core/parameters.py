@@ -1,5 +1,6 @@
 import math
 from typing import Dict
+import numpy as np
 
 
 class Parameters:
@@ -17,7 +18,10 @@ class Parameters:
         self.tank_volume = 0  # volume of the propellant tank in mL
         self.thruster_force = 0
         self.max_iter = 1e6
+        self.I_D = np.eye(3)  # moment of inertia of the kane damper
 
         for key, value in param_dict.items():
             if key in self.__dict__.keys():
                 setattr(self, key, value)
+
+        self.I_D_inv = np.linalg.inv(self.I_D)

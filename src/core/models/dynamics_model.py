@@ -188,9 +188,14 @@ class AttitudeDynamics(EnvironmentModel):
         _left = np.matmul(cross_product_matrix(ang_vel), d.I)
         rigid_body_dynamics = -np.matmul(_left, ang_vel)
 
-        damper_ang_vel = s.kane_vel
+        damper_ang_vel = s.w_damper
         kane_damping = d.kane_c * (ang_vel - damper_ang_vel)
         dhdt = rigid_body_dynamics + external_torques + kane_damping
+
+        _kane_left = np.matmul(cross_product_matrix(damper_ang_vel), self._parameters.I_D)
+        kane_rigid = np.matmul(_kane_left, damper_ang_vel)
+
+        dkane_vel = np.matmul(self._parameters.I_D_inv, kane_damping - kane_rigid)
 
         # TODO: kane damper angular velocity dynamics
         return {
@@ -201,4 +206,7 @@ class AttitudeDynamics(EnvironmentModel):
             "h_x": dhdt[0],
             "h_y": dhdt[1],
             "h_z": dhdt[2],
+            "damper_wx": dkane_vel[0],
+            "damper_wy": dkane_vel[1],
+            "damper_wz": dkane_vel[2],
         }

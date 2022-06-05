@@ -37,8 +37,10 @@ class State:
     z: float = 0.0
 
     # kane damper angular velocity (rad/s)
-    kane_vel: float = 0.0
-    
+    damper_wx: float = 0.0
+    damper_wy: float = 0.0
+    damper_wz: float = 0.0
+
     # fuel masses (g)
     water_liquid_mass: float = 0.0
     water_gaseous_mass: float = 0.0
