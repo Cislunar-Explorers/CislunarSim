@@ -14,7 +14,7 @@ class Parameters:
         self.gyro_sensitivity = 0.015625 * (math.pi / 180)
         self.dry_mass = 0
         self.com = 0
-        self.tank_volume = 0
+        self.tank_volume = 0  # volume of the propellant tank in mL
         self.thruster_force = 0
         self.max_iter = 1e6
 

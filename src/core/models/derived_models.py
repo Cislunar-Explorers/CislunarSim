@@ -92,9 +92,14 @@ def cartesian_to_spherical(x: float, y: float, z: float) -> Tuple[float, float, 
     return (r, phi, theta)
 
 
+class FillFracModel(DerivedStateModel):
+    def evaluate(self, state: State) -> Dict[str, State_Type]:
+        return {"fill_frac": state.water_liquid_mass / self._parameters.tank_volume}
+
+
 class InertiaModel(DerivedStateModel):
     def evaluate(self, state: State) -> Dict[str, np.ndarray]:
-        fill_frac = state.fill_frac
+        fill_frac = FillFracModel().evaluate(state)["fill_frac"]
 
         dcm = np.array([[0, 1, 0], [0, 0, -1], [-1, 0, 0]], dtype=np.int32)
         dcmT = np.transpose(dcm)

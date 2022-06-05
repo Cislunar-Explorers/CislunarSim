@@ -14,7 +14,10 @@ class DerivedState:
     # [[Ixx, Ixy, Ixz],
     #  [Iyx, Iyy, Iyz],
     #  [Izx, Izy, Izz]].
-    I: np.ndarray[float] = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]])
+    I: np.ndarray = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]])
+
+    # angular velocity (rad/s)
+    w: np.ndarray = np.array([0.0, 0.0, 0.0])
 
     # Kane damping constant
     kane_c: float = 0.0

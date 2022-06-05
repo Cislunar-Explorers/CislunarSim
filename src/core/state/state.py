@@ -15,36 +15,36 @@ class State:
         `my_state = State{**state_dict}`
     """
 
-    # primitive state
-    fill_frac: float = 0.0  # TODO, decouple with fuel_mass
-
-    # angular momentum (kg*m^2/s)
+    # spacecraft angular momentum (kg*m^2/s)
     h_x: float = 0.0
     h_y: float = 0.0
     h_z: float = 0.0
 
-    # angular position (quaternion)
+    # spacecraft angular position (quaternion)
     quat_v1: float = 0.0
     quat_v2: float = 0.0
     quat_v3: float = 0.0
     quat_r: float = 0.0
 
-    # velocity (meters / second)
+    # spacecraft velocity (meters / second)
     vel_x: float = 0.0
     vel_y: float = 0.0
     vel_z: float = 0.0
 
-    # position (meters)
+    # spacecraft position (meters, in ECI)
     x: float = 0.0
     y: float = 0.0
     z: float = 0.0
 
-    force_propulsion_thrusters: float = 0.0
-    fuel_mass: float = 0.0
+    # kane damper angular velocity (rad/s)
+    kane_vel: float = 0.0
+    
+    # fuel masses (g)
+    water_liquid_mass: float = 0.0
+    water_gaseous_mass: float = 0.0
+    CO2_mass: float = 0.0
 
-    # derived state (Newtons)
-    force_earth: float = 0.0
-    force_moon: float = 0.0
+    force_propulsion_thrusters: float = 0.0
 
     # discrete state
     propulsion_on: bool = False

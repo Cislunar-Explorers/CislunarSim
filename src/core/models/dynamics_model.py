@@ -1,9 +1,8 @@
 import numpy as np
 from core.models.model import EnvironmentModel
-from core.models.derived_models import DerivedStateModel
 from typing import Dict, Any
-from core.state.state import State
 from core.state.statetime import StateTime
+<<<<<<< HEAD
 from utils.gnc_utils import quaternion_derivative
 
 
@@ -94,7 +93,72 @@ class KaneModel(DerivedStateModel):
         c = kane(q)
 
         return {"kane_c": c}
+=======
 
+
+def cross_product_matrix(vector: np.ndarray) -> np.matrix:  # type: ignore
+    """Creates a cross-multiplication matrix for a length 3 vector
+    See bottom of page 2 of https://cornell.app.box.com/file/809903125394
+    for brief reference.
+
+
+    Args:
+        vector (np.array): a 3x1 vector
+
+    Returns:
+        np.matrix: a 3x3 matrix which when matrix multiplied with another vector, b, has the same results as the input
+        vector cross-product with b
+    """
+
+    return np.matrix(
+        [[0, -vector[2], vector[1]], [vector[2], 0, -vector[0]], [-vector[1], vector[0], 0]]  # type: ignore
+    )
+
+
+def calc_xi(v: np.ndarray, r: float) -> np.matrix:
+    """Xi function as defined on page 7 of https://cornell.app.box.com/file/809903125394
+
+    Args:
+        v (np.ndarray): 3-by-1 numpy array (column vector) representing the vector component of a quaternion.
+        r (float): scalar component of the quaternion
+
+    Returns:
+        Numpy matrix: 4-by-3 Xi matrix
+    """
+    top = r * np.eye(3) + cross_product_matrix(v)  # 3-by-3 matrix
+    bot = -v.T  # 1-by-3 matrix
+    return np.matrix(np.vstack((top, bot)))  # stacked to be a 4-by-3
+
+
+def quaternion_derivative(current_quat: np.ndarray, angular_velocity: np.ndarray) -> np.ndarray:
+    """Calculates the time derivative of a given quaternion based on angular velocity.
+    The algo implemented here is based off the math on page 11 of taken from page 11 of
+    https://cornell.app.box.com/file/809903125394
+
+    Args:
+        current_quat (np.ndarray): length-4 array describing the quaternion of the spacecraft's angular position in ECI.
+        (first 3 elements describe the vector, last one describes the scalar component)
+
+        angular_velocity (np.ndarray): length-3 array of the angular velocities in rad/s (in the body frame, i think)
+
+    Returns:
+        np.ndarray: the time derivative of each element of the quaternion
+    """
+
+    current_quat.shape = (4, 1)  # enforces a column vector
+    angular_velocity.shape = (3, 1)
+
+    v = current_quat[0:3]
+    r = current_quat[3]
+
+    xi = calc_xi(v, r)
+    q_odot_matrix = np.hstack((xi, current_quat))  # 4-by-4 matrix
+    augmented_ang_vel = np.vstack((angular_velocity, [0]))  # 4-by-1 matrix
+    quat_derivative = 0.5 * np.matmul(q_odot_matrix, augmented_ang_vel)  # 4x4 times a 4x1 = 4x1
+
+    return quat_derivative
+
+>>>>>>> implement angular momentum env model, stuck on kane damper
 
 class AttitudeDynamics(EnvironmentModel):
     """Class for the angular velocity and position model."""
@@ -106,17 +170,35 @@ class AttitudeDynamics(EnvironmentModel):
                 + c [(omega_{B/N}) - (omega_{D/N})]
         where c is the "Kane Damping" constant.
 
-
         """
 
         s = state_time.state
-        # d = state_time.derived_state
+        d = state_time.derived_state
 
+        # Angular position dynamics
         cur_quat = np.array([s.quat_v1, s.quat_v2, s.quat_v3, s.quat_r])
-        angular_vel = np.array([s.ang_vel_x, s.ang_vel_y, s.ang_vel_z])
+        ang_vel = d.w
 
-        d_quat = quaternion_derivative(cur_quat, angular_vel)
-        # TODO: Use angular momentum as state variable and for most dynamics evaluation
-        # then calculate angular rates from momenta b/c inertia matricies change over time
+        d_quat = quaternion_derivative(cur_quat, ang_vel)
 
-        return {"quat_v1": d_quat[0], "quat_v2": d_quat[1], "quat_v3": d_quat[2], "quat_r": d_quat[3]}
+        # Angular momentum (velocity) dynamics
+
+        external_torques = np.array([0.0, 0.0, 0.0])  # MASSIVE TODO
+
+        _left = np.matmul(cross_product_matrix(ang_vel), d.I)
+        rigid_body_dynamics = -np.matmul(_left, ang_vel)
+
+        damper_ang_vel = s.kane_vel
+        kane_damping = d.kane_c * (ang_vel - damper_ang_vel)
+        dhdt = rigid_body_dynamics + external_torques + kane_damping
+
+        # TODO: kane damper angular velocity dynamics
+        return {
+            "quat_v1": d_quat[0],
+            "quat_v2": d_quat[1],
+            "quat_v3": d_quat[2],
+            "quat_r": d_quat[3],
+            "h_x": dhdt[0],
+            "h_y": dhdt[1],
+            "h_z": dhdt[2],
+        }
