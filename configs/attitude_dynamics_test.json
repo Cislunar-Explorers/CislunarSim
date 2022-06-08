@@ -1,8 +1,11 @@
 {
+    "parameters": {
+        "tank_volume": 850
+    },
     "initial_condition": {
         "x": 100000000.0,
-        "ang_vel_x": 4.5,
-        "ang_vel_y": 1.0,
+        "h_x": 4.5,
+        "water_liquid_mass": 750,
         "time": 0.0,
         "quat_v1": 1.0,
         "quat_v2": 0.0,

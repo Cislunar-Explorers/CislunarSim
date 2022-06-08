@@ -1,4 +1,5 @@
 from abc import abstractmethod
+from core.parameters import Parameters
 from core.state.state import State
 from utils.astropy_util import get_body_position
 from typing import Dict, Tuple, Union, List
@@ -12,8 +13,8 @@ class DerivedStateModel(Model):
     Abstract Base class for all models this sim uses.
     """
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self, parameters: Parameters) -> None:
+        super().__init__(parameters)
 
     @abstractmethod
     def evaluate(self, time: float, state: State) -> Dict[str, Union[float, int, bool]]:
@@ -199,4 +200,4 @@ class DerivedAttitude(DerivedStateModel):
         }
 
 
-DERIVED_MODEL_LIST: List[DerivedStateModel] = [DerivedPosition(), DerivedAttitude()]
+DERIVED_MODEL_LIST: List[DerivedStateModel] = [DerivedPosition, DerivedAttitude]
