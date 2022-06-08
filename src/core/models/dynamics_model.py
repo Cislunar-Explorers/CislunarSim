@@ -142,6 +142,21 @@ def calc_xi(v: np.ndarray, r: float) -> np.matrix:
     return np.matrix(np.vstack((top, bot)))  # stacked to be a 4-by-3
 
 
+def calc_psi(v: np.ndarray, r: float) -> np.matrix:
+    """Psi function as defined on page 7 of https://cornell.app.box.com/file/809903125394
+
+    Args:
+        v (np.ndarray):  3-by-1 numpy array (column vector) representing the vector component of a quaternion.
+        r (float): scalar component of the quaternion
+
+    Returns:
+        np.matrix: 4-by-3 Psi matrix
+    """
+    top = r * np.eye(3) - cross_product_matrix(v)  # 3-by-3 matrix
+    bot = -v.T  # 1-by-3 matrix
+    return np.matrix(np.vstack((top, bot)))  # stacked to be a 4-by-3
+
+
 def quaternion_derivative(current_quat: np.ndarray, angular_velocity: np.ndarray) -> np.ndarray:
     """Calculates the time derivative of a given quaternion based on angular velocity.
     The algo implemented here is based off the math on page 11 of taken from page 11 of
