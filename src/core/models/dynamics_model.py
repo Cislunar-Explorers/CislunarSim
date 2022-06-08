@@ -1,7 +1,7 @@
 import numpy as np
 from core.models.model import EnvironmentModel
 from core.models.derived_models import DerivedStateModel
-from typing import Dict, Any
+from typing import Dict, Any, Tuple
 from core.state.state import State
 from core.state.statetime import StateTime
 
@@ -166,7 +166,7 @@ def quat_to_dcm(quat: np.ndarray) -> np.matrix:
     Returns:
         np.matrix: 3x3 Direction Cosine Matrix
     """
-    
+
     v = quat[0:3]
     r = quat[3]
 
@@ -176,6 +176,29 @@ def quat_to_dcm(quat: np.ndarray) -> np.matrix:
     dcm = np.matmul(xi.T, psi)
 
     return np.matrix(dcm)
+
+
+def dcm_to_spherical_coords(
+    dcm: np.matrix, spacecraft_frame_vector: np.ndarray = np.array((1, 0, 0))
+) -> Tuple[float, float]:
+    """Calculates the spherical coordinate components (theta, phi) of the `spacecraft_frame_vector` from the input
+    spacecraft-body DCM.
+
+    Args:
+        dcm (np.matrix): the DCM of an ECI to spacecraft body frame transformation
+        spacecraft_frame_vector (np.ndarray, optional): vector in the spacecraft body
+        frame that is converted into ECI and then transformed into spherical coordinates.
+        Defaults to np.array((1, 0, 0)).
+
+    Returns:
+        Tuple[float, float]: (theta, phi) angles corresponding to the spherical coordinates
+    """
+    vector_in_ECI_frame = np.matmul(dcm.T, spacecraft_frame_vector)
+    normed_vec = vector_in_ECI_frame / np.linalg.norm(vector_in_ECI_frame)
+
+    phi = np.arccos(normed_vec[2])
+    theta = np.arctan2(normed_vec[1], normed_vec[0])
+    return phi, theta
 
 
 def quaternion_derivative(current_quat: np.ndarray, angular_velocity: np.ndarray) -> np.ndarray:
