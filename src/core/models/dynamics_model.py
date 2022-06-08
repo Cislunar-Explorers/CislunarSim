@@ -157,10 +157,31 @@ def calc_psi(v: np.ndarray, r: float) -> np.matrix:
     return np.matrix(np.vstack((top, bot)))  # stacked to be a 4-by-3
 
 
+def quat_to_dcm(quat: np.ndarray) -> np.matrix:
+    """Calculates the direction cosine matrix (DCM) associated with the input quaternion.
+    The math in this function is based off of page 17 of https://cornell.app.box.com/file/809903002605
+    Args:
+        quat (np.ndarray): 4x1 quaternion
+
+    Returns:
+        np.matrix: 3x3 Direction Cosine Matrix
+    """
+    
+    v = quat[0:3]
+    r = quat[3]
+
+    xi = calc_xi(v, r)
+    psi = calc_psi(v, r)
+
+    dcm = np.matmul(xi.T, psi)
+
+    return np.matrix(dcm)
+
+
 def quaternion_derivative(current_quat: np.ndarray, angular_velocity: np.ndarray) -> np.ndarray:
     """Calculates the time derivative of a given quaternion based on angular velocity.
-    The algo implemented here is based off the math on page 11 of taken from page 11 of
-    https://cornell.app.box.com/file/809903125394
+    The algo implemented here is based off the math on page 17 of
+    https://cornell.app.box.com/file/809903002605
 
     Args:
         current_quat (np.ndarray): length-4 array describing the quaternion of the spacecraft's angular position in ECI.
@@ -179,9 +200,8 @@ def quaternion_derivative(current_quat: np.ndarray, angular_velocity: np.ndarray
     r = current_quat[3]
 
     xi = calc_xi(v, r)
-    q_odot_matrix = np.hstack((xi, current_quat))  # 4-by-4 matrix
-    augmented_ang_vel = np.vstack((angular_velocity, [0]))  # 4-by-1 matrix
-    quat_derivative = 0.5 * np.matmul(q_odot_matrix, augmented_ang_vel)  # 4x4 times a 4x1 = 4x1
+
+    quat_derivative = 0.5 * np.matmul(xi, angular_velocity)  # 4x3 times a 3x1 = 4x1
 
     return quat_derivative
 
