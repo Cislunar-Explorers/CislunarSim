@@ -5,7 +5,7 @@ from typing import Union
 from core.config import Config
 from core.sim import CislunarSim
 import pandas as pd
-from utils.matplotlib_util import Plot
+# from utils.matplotlib_util import Plot
 
 
 import argparse
@@ -72,8 +72,8 @@ class SimRunner:
         run_df = states_to_df(states)
 
         log.setLevel(logging.INFO)  # to prevent being spammed by matplotlib's debug logs (doesn't work)
-        data_plot = Plot(run_df)
-        data_plot.plot_data()
+        # data_plot = Plot(run_df)
+        # data_plot.plot_data()
 
         return run_df
 

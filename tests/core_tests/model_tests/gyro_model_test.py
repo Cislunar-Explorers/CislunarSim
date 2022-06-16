@@ -1,7 +1,7 @@
 import unittest
 from core.parameters import Parameters
 from core.models.gyro_model import GyroModel
-from core.state import StateTime
+from core.state.statetime import StateTime
 from typing import Dict
 from utils.test_utils import state_1
 

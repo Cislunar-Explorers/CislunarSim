@@ -1,6 +1,6 @@
 import unittest
 from core.models.model_list import PositionDynamics
-from core.state import StateTime
+from core.state.statetime import StateTime
 from utils.test_utils import state_1, d3456
 
 
@@ -16,7 +16,6 @@ class PositionDynamicsModelTest(unittest.TestCase):
         base_state = StateTime(state_1)
         dummy_pd = PositionDynamics(d3456)
         propagated_state = dummy_pd.d_state(base_state)
-
 
         # trivial tests that check to make sure the velocity components from the input to the output match exactly
         self.assertEqual(9.0, propagated_state["x"])

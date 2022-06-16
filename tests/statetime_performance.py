@@ -1,5 +1,6 @@
 import datetime
-from core.state import State, StateTime
+from core.state.state import State
+from core.state.statetime import StateTime
 
 N_TESTS = 100000
 
