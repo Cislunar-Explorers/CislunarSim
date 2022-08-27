@@ -1,8 +1,8 @@
 from dataclasses import dataclass
-from attr import field
 import numpy as np
 from typing import Dict, Union
 from core.derived_state import DerivedState
+from core.models.derived_models import DERIVED_MODEL_LIST
 from utils.constants import State_Type
 
 
@@ -46,9 +46,6 @@ class State:
     force_earth: float = 0.0
     force_moon: float = 0.0
 
-    # derived state
-    derived_state: DerivedState = DerivedState()
-
     # discrete state
     propulsion_on: bool = False
     solenoid_actuation_on: bool = False
@@ -70,15 +67,6 @@ class State:
             Numpy array: contains all values stored in the fields.
         """
         return np.array(list(self.__dict__.values()))
-
-    def float_fields_to_array(self):
-        """
-        float_fields_to_array() acts like to_array(), but ignores the derived state. This is helpful for functions which wish to evaluate numerical fields of the state, such as should_stop() in sim.py and propagate_state() in integrator.py.
-
-        Returns:
-            Numpy array: contains all values stored in the float or bool fields.
-        """
-        return np.array(list(x for x in self.__dict__.values() if type(x) is not DerivedState))
 
     def from_array(self, state_array: np.ndarray):
 
@@ -123,6 +111,12 @@ class StateTime:
 
     state: State = State()
     time: float = 0.0
+    derived_state: DerivedState = DerivedState()
+    
+    def __post_init__(self):
+        for derived_state_model in DERIVED_MODEL_LIST:
+            self.update_derived(
+                derived_state_model.evaluate(self.time, self.state.__dict__))
 
     @classmethod
     def from_dict(cls, statetime_dict: Dict[str, State_Type]):
@@ -142,6 +136,18 @@ class StateTime:
 
         return cls(State(**statetime_dict), time=time)
 
+    def update(self, state_dict: Dict[str, Union[int, float, bool]]) -> None:
+        """ update() is a procedure that updates the fields of the state with specified key/value pairs in state_dict.
+        If a key in the `state_dict` is not defined as an attribute in State.__init__, it will be ignored.
+        """
+        self.state.update(state_dict)
+
+    def update_derived(self, state_dict: Dict) -> None:
+        """ update_derived() is a procedure that updates the fields of the derived state with specified key/value pairs in state_dict.
+        If a key in the `state_dict` is not defined as an attribute in DerivedState.__init__, it will be ignored.
+        """
+        self.derived_state.update(state_dict)
+
     def __eq__(self, other):
         """
 
@@ -158,9 +164,55 @@ class StateTime:
 
 
 @dataclass
-class ObservedState(StateTime):
+class ObservedState(State):
     # This is the true state with some noise applied
-    pass  # TODO
+    # TODO: Implement noise application
+
+    # angular velocity (radians/second)
+    ang_vel_x: float = 0.0
+    ang_vel_y: float = 0.0
+    ang_vel_z: float = 0.0
+
+    # angular position
+    gnc_pos_q1: float = 0.0
+    gnc_pos_q2: float = 0.0
+    gnc_pos_q3: float = 0.0
+    gnc_pos_q4: float = 0.0
+
+    # velocity (meters / second)
+    vel_x: float = 0.0
+    vel_y: float = 0.0
+    vel_z: float = 0.0
+
+    # position (meters)
+    x: float = 0.0
+    y: float = 0.0
+    z: float = 0.0
+
+    force_propulsion_thrusters: float = 0.0
+    fuel_mass: float = 0.0
+
+    # derived state (Newtons)
+    force_earth: float = 0.0
+    force_moon: float = 0.0
+
+    # discrete state
+    propulsion_on: bool = False
+    solenoid_actuation_on: bool = False
+
+    def init_from_state(self, state: State):
+        for key, value in state.__dict__.items():
+            if key in self.__dict__.keys():
+                setattr(self, key, value)
+
+    def gaussian_noise(self, mu: float, sigma: float):
+        """
+        Args:
+            sigma (float): standard deviation of the noise
+        """
+        noise = np.random.normal(mu, sigma)
+        self.mu = noise
+
 
 
 @dataclass

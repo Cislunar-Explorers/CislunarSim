@@ -1,5 +1,6 @@
 import unittest
-from core.models.model_list import PositionDynamics, DerivedPosition
+from core.models.model_list import PositionDynamics
+from core.state import StateTime
 from utils.test_utils import state_1, d3456
 
 
@@ -12,11 +13,9 @@ class PositionDynamicsModelTest(unittest.TestCase):
         """
         This function tests the position dynamics model's d_state function.
         """
-        base_state = state_1
+        base_state = StateTime(state_1)
         dummy_pd = PositionDynamics(d3456)
-        dummy_dpd = DerivedPosition(d3456)
-        base_state.derived_state.update(dummy_dpd.evaluate(1.0, state_1))
-        propagated_state = dummy_pd.d_state(1.0, base_state)
+        propagated_state = dummy_pd.d_state(base_state)
 
 
         # trivial tests that check to make sure the velocity components from the input to the output match exactly
