@@ -4,7 +4,7 @@ Gyro sensor model documentation: https://cornell.box.com/s/6nu08iqfk5i389wlpp44r
 
 from core.models.model import SensorModel
 from core.parameters import Parameters
-from core.state import State
+from core.state import StateTime
 from typing import Dict, Any
 import numpy as np
 
@@ -17,7 +17,7 @@ class GyroModel(SensorModel):
         self.gyro_bias = np.array(self._parameters.gyro_bias)
         self.gyro_noise = np.array(self._parameters.gyro_noise)
 
-    def evaluate(self, state: State) -> Dict[str, Any]:
+    def evaluate(self, state_time: StateTime) -> Dict[str, Any]:
         """Abstracts the angular velocities according to the model
 
         Args:
@@ -26,7 +26,8 @@ class GyroModel(SensorModel):
         Returns:
             Dict[str, Any]: The augmented angular velocities
         """
-        ang_vel_i = np.array([state.ang_vel_x, state.ang_vel_y, state.ang_vel_z])
+
+        ang_vel_i = np.array([state_time.state.ang_vel_x, state_time.state.ang_vel_y, state_time.state.ang_vel_z])
 
         ang_vel_d = ang_vel_i + self.gyro_bias
         ang_vel_d = np.random.normal(loc=ang_vel_d, scale=self.gyro_noise, size=3)

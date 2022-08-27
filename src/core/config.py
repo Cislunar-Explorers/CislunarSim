@@ -4,7 +4,7 @@ from typing import Dict, List
 import json
 from utils.log import log
 from jsonschema import Draft3Validator, ValidationError
-from utils.constants import DEFAULT_MODELS, ModelEnum
+from utils.constants import ModelEnum
 
 from core.parameters import Parameters
 from core.state import StateTime
