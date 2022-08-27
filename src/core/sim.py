@@ -1,11 +1,11 @@
+from queue import Queue
 import numpy as np
 from core.config import Config
-from core.integrator.integrator import propagate_state
-from core.state.statetime import StateTime, ObservedState, PropagatedOutput, State
+from core.state.statetime import StateTime, ObservedState, PropagatedOutput
 from core.models.model_list import ModelContainer
 from utils.log import log
 from utils.constants import R_EARTH, EARTH_SOI
-
+from core.event import Event
 
 class CislunarSim:
     """This class consolidates all parts of the sim (config, models, state). It is responsible for 
@@ -14,12 +14,13 @@ class CislunarSim:
 
     def __init__(self, config: Config) -> None:
         self._config = config
-        self._models = ModelContainer(self._config)
-        self.state_time: StateTime = self._config.init_cond
-        self.observed_state: ObservedState = ObservedState()
+        self._models = ModelContainer(self._config) #wouldn't need for event-based
+        self.state: StateTime = self._config.init_cond
+        self.observed_state = ObservedState()
 
         self.should_run = True
         self.num_iters = 0
+        self.event_queue : "Queue[Event]" = Queue()
 
     def step(self) -> PropagatedOutput:
         """Evaluates all models and propagates state
@@ -27,30 +28,20 @@ class CislunarSim:
             PropagatedOutput: The true and observed states resulting from this step
         """
 
-        # Evaluate Actuator models to update state
-        for actuator_model in self._models.actuator:
-            self.state_time.update(actuator_model.evaluate(self.state_time))
+        current_event = self.event_queue.get()
+        output = current_event.evaluate_model_list(self.state)
 
-        # Evaluate environmental models to propagate state
-        self.state_time = propagate_state(self._models, self.state_time)
-
-        # Evaluate sensor models
-        temp_state = State()
-
-        for sensor_model in self._models.sensor:
-            temp_state.update(sensor_model.evaluate(self.state_time))
-
-        # synchronize observed state time with true state time
-        # TODO: clock drift?
-        self.observed_state.init_from_state(temp_state)
+        event = Event(self._models)
+        self.event_queue.put(event)
 
         # TODO: Feed outputs of sensor models into FSW and return actuator's state as part of `PropagatedOutput`
 
         # check if we should stop the sim
         self.should_run = not (self.should_stop())
         self.num_iters += 1
-        log.debug(self.state_time)
-        return PropagatedOutput(self.state_time, self.observed_state)
+
+        log.debug(self.state)
+        return output
 
     def should_stop(self) -> bool:
         """Returns true if our state reaches a condition that should stop the sim
