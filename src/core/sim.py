@@ -1,8 +1,7 @@
 from queue import Queue
 import numpy as np
 from core.config import Config
-from core.integrator.integrator import propagate_state
-from core.state import StateTime, ObservedState, PropagatedOutput, State
+from core.state import StateTime, ObservedState, PropagatedOutput
 from core.models.model_list import ModelContainer
 from utils.log import log
 from utils.constants import R_EARTH, EARTH_SOI
@@ -30,9 +29,7 @@ class CislunarSim:
         self.event_queue.put(event)
 
         current_event = self.event_queue.get()
-        output = current_event.evaluate_model_list(self.state_time)
-
-        
+        self.state_time, self.observed_state = current_event.evaluate_model_list(self.state_time)
 
         # TODO: Feed outputs of sensor models into FSW and return actuator's state as part of `PropagatedOutput`
 
@@ -41,7 +38,7 @@ class CislunarSim:
         self.num_iters += 1
 
         log.debug(self.state_time)
-        return output
+        return PropagatedOutput(self.state_time, self.observed_state)
 
     def should_stop(self) -> bool:
         """Returns True if something in our state reaches a condition that should stop the sim
