@@ -22,7 +22,7 @@ class Event:
 
         # Evaluate Actuator models to update state
         for actuator_model in self.model_container.actuator:
-            state_time.update(actuator_model.evaluate(state_time.state))
+            state_time.update(actuator_model.evaluate(state_time))
 
         # Evaluate environmental models to propagate state
         new_state_time: StateTime = propagate_state(self.model_container, state_time)
