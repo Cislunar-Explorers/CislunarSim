@@ -1,6 +1,6 @@
 # CislunarSim
 
-Simulation Software for the Cislunar Explorers Mission
+Simulation Software for the Cislunar Explorers Mission  
 [Read the Docs](https://cislunarsim.readthedocs.io/en/latest/)
 
 ## Getting Started
@@ -23,11 +23,11 @@ Usage:
 python src/main.py {file path} [-v]
 ```
 
-Options:
-`file path` (Required): The path of the config file to simulate
+Options:  
+`file path` (Required): The path of the config file to simulate  
 `verbose` (Optional): For logging extra information to the terminal
 
-Examples:
+Examples:  
 ```zsh
 python src/main.py configs/freefall.json 
 python src/main.py configs/test_angles.json -v
@@ -35,16 +35,16 @@ python src/main.py configs/test_angles.json -v
 
 ## Plotting Sim Runs
 
-Usage:
+Usage:  
 
 ```zsh
 python src/utils/plot.py {file path}
 ```
 
-Options:
-`file path` (Required): The path of the csv file to plot
+Options:  
+`file path` (Required): The path of the csv file to plot  
 
-Example:
+Example:  
 ```zsh
 python src/utils/plot.py runs/cislunarsim-1650068219.9772968.csv
 ```
