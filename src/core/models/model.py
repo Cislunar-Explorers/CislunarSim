@@ -23,7 +23,7 @@ class Model(ABC):
     @abstractmethod
     def evaluate(self, state_time: StateTime):
         """
-        Abstract method for any model that evaluates the model based on the
+        Evaluates the model based on the
             current state.
         An instance of State is required to evaluate the model, (because each
             model should be dependent on the state of the system.)
@@ -44,7 +44,7 @@ class EnvironmentModel(Model):
 
     @abstractmethod
     def d_state(self, state_time: StateTime) -> Dict[str, State_Type]:
-        """Function which evaluates the differential equation:
+        """Evaluates the differential equation:
             dy / dt = f(t, y)
             for the current state. "y" is a state vector (not just one variable)
 
@@ -81,6 +81,6 @@ class ActuatorModel(Model):
     @abstractmethod
     def evaluate(self, state_time: StateTime) -> Dict[str, Any]:
         ...
-        
+
 
 MODEL_TYPES = Union[Type[EnvironmentModel], Type[SensorModel], Type[ActuatorModel]]
