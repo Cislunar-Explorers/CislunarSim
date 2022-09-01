@@ -1,4 +1,5 @@
 import numpy as np
+import numpy.typing as npt
 import matplotlib.pyplot as plt
 from utils.astropy_util import get_body_position
 import matplotlib.animation as animation
@@ -6,6 +7,8 @@ from utils.constants import BodyEnum, R_EARTH, R_MOON
 from datetime import datetime
 
 class Plot:
+    """This class handles all data output, processing, and visual representation in matplotlib.
+    """
 
     def __init__(self, df):
         self.df = df
@@ -90,6 +93,7 @@ class Plot:
         locs = np.array([self.xlocs, self.ylocs, self.zlocs])
         traj = plt.plot(self.xlocs, self.ylocs, self.zlocs, lw=2, c="blue")[0]
         
+        # Handles trajectory updating and plotting
         traj_ani = animation.FuncAnimation(
             self.fig_3d,
             self.animate_traj,
@@ -117,25 +121,45 @@ class Plot:
 
         moon = [self.ax.plot_surface(moon_x, moon_y, moon_z, color="gray")]
 
+        # Handles moon location updating and plotting
         moon_ani = animation.FuncAnimation(
             self.fig_3d,
             self.animate_moon,
             frames=len(self.xlocs),
-            fargs=(locs, moon)
+            fargs=(locs, moon),
+            interval=1,
+            blit=False
         )
         plt.show()
 
-    def animate_traj(self, num, locs, line):
-        self.ax.set_title('Apollo 12 SIVB \nTime = ' + datetime.utcfromtimestamp(self.times[num]).strftime('%Y-%m-%d %H:%M:%S'))
+    def animate_traj(self, num: int, locs: npt.ArrayLike, line):
+        """Handles trajectory line positioning and updating
+
+        Args:
+            num (int): counter that increments on each call to this function
+            locs (npt.ArrayLike): the trajectory location data
+            line (_type_): the trajectory that is being modified and plotted
+
+        Returns:
+            _type_: the updated trajectory
+        """
+        self.ax.set_title('Cislunar Sim\nTime = ' + datetime.utcfromtimestamp(self.times[num]).strftime('%Y-%m-%d %H:%M:%S'))
         line.set_data(locs[0:2, :num])
         line.set_3d_properties(locs[2, :num])
         return line
 
-    def animate_moon(self, num, locs, moon):
-        moon_cx = float(self.df["true_state.derived_state.r_mo"][num].strip("[]").split(" ")[1])
-        moon_cy = float(self.df["true_state.derived_state.r_mo"][num].strip("[]").split(" ")[2])
-        moon_cz = float(self.df["true_state.derived_state.r_mo"][num].strip("[]").split(" ")[3])
-        
+    def animate_moon(self, num: int, locs: npt.ArrayLike, moon: list):
+        """Handles moon positioning and updating
+
+        Args:
+            num (int): counter that increments on each call to this function
+            locs (npt.ArrayLike): the moon trajectory location data
+            moon (list): the moon object at the current location (should be a list of size 1, may change this in the future)
+        """
+        moon_cx = self.df["true_state.derived_state.r_mo"][num].tolist()[0].item(0)
+        moon_cy = self.df["true_state.derived_state.r_mo"][num].tolist()[0].item(1)
+        moon_cz = self.df["true_state.derived_state.r_mo"][num].tolist()[0].item(2)
+
         moon_x = moon_cx + R_MOON * np.outer(np.cos(self.u), np.sin(self.v))
         moon_y = moon_cy + R_MOON * np.outer(np.sin(self.u), np.sin(self.v))
         moon_z = moon_cz + R_MOON * np.outer(np.ones(np.size(self.u)), np.cos(self.v))

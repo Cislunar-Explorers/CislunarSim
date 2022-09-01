@@ -8,8 +8,8 @@ from utils.constants import R_EARTH, EARTH_SOI
 
 
 class CislunarSim:
-    """
-    This class consolidates all parts of the sim (config, models, state).
+    """This class consolidates all parts of the sim (config, models, state). It is responsible for 
+    stepping the sim and checking stop conditions.
     """
 
     def __init__(self, config: Config) -> None:
@@ -22,7 +22,11 @@ class CislunarSim:
         self.num_iters = 0
 
     def step(self) -> PropagatedOutput:
-        """step() is the combined true and observed state after one step."""
+        """Evaluates all models and propagates state
+
+        Returns:
+            PropagatedOutput: The true and observed states resulting from this step
+        """
 
         # Evaluate Actuator models to update state
         for actuator_model in self._models.actuator:
@@ -50,10 +54,7 @@ class CislunarSim:
         return PropagatedOutput(self.state_time, self.observed_state)
 
     def should_stop(self) -> bool:
-        """Returns True if something in our state reaches a condition that should stop the sim
-
-        Args:
-            state (StateTime): The current state of the system to evaluate
+        """Returns true if something in our state reaches a condition that should stop the sim
 
         Returns:
             bool: Whether the sim should be stopped
