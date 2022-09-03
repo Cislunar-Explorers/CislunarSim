@@ -125,12 +125,6 @@ class StateTime:
     def from_dict(cls, statetime_dict: Dict[str, State_Type]):
         """
         Generates a new StateTime instance from an input dictionary. Can be called via `StateTime.from_dict(...)` to make a new StateTime object
-
-        Args:
-            statetime_dict (Dict[str, State_Type]): _description_
-
-        Returns:
-            StateTime: _description_
         """
         try:
             time = statetime_dict.pop("time")

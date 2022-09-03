@@ -9,8 +9,10 @@ def propagate_state(
     state_time: StateTime,
     dt: float = D_T,
 ) -> StateTime:
-    """Takes in a state and propagates it over a timestep of `dt` seconds.
-    Returns a new State object at t+dt"""
+    """
+    Takes in a state and propagates it over a timestep of `dt` seconds.
+    Returns a new State object at t+dt
+    """
     t = state_time.time
     propagate_state_function = models.state_update_function
     state_array = state_time.state.to_array()
