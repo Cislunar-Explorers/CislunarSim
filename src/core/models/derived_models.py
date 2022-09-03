@@ -5,7 +5,6 @@ import numpy as np
 from utils.constants import BodyEnum
 
 
-
 class DerivedStateModel(ABC):
     """
     Abstract Base class for all models this sim uses.
@@ -24,7 +23,7 @@ class DerivedStateModel(ABC):
     @abstractmethod
     def evaluate(self, state_time: Dict):
         """
-        Abstract method for any model that evaluates the model based on the
+        Evaluates the model based on the
             current state.
         An instance of State is required to evaluate the model, (because each
             model should be dependent on the state of the system.)
@@ -34,6 +33,7 @@ class DerivedStateModel(ABC):
         Returns:
             _type_: Defined in concrete instantiation of subclasses.
         """
+
 
 class DerivedAttitude(DerivedStateModel):
     ...
@@ -47,14 +47,14 @@ class DerivedPosition(DerivedStateModel):
 
     def evaluate(self, t: float, state: Dict) -> Dict[str, np.ndarray]:
 
-        # Position column vectors from moon/sun/earth/craft to the origin, where the origin is 
+        # Position column vectors from moon/sun/earth/craft to the origin, where the origin is
         # the Earth's center of mass.
         # Craft to origin
         r_co = np.array([state["x"], state["y"], state["z"]])
         # Moon to origin
-        r_mo = np.array(get_body_position(10*t//10, BodyEnum.Moon))
+        r_mo = np.array(get_body_position(10 * t // 10, BodyEnum.Moon))
         # Sun to origin
-        r_so = np.array(get_body_position(10*t//10, BodyEnum.Sun))
+        r_so = np.array(get_body_position(10 * t // 10, BodyEnum.Sun))
         # Earth to origin (Note: Earth is at the origin in GCRS)
         r_eo = np.array((0.0, 0.0, 0.0))
 
@@ -75,5 +75,6 @@ class DerivedPosition(DerivedStateModel):
             "r_sc": r_sc,
             "r_ec": r_ec,
         }
+
 
 DERIVED_MODEL_LIST = [DerivedPosition()]
