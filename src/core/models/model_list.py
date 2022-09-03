@@ -20,7 +20,8 @@ class PositionDynamics(EnvironmentModel):
         return super().evaluate(state_time)
 
     def d_state(self, state_time: StateTime) -> Dict[str, State_Type]:
-        """ Takes the derivative of a vector [r v] to compute [v a], where r is a position vector,
+        """
+        Takes the derivative of a vector [r v] to compute [v a], where r is a position vector,
         v is the velocity vector, and a is the acceleration vector
         Args:
             t (float): the initial time
@@ -94,14 +95,16 @@ def build_state_update_function(
     env_models: List[EnvironmentModel],
 ) -> Callable[[float, np.ndarray], np.ndarray]:
     def update_function(t: float, state_array: np.ndarray) -> np.ndarray:
-        """The function that gets plugged into the integrator and propagates the state.
+        """
+        Gets plugged into the integrator and propagates the state.
         The input to this function is the current state.
 
         Args:
-            state (np.ndarray): _description_
+            t (float): the current time
+            state (np.ndarray): the current state
 
         Returns:
-            np.ndarray: _description_
+            np.ndarray: the propagated state
         """
         propagated_state = State()
         state_in = StateTime(array_to_state(state_array), t)
