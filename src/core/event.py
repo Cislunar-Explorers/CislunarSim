@@ -9,7 +9,7 @@ class Event:
 
     def __init__(self, model_container: ModelContainer):
         self.model_container = model_container
-    
+
     def evaluate_model_list(self, state_time: StateTime) -> Tuple[StateTime, ObservedState]:
         """Evaluates all the models for this event
 
