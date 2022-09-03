@@ -8,7 +8,8 @@ from utils.constants import State_Type
 
 @dataclass
 class State:
-    """This is a container class for all state variables as defined in this sheet:
+    """
+    This is a container class for all state variables as defined in this sheet:
         https://cornell.box.com/s/z20wbp66q0pseqievmadf515ucd971g2.
 
     In order to init a class of State, by far the easiest way is via kwarg unpacking:
@@ -50,7 +51,8 @@ class State:
     solenoid_actuation_on: bool = False
 
     def update(self, state_dict: Dict[str, Union[int, float, bool]]) -> None:
-        """update() is a procedure that updates the fields of the state with specified key/value pairs in state_dict.
+        """
+        update() is a procedure that updates the fields of the state with specified key/value pairs in state_dict.
         If a key in the `state_dict` is not defined as an attribute in State.__init__, it will be ignored.
         """
         for key, value in state_dict.items():
@@ -91,7 +93,8 @@ STATE_ARRAY_ORDER = list(k for k in State().__dict__.keys() if k != "derived_sta
 
 
 def array_to_state(values: np.ndarray) -> State:
-    """Converts a numpy array or list into a `State` object.
+    """
+    Converts a numpy array or list into a `State` object.
         This assumes that the items in `state_array` are consistent with
         `STATE_ARRAY_ORDER`(which is an assumption that will probably lead
         to many bugs in the future...)
@@ -120,8 +123,8 @@ class StateTime:
 
     @classmethod
     def from_dict(cls, statetime_dict: Dict[str, State_Type]):
-        """Generates a new StateTime instance from an input dictionary.
-            Can be called via `StateTime.from_dict(...)` to make a new StateTime object
+        """
+        Generates a new StateTime instance from an input dictionary. Can be called via `StateTime.from_dict(...)` to make a new StateTime object
 
         Args:
             statetime_dict (Dict[str, State_Type]): _description_
@@ -137,13 +140,15 @@ class StateTime:
         return cls(State(**statetime_dict), time=time)
 
     def update(self, state_dict: Dict[str, Union[int, float, bool]]) -> None:
-        """update() is a procedure that updates the fields of the state with specified key/value pairs in state_dict.
+        """
+        update() is a procedure that updates the fields of the state with specified key/value pairs in state_dict.
         If a key in the `state_dict` is not defined as an attribute in State.__init__, it will be ignored.
         """
         self.state.update(state_dict)
 
     def update_derived(self, state_dict: Dict) -> None:
-        """update_derived() is a procedure that updates the fields of the derived state with specified key/value pairs in state_dict.
+        """
+        update_derived() is a procedure that updates the fields of the derived state with specified key/value pairs in state_dict.
         If a key in the `state_dict` is not defined as an attribute in DerivedState.__init__, it will be ignored.
         """
         self.derived_state.update(state_dict)
