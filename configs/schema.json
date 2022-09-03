@@ -51,16 +51,16 @@
 				"ang_vel_z": {
 					"type": "number"
 				},
-				"gnc_pos_q1": {
+				"quat_v1": {
 					"type": "number"
 				},
-				"gnc_pos_q2": {
+				"quat_v2": {
 					"type": "number"
 				},
-				"gnc_pos_q3": {
+				"quat_v3": {
 					"type": "number"
 				},
-				"gnc_pos_q4": {
+				"quat_r": {
 					"type": "number"
 				},
 				"vel_x": {
