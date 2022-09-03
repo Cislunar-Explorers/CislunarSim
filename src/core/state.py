@@ -8,8 +8,7 @@ from utils.constants import State_Type
 
 @dataclass
 class State:
-    """
-    This is a container class for all state variables as defined in this sheet:
+    """This is a container class for all state variables as defined in this sheet:
         https://cornell.box.com/s/z20wbp66q0pseqievmadf515ucd971g2.
 
     In order to init a class of State, by far the easiest way is via kwarg unpacking:
@@ -51,7 +50,7 @@ class State:
     solenoid_actuation_on: bool = False
 
     def update(self, state_dict: Dict[str, Union[int, float, bool]]) -> None:
-        """ update() is a procedure that updates the fields of the state with specified key/value pairs in state_dict.
+        """update() is a procedure that updates the fields of the state with specified key/value pairs in state_dict.
         If a key in the `state_dict` is not defined as an attribute in State.__init__, it will be ignored.
         """
         for key, value in state_dict.items():
@@ -112,11 +111,12 @@ class StateTime:
     state: State = State()
     time: float = 0.0
     derived_state: DerivedState = DerivedState()
-    
+
     def __post_init__(self):
         for derived_state_model in DERIVED_MODEL_LIST:
             self.update_derived(
-                derived_state_model.evaluate(self.time, self.state.__dict__))
+                derived_state_model.evaluate(self.time, self.state.__dict__)
+            )
 
     @classmethod
     def from_dict(cls, statetime_dict: Dict[str, State_Type]):
@@ -137,13 +137,13 @@ class StateTime:
         return cls(State(**statetime_dict), time=time)
 
     def update(self, state_dict: Dict[str, Union[int, float, bool]]) -> None:
-        """ update() is a procedure that updates the fields of the state with specified key/value pairs in state_dict.
+        """update() is a procedure that updates the fields of the state with specified key/value pairs in state_dict.
         If a key in the `state_dict` is not defined as an attribute in State.__init__, it will be ignored.
         """
         self.state.update(state_dict)
 
     def update_derived(self, state_dict: Dict) -> None:
-        """ update_derived() is a procedure that updates the fields of the derived state with specified key/value pairs in state_dict.
+        """update_derived() is a procedure that updates the fields of the derived state with specified key/value pairs in state_dict.
         If a key in the `state_dict` is not defined as an attribute in DerivedState.__init__, it will be ignored.
         """
         self.derived_state.update(state_dict)
@@ -212,7 +212,6 @@ class ObservedState(State):
         """
         noise = np.random.normal(mu, sigma)
         self.mu = noise
-
 
 
 @dataclass
