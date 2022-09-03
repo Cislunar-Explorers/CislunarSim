@@ -15,7 +15,7 @@ class CislunarSim:
     def __init__(self, config: Config) -> None:
         self._config = config
         self._models = ModelContainer(self._config) #wouldn't need for event-based
-        self.state: StateTime = self._config.init_cond
+        self.state_time: StateTime = self._config.init_cond
         self.observed_state = ObservedState()
 
         self.should_run = True
