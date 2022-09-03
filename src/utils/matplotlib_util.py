@@ -6,9 +6,9 @@ import matplotlib.animation as animation
 from utils.constants import BodyEnum, R_EARTH, R_MOON
 from datetime import datetime
 
+
 class Plot:
-    """This class handles all data output, processing, and visual representation in matplotlib.
-    """
+    """Handles all data output, processing, and visual representation in matplotlib."""
 
     def __init__(self, df):
         self.df = df
@@ -18,7 +18,7 @@ class Plot:
         self.ax_ang_vel_x = plt.subplot(223)
 
         self.fig_3d = plt.figure("CislunarSim")
-        self.ax = self.fig_3d.gca(projection='3d')
+        self.ax = self.fig_3d.gca(projection="3d")
 
         self.u = np.linspace(0, 2 * np.pi, 60)
         self.v = np.linspace(0, np.pi, 60)
@@ -62,13 +62,13 @@ class Plot:
         self.annot.set_visible(False)
 
     def plot_data(self) -> None:
+        """Displays all plots of spacecraft"""
         self.plot_data_2d()
         self.plot_data_3d()
         plt.tight_layout()
-        #plt.show()
 
     def plot_data_2d(self) -> None:
-        """Procedure that displays 2d plots of spacecraft data"""
+        """Displays 2d plots of spacecraft data"""
         self.ax_vel.plot(self.ts, self.vel_xs, "--", c="hotpink", label="x")
         self.ax_vel.plot(self.ts, self.vel_ys, "--", c="green", label="y")
         self.ax_vel.plot(self.ts, self.vel_zs, "--", c="blue", label="z")
@@ -88,11 +88,11 @@ class Plot:
         self.ax_ang_vel_x.legend()
 
     def plot_data_3d(self):
-        """Procedure that plots a model of the earth, moon and the craft's trajectory in R3"""
+        """Plots a model of the earth, moon and the craft's trajectory in R3"""
 
         locs = np.array([self.xlocs, self.ylocs, self.zlocs])
         traj = plt.plot(self.xlocs, self.ylocs, self.zlocs, lw=2, c="blue")[0]
-        
+
         # Handles trajectory updating and plotting
         traj_ani = animation.FuncAnimation(
             self.fig_3d,
@@ -103,10 +103,10 @@ class Plot:
             blit=False,
         )
 
-        self.ax.set_box_aspect(aspect = (1,1,1))
+        self.ax.set_box_aspect(aspect=(1, 1, 1))
 
         # Calculation and plotting of earth's position
-       
+
         earth_x = R_EARTH * np.outer(np.cos(self.u), np.sin(self.v))
         earth_y = R_EARTH * np.outer(np.sin(self.u), np.sin(self.v))
         earth_z = R_EARTH * np.outer(np.ones(np.size(self.u)), np.cos(self.v))
@@ -128,7 +128,7 @@ class Plot:
             frames=len(self.xlocs),
             fargs=(locs, moon),
             interval=1,
-            blit=False
+            blit=False,
         )
         plt.show()
 
@@ -143,7 +143,10 @@ class Plot:
         Returns:
             _type_: the updated trajectory
         """
-        self.ax.set_title('Cislunar Sim\nTime = ' + datetime.utcfromtimestamp(self.times[num]).strftime('%Y-%m-%d %H:%M:%S'))
+        self.ax.set_title(
+            "Cislunar Sim\nTime = "
+            + datetime.utcfromtimestamp(self.times[num]).strftime("%Y-%m-%d %H:%M:%S")
+        )
         line.set_data(locs[0:2, :num])
         line.set_3d_properties(locs[2, :num])
         return line

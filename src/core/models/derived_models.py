@@ -19,7 +19,7 @@ class DerivedStateModel(Model):
     @abstractmethod
     def evaluate(self, time: float, state: State) -> Dict[str, Union[float, int, bool]]:
         """
-        Abstract method for any model that evaluates the model based on the
+        Evaluates the model based on the
             current state.
         An instance of State is required to evaluate the model, (because each
             model should be dependent on the state of the system.)
@@ -56,6 +56,7 @@ def cartesian_to_spherical(x: float, y: float, z: float) -> Tuple[float, float, 
         theta = np.arccos(z / r)  # elevation angle
 
     return (r, phi, theta)
+
 
 
 class DerivedAttitude(DerivedStateModel):
