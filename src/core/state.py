@@ -141,14 +141,14 @@ class StateTime:
 
     def update(self, state_dict: Dict[str, Union[int, float, bool]]) -> None:
         """
-        update() is a procedure that updates the fields of the state with specified key/value pairs in state_dict.
+        Updates the fields of the state with specified key/value pairs in state_dict.
         If a key in the `state_dict` is not defined as an attribute in State.__init__, it will be ignored.
         """
         self.state.update(state_dict)
 
     def update_derived(self, state_dict: Dict) -> None:
         """
-        update_derived() is a procedure that updates the fields of the derived state with specified key/value pairs in state_dict.
+        Updates the fields of the derived state with specified key/value pairs in state_dict.
         If a key in the `state_dict` is not defined as an attribute in DerivedState.__init__, it will be ignored.
         """
         self.derived_state.update(state_dict)

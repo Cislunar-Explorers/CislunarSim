@@ -11,7 +11,7 @@ class PositionDynamicsModelTest(unittest.TestCase):
 
     def test_position_dynamics_model(self):
         """
-        This function tests the position dynamics model's d_state function.
+        Tests the position dynamics model's d_state function.
         """
         base_state = StateTime(state_1)
         dummy_pd = PositionDynamics(d3456)
