@@ -91,7 +91,7 @@ class KaneModel(DerivedStateModel):
         kane = kane * k / np.max(kane)
 
         q = np.round(state.fill_frac / 0.02 + 1)
-        c = kane(q)
+        c = kane[q]
 
         return {"kane_c": c}
 
