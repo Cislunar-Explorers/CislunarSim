@@ -132,7 +132,7 @@ class Plot:
         )
         plt.show()
 
-    def animate_traj(self, num: int, locs: npt.ArrayLike, line):
+    def animate_traj(self, num, locs, line):
         """Handles trajectory line positioning and updating
 
         Args:
@@ -151,7 +151,7 @@ class Plot:
         line.set_3d_properties(locs[2, :num])
         return line
 
-    def animate_moon(self, num: int, locs: npt.ArrayLike, moon: list):
+    def animate_moon(self, num, locs, moon):
         """Handles moon positioning and updating
 
         Args:
