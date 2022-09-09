@@ -11,12 +11,11 @@ class PositionDynamicsModelTest(unittest.TestCase):
 
     def test_position_dynamics_model(self):
         """
-        This function tests the position dynamics model's d_state function.
+        Tests the position dynamics model's d_state function.
         """
         base_state = StateTime(state_1)
         dummy_pd = PositionDynamics(d3456)
         propagated_state = dummy_pd.d_state(base_state)
-
 
         # trivial tests that check to make sure the velocity components from the input to the output match exactly
         self.assertEqual(9.0, propagated_state["x"])

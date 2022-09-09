@@ -132,8 +132,14 @@ class Plot:
         )
         plt.show()
 
+<<<<<<< HEAD
     def animate_traj(self, num, locs, line):
         """Handles trajectory line positioning and updating
+=======
+    def animate_traj(self, num: int, locs: npt.ArrayLike, line):
+        """
+        Handles trajectory line positioning and updating
+>>>>>>> 34c5904704bdf77e3e90a58253e4aa589e10e698
 
         Args:
             num (int): counter that increments on each call to this function
