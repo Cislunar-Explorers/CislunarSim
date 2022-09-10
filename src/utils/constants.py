@@ -51,4 +51,4 @@ R_EARTH = 6_378_137  # Average Radius of the Earth, meters
 R_MOON = 1_737_100  # Average Radius of the Moon, meters
 R_SUN = 696_340_000
 
-D_T = 50.0  # timestep in seconds
+D_T = 0.1  # timestep in seconds

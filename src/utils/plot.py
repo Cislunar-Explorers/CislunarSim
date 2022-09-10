@@ -25,4 +25,4 @@ class PlotHelper:
 
 
 if __name__ == "__main__":
-    data = PlotHelper().pl.plot_data()
+    data = PlotHelper().pl.plot_quat()

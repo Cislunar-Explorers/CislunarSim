@@ -1,6 +1,6 @@
 import unittest
 from core.models.model_list import PositionDynamics
-from core.state import StateTime
+from core.state.statetime import StateTime
 from utils.test_utils import state_1, d3456
 
 

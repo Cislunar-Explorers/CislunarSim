@@ -2,14 +2,11 @@ from typing import Callable, List, Dict
 import numpy as np
 from core.models.model import ActuatorModel, EnvironmentModel, SensorModel, MODEL_TYPES
 from core.models.gyro_model import GyroModel
-from core.state import State, StateTime, array_to_state
+from core.state.state import State, array_to_state
+from core.state.statetime import StateTime
 from core.config import Config
 from utils.constants import ModelEnum, State_Type
-
-
-class AttitudeDynamics(EnvironmentModel):
-    ...
-
+from core.models.dynamics_model import AttitudeDynamics
 
 class PositionDynamics(EnvironmentModel):
     """
@@ -67,12 +64,6 @@ class PositionDynamics(EnvironmentModel):
 
 
 class TestModel(EnvironmentModel):
-    def __init__(self, parameters) -> None:
-        super().__init__(parameters)
-
-    def evaluate(self, state_time: StateTime) -> Dict[str, State_Type]:
-        return super().evaluate(state_time)
-
     def d_state(self, state_time: StateTime) -> Dict[str, State_Type]:
         dx = 0
         dy = 0

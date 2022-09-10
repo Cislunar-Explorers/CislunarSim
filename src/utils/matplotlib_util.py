@@ -169,3 +169,21 @@ class Plot:
 
         moon[0].remove()
         moon[0] = self.ax.plot_surface(moon_x, moon_y, moon_z, color="gray")
+    
+    def plot_quat(self):
+        quat_v1s = self.df["true_state.state.quat_v1"]
+        quat_v2s = self.df["true_state.state.quat_v2"]
+        quat_v3s = self.df["true_state.state.quat_v3"]
+        quat_rs = self.df["true_state.state.quat_r"]
+
+
+        fig = plt.figure()
+        plt.plot(self.times, quat_v1s, alpha=0.8, label="v1")
+        plt.plot(self.times, quat_v2s, alpha=0.8, label="v2")
+        plt.plot(self.times, quat_v3s, alpha=0.8, label="v3")
+        plt.plot(self.times, quat_rs, "--", alpha=0.8, label="r")
+        plt.xlabel("Time")
+        plt.ylabel("")
+        plt.title("Attitude Quaternion")
+        plt.legend()
+        plt.savefig(fname="attitude_plot.png")
