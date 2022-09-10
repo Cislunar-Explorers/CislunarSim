@@ -5,8 +5,7 @@ from typing import Dict
 
 @dataclass
 class DerivedState:
-    """
-    Container class for derived state variables needed for state determination.
+    """Container class for derived state variables needed for state determination.
     TODO: Concretely document these somewhere.
     """
 

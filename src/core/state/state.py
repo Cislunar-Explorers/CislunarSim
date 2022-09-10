@@ -7,8 +7,7 @@ from utils.constants import State_Type
 
 @dataclass
 class State:
-    """
-    This is a container class for all state variables as defined in this sheet:
+    """This is a container class for all state variables as defined in this sheet:
         https://cornell.box.com/s/z20wbp66q0pseqievmadf515ucd971g2.
 
     In order to init a class of State, by far the easiest way is via kwarg unpacking:

@@ -8,9 +8,7 @@ from typing import Dict, Union
 
 @dataclass
 class StateTime:
-    """
-    This class associates the state with the time.
-    """
+    """ This class associates the state with the time. """
 
     state: State = State()
     time: float = 0.0
@@ -53,9 +51,7 @@ class StateTime:
 
 @dataclass
 class PropagatedOutput:
-    """
-    This is a container class that holds a true_state and its corresponding observed_state.
-    """
+    """This is a container class that holds a true_state and its corresponding observed_state."""
 
     true_state: StateTime
     observed_state: ObservedState
