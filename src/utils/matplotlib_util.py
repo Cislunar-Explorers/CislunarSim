@@ -1,5 +1,4 @@
 import numpy as np
-import numpy.typing as npt
 import matplotlib.pyplot as plt
 from utils.astropy_util import get_body_position
 import matplotlib.animation as animation
@@ -132,14 +131,8 @@ class Plot:
         )
         plt.show()
 
-<<<<<<< HEAD
     def animate_traj(self, num, locs, line):
         """Handles trajectory line positioning and updating
-=======
-    def animate_traj(self, num: int, locs: npt.ArrayLike, line):
-        """
-        Handles trajectory line positioning and updating
->>>>>>> 34c5904704bdf77e3e90a58253e4aa589e10e698
 
         Args:
             num (int): counter that increments on each call to this function
@@ -147,8 +140,9 @@ class Plot:
             line (_type_): the trajectory that is being modified and plotted
 
         Returns:
-            _type_: the updated trajectory
+            line: the updated trajectory
         """
+
         self.ax.set_title(
             "Cislunar Sim\nTime = "
             + datetime.utcfromtimestamp(self.times[num]).strftime("%Y-%m-%d %H:%M:%S")
