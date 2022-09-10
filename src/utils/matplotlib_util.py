@@ -126,12 +126,31 @@ class Plot:
         plt.show()
 
     def animate_traj(self, num, locs, line):
-        self.ax.set_title('Apollo 12 SIVB \nTime = ' + datetime.utcfromtimestamp(self.times[num]).strftime('%Y-%m-%d %H:%M:%S'))
+        """Handles trajectory line positioning and updating
+
+        Args:
+            num (int): counter that increments on each call to this function
+            locs (npt.ArrayLike): the trajectory location data
+            line (_type_): the trajectory that is being modified and plotted
+
+        Returns:
+            line: the updated trajectory
+        """
+
+        self.ax.set_title('Cislunar Sim \nTime = ' + datetime.utcfromtimestamp(self.times[num]).strftime('%Y-%m-%d %H:%M:%S'))
         line.set_data(locs[0:2, :num])
         line.set_3d_properties(locs[2, :num])
         return line
 
     def animate_moon(self, num, locs, moon):
+        """Handles moon positioning and updating
+
+        Args:
+            num (int): counter that increments on each call to this function
+            locs (npt.ArrayLike): the moon trajectory location data
+            moon (list): the moon object at the current location (should be a list of size 1, may change this in the future)
+        """
+
         moon_cx = float(self.df["true_state.derived_state.r_mo"][num].strip("[]").split(" ")[1])
         moon_cy = float(self.df["true_state.derived_state.r_mo"][num].strip("[]").split(" ")[2])
         moon_cz = float(self.df["true_state.derived_state.r_mo"][num].strip("[]").split(" ")[3])
