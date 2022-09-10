@@ -6,6 +6,7 @@ from utils.constants import BodyEnum, R_EARTH, R_MOON
 from datetime import datetime
 
 class Plot:
+    """Handles all data output, processing, and visual representation in matplotlib."""
 
     def __init__(self, df):
         self.df = df
