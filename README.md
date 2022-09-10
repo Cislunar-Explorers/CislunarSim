@@ -31,7 +31,7 @@ python src/main.py {file path} [-v]
 
 #### Examples:  
 ```zsh
-python src/main.py configs/freefall.json 
+python src/main.py configs/iss.json 
 python src/main.py configs/test_angles.json -v
 ```
 
