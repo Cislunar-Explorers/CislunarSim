@@ -2,14 +2,11 @@ from typing import Callable, List, Dict
 import numpy as np
 from core.models.model import ActuatorModel, EnvironmentModel, SensorModel, MODEL_TYPES
 from core.models.gyro_model import GyroModel
-from core.state import State, StateTime, array_to_state
+from core.state.state import State, array_to_state
+from core.state.statetime import StateTime
 from core.config import Config
 from utils.constants import ModelEnum, State_Type
-
-
-class AttitudeDynamics(EnvironmentModel):
-    ...
-
+from core.models.dynamics_model import AttitudeDynamics
 
 class PositionDynamics(EnvironmentModel):
     """
@@ -23,8 +20,7 @@ class PositionDynamics(EnvironmentModel):
         return super().evaluate(state_time)
 
     def d_state(self, state_time: StateTime) -> Dict[str, State_Type]:
-        """
-        Takes the derivative of a vector [r v] to compute [v a], where r is a position vector,
+        """ Takes the derivative of a vector [r v] to compute [v a], where r is a position vector,
         v is the velocity vector, and a is the acceleration vector
         Args:
             t (float): the initial time
@@ -67,12 +63,6 @@ class PositionDynamics(EnvironmentModel):
 
 
 class TestModel(EnvironmentModel):
-    def __init__(self, parameters) -> None:
-        super().__init__(parameters)
-
-    def evaluate(self, state_time: StateTime) -> Dict[str, State_Type]:
-        return super().evaluate(state_time)
-
     def d_state(self, state_time: StateTime) -> Dict[str, State_Type]:
         dx = 0
         dy = 0
@@ -104,16 +94,14 @@ def build_state_update_function(
     env_models: List[EnvironmentModel],
 ) -> Callable[[float, np.ndarray], np.ndarray]:
     def update_function(t: float, state_array: np.ndarray) -> np.ndarray:
-        """
-        Gets plugged into the integrator and propagates the state.
+        """The function that gets plugged into the integrator and propagates the state.
         The input to this function is the current state.
 
         Args:
-            t (float): the current time
-            state (np.ndarray): the current state
+            state (np.ndarray): _description_
 
         Returns:
-            np.ndarray: the propagated state
+            np.ndarray: _description_
         """
         propagated_state = State()
         state_in = StateTime(array_to_state(state_array), t)

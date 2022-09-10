@@ -1,14 +1,15 @@
 import math
-from core.state import State
+from core.state.state import State
 
 s_0 = {
+    "fill_frac": 0.0,
     "ang_vel_x": 0.0,
     "ang_vel_y": 0.0,
     "ang_vel_z": 0.0,
-    "gnc_pos_q1": 0.0,
-    "gnc_pos_q2": 0.0,
-    "gnc_pos_q3": 0.0,
-    "gnc_pos_q4": 0.0,
+    "quat_v1": 0.0,
+    "quat_v2": 0.0,
+    "quat_v3": 0.0,
+    "quat_r": 0.0,
     "vel_x": 0.0,
     "vel_y": 0.0,
     "vel_z": 0.0,
@@ -24,13 +25,14 @@ s_0 = {
 }
 
 s_1 = {
+    "fill_frac": 1.0,
     "ang_vel_x": 2.0,
     "ang_vel_y": 3.0,
     "ang_vel_z": 4.0,
-    "gnc_pos_q1": 5.0,
-    "gnc_pos_q2": 6.0,
-    "gnc_pos_q3": 7.0,
-    "gnc_pos_q4": 8.0,
+    "quat_v1": 5.0,
+    "quat_v2": 6.0,
+    "quat_v3": 7.0,
+    "quat_r": 8.0,
     "vel_x": 9.0,
     "vel_y": 10.0,
     "vel_z": 11.0,
