@@ -1,7 +1,7 @@
 from typing import List, Optional, Union
 import time
 import pandas as pd
-from core.state.statetime import PropagatedOutput
+from core.state import PropagatedOutput
 from dataclasses import asdict
 from utils.constants import SIM_ROOT
 from pathlib import Path

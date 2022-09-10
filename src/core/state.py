@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import numpy as np
 from typing import Dict, Union
-from core.state.derived_state import DerivedState
+from core.derived_state import DerivedState
 from core.models.derived_models import DERIVED_MODEL_LIST
 from utils.constants import State_Type
 

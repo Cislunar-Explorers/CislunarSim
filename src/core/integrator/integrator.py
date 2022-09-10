@@ -1,6 +1,5 @@
 from scipy.integrate import solve_ivp
-from core.state.statetime import StateTime
-from core.state.state import array_to_state
+from core.state import StateTime, array_to_state
 from core.models.model_list import ModelContainer
 from utils.constants import D_T
 
