@@ -53,7 +53,7 @@ class CislunarSim:
         return PropagatedOutput(self.state_time, self.observed_state)
 
     def should_stop(self) -> bool:
-        """Returns true if something in our state reaches a condition that should stop the sim
+        """Returns true if our state reaches a condition that should stop the sim
 
         Returns:
             bool: Whether the sim should be stopped

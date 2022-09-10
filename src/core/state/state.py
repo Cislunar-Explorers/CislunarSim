@@ -58,8 +58,7 @@ class State:
                 setattr(self, key, value)
 
     def to_array(self):
-        """The is the representation of the values of the fields as an
-            array.
+        """The representation of the values of the fields as an array.
 
         Returns:
             Numpy array: contains all values stored in the fields.
