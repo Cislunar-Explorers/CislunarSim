@@ -1,7 +1,7 @@
 import numpy as np
 from core.config import Config
 from core.integrator.integrator import propagate_state
-from core.state.statetime import StateTime, ObservedState, PropagatedOutput, State
+from core.state import StateTime, ObservedState, PropagatedOutput, State
 from core.models.model_list import ModelContainer
 from utils.log import log
 from utils.constants import R_EARTH, EARTH_SOI

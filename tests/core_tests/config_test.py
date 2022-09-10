@@ -1,7 +1,7 @@
 import unittest
 from core.config import Config, JsonError, MutationException
 from core.parameters import Parameters
-from core.state.statetime import StateTime
+from core.state import StateTime
 
 
 class ConfigTestCases(unittest.TestCase):
@@ -22,10 +22,10 @@ class ConfigTestCases(unittest.TestCase):
         "ang_vel_x": 10.0,
         "ang_vel_y": 10.0,
         "ang_vel_z": 10.0,
-        "quat_v1": 10.0,
-        "quat_v2": 10.0,
-        "quat_v3": 10.0,
-        "quat_r": 10.0,
+        "gnc_pos_q1": 10.0,
+        "gnc_pos_q2": 10.0,
+        "gnc_pos_q3": 10.0,
+        "gnc_pos_q4": 10.0,
         "vel_x": 10.0,
         "vel_y": 10.0,
         "vel_z": 10.0,
@@ -55,10 +55,10 @@ class ConfigTestCases(unittest.TestCase):
         "ang_vel_x": 0.0,
         "ang_vel_y": 0.0,
         "ang_vel_z": 0.0,
-        "quat_v1": 0.0,
-        "quat_v2": 0.0,
-        "quat_v3": 0.0,
-        "quat_r": 0.0,
+        "gnc_pos_q1": 0.0,
+        "gnc_pos_q2": 0.0,
+        "gnc_pos_q3": 0.0,
+        "gnc_pos_q4": 0.0,
         "vel_x": 0.0,
         "vel_y": 0.0,
         "vel_z": 0.0,
@@ -78,10 +78,10 @@ class ConfigTestCases(unittest.TestCase):
         "ang_vel_x": 5.0,
         "ang_vel_y": 5.0,
         "ang_vel_z": 5.0,
-        "quat_v1": 10.0,
-        "quat_v2": 10.0,
-        "quat_v3": 10.0,
-        "quat_r": 10.0,
+        "gnc_pos_q1": 10.0,
+        "gnc_pos_q2": 10.0,
+        "gnc_pos_q3": 10.0,
+        "gnc_pos_q4": 10.0,
         "vel_x": 3.0,
         "vel_y": 3.0,
         "vel_z": 3.0,

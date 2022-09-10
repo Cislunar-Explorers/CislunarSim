@@ -4,7 +4,7 @@ Gyro sensor model documentation: https://cornell.box.com/s/6nu08iqfk5i389wlpp44r
 
 from core.models.model import SensorModel
 from core.parameters import Parameters
-from core.state.statetime import StateTime
+from core.state import StateTime
 from typing import Dict, Any
 import numpy as np
 

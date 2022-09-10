@@ -1,7 +1,5 @@
 import unittest
-from core.state.state import State
-from core.state.derived_state import DerivedState
-from core.state.statetime import StateTime
+from core.state import State, StateTime, DerivedState
 from utils.test_utils import s_0, state_1
 
 
@@ -23,7 +21,7 @@ class StateTestCases(unittest.TestCase):
         Tests that all fields are set properly when creating a new instance of State.
         """
         bool_fields = ["propulsion_on", "solenoid_actuation_on"]
-
+        
         s_copy = {}
         field = ""
         dummy_data = None
@@ -46,9 +44,8 @@ class StateTestCases(unittest.TestCase):
         """
         Tests that float_fields_to_array() returns the correct values for the fields of an instance of State, in a consistent order.
         """
-        
+
         state_list = [
-            1.0,
             2.0,
             3.0,
             4.0,
