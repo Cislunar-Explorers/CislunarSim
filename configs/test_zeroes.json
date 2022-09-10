@@ -14,10 +14,10 @@
         "ang_vel_y" : 0.0, 
         "ang_vel_z" : 0.0, 
         
-        "quat_v1" : 0.0, 
-        "quat_v2" : 0.0, 
-        "quat_v3" : 0.0, 
-        "quat_r" : 0.0, 
+        "gnc_pos_q1" : 0.0, 
+        "gnc_pos_q2" : 0.0, 
+        "gnc_pos_q3" : 0.0, 
+        "gnc_pos_q4" : 0.0, 
 
         "vel_x" : 0.0, 
         "vel_y" : 0.0, 

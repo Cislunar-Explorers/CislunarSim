@@ -21,7 +21,7 @@ def main():
     stats = pstats.Stats(pr)
     stats.sort_stats(pstats.SortKey.TIME)
     stats.dump_stats(filename="for_snakeviz.prof")
-    print("Writing to for_snakeviz.prof")
+
     # Now you can investigate the results with `snakevix for_snakeviz.prof`
 
 

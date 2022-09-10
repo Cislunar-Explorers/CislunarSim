@@ -1,6 +1,6 @@
 import unittest
 from core.models.model_list import PositionDynamics
-from core.state.statetime import StateTime
+from core.state import StateTime
 from utils.test_utils import state_1, d3456
 
 
@@ -11,7 +11,7 @@ class PositionDynamicsModelTest(unittest.TestCase):
 
     def test_position_dynamics_model(self):
         """
-        This function tests the position dynamics model's d_state function.
+        Tests the position dynamics model's d_state function.
         """
         base_state = StateTime(state_1)
         dummy_pd = PositionDynamics(d3456)

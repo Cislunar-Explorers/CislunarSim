@@ -7,7 +7,7 @@ from jsonschema import Draft3Validator, ValidationError
 from utils.constants import ModelEnum
 
 from core.parameters import Parameters
-from core.state.statetime import StateTime
+from core.state import StateTime
 
 
 class MutationException(Exception):
