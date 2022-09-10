@@ -105,8 +105,6 @@ class AttitudeDynamics(EnvironmentModel):
                 +   [(omega_{B/N}) x (I_b (omega_{B/N}))]
                 + c [(omega_{B/N}) - (omega_{D/N})]
         where c is the "Kane Damping" constant.
-
-
         """
 
         s = state_time.state

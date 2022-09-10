@@ -9,18 +9,14 @@ from typing import Union, Tuple, List
 
 
 class DerivedStateModel(Model):
-    """
-    Abstract Base class for all models this sim uses.
-    """
+    """Abstract Base class for all models this sim uses."""
 
     def __init__(self) -> None:
         pass
 
     @abstractmethod
     def evaluate(self, time: float, state: State) -> Dict[str, Union[float, int, bool]]:
-        """
-        Abstract method for any model that evaluates the model based on the
-            current state.
+        """Evaluates the model based on the current state.
         An instance of State is required to evaluate the model, (because each
             model should be dependent on the state of the system.)
         Args:

@@ -15,13 +15,10 @@ _DESCRIPTION = """CISLUNAR Simulation Runner!"""
 
 
 class SimRunner:
-    """
-    This class serves as the main entry point to the sim.
-    """
+    """This class serves as the main entry point to the sim."""
 
     def __init__(self, config: Union[Config, None] = None) -> None:
-        """
-        Runs the sim from specified config path or from a Config Object.
+        """Runs the sim from specified config path or from a Config Object.
 
         Input structure:
             "python3 src/main.py {file path} [-v]"

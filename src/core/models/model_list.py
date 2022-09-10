@@ -9,9 +9,7 @@ from utils.constants import ModelEnum, State_Type
 from core.models.dynamics_model import AttitudeDynamics
 
 class PositionDynamics(EnvironmentModel):
-    """
-    The position dynamics model implementation.
-    """
+    """The position dynamics model implementation."""
 
     def __init__(self, parameters) -> None:
         super().__init__(parameters)
@@ -20,7 +18,7 @@ class PositionDynamics(EnvironmentModel):
         return super().evaluate(state_time)
 
     def d_state(self, state_time: StateTime) -> Dict[str, State_Type]:
-        """ Takes the derivative of a vector [r v] to compute [v a], where r is a position vector,
+        """Takes the derivative of a vector [r v] to compute [v a], where r is a position vector,
         v is the velocity vector, and a is the acceleration vector
         Args:
             t (float): the initial time
