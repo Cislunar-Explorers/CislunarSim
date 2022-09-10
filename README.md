@@ -48,8 +48,10 @@ python src/utils/plot.py {file path}
 
 #### Example:  
 ```zsh
-python src/utils/plot.py runs/cislunarsim-1650068219.9772968.csv
+python src/utils/plot.py runs/cislunarsim-355942804.csv
 ```
+
+*Note: The above is an example CSV file that does not exist locally on your system.
 
 ## IMPORTANT: Python Version MUST be >=3.8
 
