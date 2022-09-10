@@ -45,9 +45,18 @@ class DerivedState:
     # earth to the craft
     r_ec: np.ndarray = np.array((0.0, 0.0, 0.0))
 
+    # attitude (unit) vector of spacecraft in ECI
+    attitude_vector: np.ndarray = np.array((0.0, 0.0, 0.0))
+
+    # Azimuth angle of the spacecraft frame in ECI. "Theta" angle in spherical coords
+    azimuth: float = 0  # radians
+
+    # Elevation angle of the spacecraft frame in ECI. "phi" angle in spherical coords
+    elevation: float = 0  # radians
+
     def update(self, derived_state_dict: Dict) -> None:
         """
-        Updates the fields of the derived state with specified
+        update() is a procedure that updates the fields of the derived state with specified
             key/value pairs in derived_state_dict.
         If a key in the `derived_state_dict` is not defined as an attribute in DerivedState.
             __init__, it will be ignored.
