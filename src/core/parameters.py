@@ -3,8 +3,7 @@ from typing import Dict
 
 
 class Parameters:
-    """
-    This is a container class for all parameters as defined in this sheet:
+    """This is a container class for all parameters as defined in this sheet:
      https://cornell.box.com/s/z20wbp66q0pseqievmadf515ucd971g2.
     """
 

@@ -8,6 +8,8 @@ from matplotlib.widgets import Slider
 
 
 class Plot:
+    """Handles all data output, processing, and visual representation in matplotlib."""
+
     def __init__(self, df):
         self.df = df
 
@@ -181,15 +183,34 @@ class Plot:
         plt.show()
 
     def animate_traj(self, num, locs, line):
+        """Handles trajectory line positioning and updating
+
+        Args:
+            num (int): counter that increments on each call to this function
+            locs (npt.ArrayLike): the trajectory location data
+            line (_type_): the trajectory that is being modified and plotted
+
+        Returns:
+            line: the updated trajectory
+        """
+
         self.ax.set_title(
-            "Apollo 12 SIVB \nTime = "
-            + datetime.utcfromtimestamp(self.ts[num]).strftime("%Y-%m-%d %H:%M:%S")
+            "Cislunar Sim \nTime = "
+            + datetime.utcfromtimestamp(self.times[num]).strftime("%Y-%m-%d %H:%M:%S")
         )
         line.set_data(locs[0:2, :num])
         line.set_3d_properties(locs[2, :num])
         return line
 
     def animate_moon(self, num, locs, moon):
+        """Handles moon positioning and updating
+
+        Args:
+            num (int): counter that increments on each call to this function
+            locs (npt.ArrayLike): the moon trajectory location data
+            moon (list): the moon object at the current location (should be a list of size 1, may change this in the future)
+        """
+
         moon_cx = float(
             self.df["true_state.derived_state.r_mo"][num].strip("[]").split(" ")[1]
         )
@@ -206,3 +227,20 @@ class Plot:
 
         moon[0].remove()
         moon[0] = self.ax.plot_surface(moon_x, moon_y, moon_z, color="gray")
+
+    def plot_quat(self):
+        quat_v1s = self.df["true_state.state.quat_v1"]
+        quat_v2s = self.df["true_state.state.quat_v2"]
+        quat_v3s = self.df["true_state.state.quat_v3"]
+        quat_rs = self.df["true_state.state.quat_r"]
+
+        fig = plt.figure()
+        plt.plot(self.times, quat_v1s, alpha=0.8, label="v1")
+        plt.plot(self.times, quat_v2s, alpha=0.8, label="v2")
+        plt.plot(self.times, quat_v3s, alpha=0.8, label="v3")
+        plt.plot(self.times, quat_rs, "--", alpha=0.8, label="r")
+        plt.xlabel("Time")
+        plt.ylabel("")
+        plt.title("Attitude Quaternion")
+        plt.legend()
+        plt.savefig(fname="attitude_plot.png")
