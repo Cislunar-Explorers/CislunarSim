@@ -31,7 +31,7 @@ class Plot:
         self.ax_pos = plt.subplot(322)
         self.ax_ang_vel_x = plt.subplot(323)
 
-        self.ax_vel.set_xlim(self.ax_vel.get_xlim())
+        # self.ax_vel.set_xlim(self.ax_vel.get_xlim())
 
         axcolor = "lightgoldenrodyellow"
         axfreq = plt.axes([0.1, 0.1, 0.5, 0.01], facecolor=axcolor)
@@ -90,17 +90,16 @@ class Plot:
         # plt.show()
 
     def update(self, _):
+        print(self.t_max.val)
+        print(self.t_max.val - self.ts[0])
+        print(self.ts[-1] - self.ts[0])
+        print((self.ts[-1] - self.ts[0]) // len(self.ts))
+        print(len(self.ts))
         t_max_index = int(
             (self.t_max.val - self.ts[0])
             // ((self.ts[-1] - self.ts[0]) // len(self.ts))
         )
-
-        print(self.t_max.val)
-        print(self.t_max.val - self.ts[0])
-        print((self.ts[-1] - self.ts[0]) // len(self.ts))
         print(t_max_index)
-        print(len(self.ts))
-
         self.sub_ts = self.ts[:t_max_index:]
         self.sub_xlocs = self.xlocs[:t_max_index:]
         self.sub_ylocs = self.ylocs[:t_max_index:]
