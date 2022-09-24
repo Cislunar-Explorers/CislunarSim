@@ -104,7 +104,7 @@ class Plot:
         self.fig_2d.canvas.flush_events()
 
     def plot_data_2d(self) -> None:
-        """Procedure that displays 2d plots of spacecraft data"""
+        """Displays 2d plots of spacecraft data"""
 
         (self.vel_xs_line,) = self.ax_vel.plot(
             self.ts, self.vel_xs, "--", c="hotpink", label="x"
@@ -149,7 +149,7 @@ class Plot:
         self.ax_ang_vel_x.legend()
 
     def plot_data_3d(self):
-        """Procedure that plots a model of the earth, moon and the craft's trajectory in R3"""
+        """Plots a model of the earth, moon and the craft's trajectory in R3"""
 
         locs = np.array([self.xlocs, self.ylocs, self.zlocs])
         traj = plt.plot(self.xlocs, self.ylocs, self.zlocs, lw=2, c="blue")[0]
@@ -233,6 +233,8 @@ class Plot:
         moon[0] = self.ax.plot_surface(moon_x, moon_y, moon_z, color="gray")
 
     def plot_quat(self):
+        """Plots true state quaternion versus time"""
+
         quat_v1s = self.df["true_state.state.quat_v1"]
         quat_v2s = self.df["true_state.state.quat_v2"]
         quat_v3s = self.df["true_state.state.quat_v3"]
