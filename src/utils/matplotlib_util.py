@@ -1,3 +1,4 @@
+from re import X
 import numpy as np
 import matplotlib.pyplot as plt
 from utils.astropy_util import get_body_position
@@ -31,7 +32,12 @@ class Plot:
         self.ax_pos = plt.subplot(322)
         self.ax_ang_vel_x = plt.subplot(323)
 
-        # self.ax_vel.set_xlim(self.ax_vel.get_xlim())
+        self.ax_vel.set_xlim(xmin=7000)
+        self.ax_vel.set_xbound(lower=7000)
+        self.ax_pos.set_xlim(xmin=7000)
+        self.ax_pos.set_xbound(lower=7000)
+        self.ax_ang_vel_x.set_xlim(xmin=7000)
+        self.ax_ang_vel_x.set_xbound(lower=7000)
 
         axcolor = "lightgoldenrodyellow"
         axfreq = plt.axes([0.1, 0.1, 0.5, 0.01], facecolor=axcolor)
@@ -93,11 +99,11 @@ class Plot:
         print(self.t_max.val)
         print(self.t_max.val - self.ts[0])
         print(self.ts[-1] - self.ts[0])
-        print((self.ts[-1] - self.ts[0]) // len(self.ts))
+        print((self.ts[-1] - self.ts[0]) / len(self.ts))
         print(len(self.ts))
         t_max_index = int(
             (self.t_max.val - self.ts[0])
-            // ((self.ts[-1] - self.ts[0]) // len(self.ts))
+            // ((self.ts[-1] - self.ts[0]) / (len(self.ts) - 1))
         )
         print(t_max_index)
         self.sub_ts = self.ts[:t_max_index:]
@@ -120,6 +126,20 @@ class Plot:
         self.ax_ang_vel_x.clear()
         self.plot_data_2d()
 
+    def set_xlims(self):
+        x = self.ts[0]
+        max = self.ts[-1]
+        self.ax_vel.set_xlim(xmin=x, xmax=max)
+        self.ax_pos.set_xlim(xmin=x, xmax=max)
+        self.ax_ang_vel_x.set_xlim(xmin=x, xmax=max)
+
+    def set_xbounds(self):
+        x = self.ts[0]
+        max = self.ts[-1]
+        self.ax_vel.set_xbound(lower=x, upper=max)
+        self.ax_pos.set_xbound(lower=x, upper=max)
+        self.ax_ang_vel_x.set_xbound(lower=x, upper=max)
+
     def plot_data_2d(self) -> None:
         """Procedure that displays 2d plots of spacecraft data"""
 
@@ -137,6 +157,8 @@ class Plot:
         self.ax_ang_vel_x.plot(
             self.sub_ts, self.sub_ang_x_obs, "--", c="green", label="x (observed)"
         )
+
+        self.set_xlims()
 
         self.ax_vel.legend()
         self.ax_pos.legend()
