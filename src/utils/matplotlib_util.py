@@ -132,13 +132,9 @@ class Plot:
         self.ax_vel.set_xlim(xmin=x, xmax=max)
         self.ax_pos.set_xlim(xmin=x, xmax=max)
         self.ax_ang_vel_x.set_xlim(xmin=x, xmax=max)
-
-    def set_xbounds(self):
-        x = self.ts[0]
-        max = self.ts[-1]
-        self.ax_vel.set_xbound(lower=x, upper=max)
-        self.ax_pos.set_xbound(lower=x, upper=max)
-        self.ax_ang_vel_x.set_xbound(lower=x, upper=max)
+        # self.ax_vel.set_xlim(xmin=x)
+        # self.ax_pos.set_xlim(xmin=x)
+        # self.ax_ang_vel_x.set_xlim(xmin=x)
 
     def plot_data_2d(self) -> None:
         """Procedure that displays 2d plots of spacecraft data"""
