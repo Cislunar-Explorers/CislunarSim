@@ -213,7 +213,7 @@ class Plot:
 
         self.ax.set_title(
             "Cislunar Sim \nTime = "
-            + datetime.utcfromtimestamp(self.times[num]).strftime("%Y-%m-%d %H:%M:%S")
+            + datetime.utcfromtimestamp(self.ts[num]).strftime("%Y-%m-%d %H:%M:%S")
         )
         line.set_data(locs[0:2, :num])
         line.set_3d_properties(locs[2, :num])
@@ -252,10 +252,10 @@ class Plot:
         quat_rs = self.df["true_state.state.quat_r"]
 
         fig = plt.figure()
-        plt.plot(self.times, quat_v1s, alpha=0.8, label="v1")
-        plt.plot(self.times, quat_v2s, alpha=0.8, label="v2")
-        plt.plot(self.times, quat_v3s, alpha=0.8, label="v3")
-        plt.plot(self.times, quat_rs, "--", alpha=0.8, label="r")
+        plt.plot(self.ts, quat_v1s, alpha=0.8, label="v1")
+        plt.plot(self.ts, quat_v2s, alpha=0.8, label="v2")
+        plt.plot(self.ts, quat_v3s, alpha=0.8, label="v3")
+        plt.plot(self.ts, quat_rs, "--", alpha=0.8, label="r")
         plt.xlabel("Time")
         plt.ylabel("")
         plt.title("Attitude Quaternion")
