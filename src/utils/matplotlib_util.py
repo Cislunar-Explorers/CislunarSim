@@ -83,6 +83,8 @@ class Plot:
         plt.tight_layout()
 
     def update(self, _):
+        """Updates plotted data in response to slider value change"""
+
         t_selected_range = self.t_max.val - self.ts[0]
         t_max_index = int(t_selected_range // D_T)
 
