@@ -1,4 +1,3 @@
-from re import X
 import numpy as np
 import matplotlib.pyplot as plt
 from utils.astropy_util import get_body_position
@@ -28,16 +27,13 @@ class Plot:
         self.ang_x_obs = df["observed_state.ang_vel_x"].to_numpy()
 
         self.fig_2d = plt.figure()
-        self.ax_vel = plt.subplot(321)
-        self.ax_pos = plt.subplot(322)
-        self.ax_ang_vel_x = plt.subplot(323)
+        self.ax_vel = plt.subplot(421)
+        self.ax_pos = plt.subplot(422)
+        self.ax_ang_vel_x = plt.subplot(425)
 
-        self.ax_vel.set_xlim(xmin=7000)
-        self.ax_vel.set_xbound(lower=7000)
-        self.ax_pos.set_xlim(xmin=7000)
-        self.ax_pos.set_xbound(lower=7000)
-        self.ax_ang_vel_x.set_xlim(xmin=7000)
-        self.ax_ang_vel_x.set_xbound(lower=7000)
+        self.ax_vel.set_xlim(xmin=self.ts[0], xmax=self.ts[-1])
+        self.ax_pos.set_xlim(xmin=self.ts[0], xmax=self.ts[-1])
+        self.ax_ang_vel_x.set_xlim(xmin=self.ts[0], xmax=self.ts[-1])
 
         axcolor = "lightgoldenrodyellow"
         axfreq = plt.axes([0.1, 0.1, 0.5, 0.01], facecolor=axcolor)
@@ -50,15 +46,6 @@ class Plot:
             valstep=D_T,
         )
         self.t_max.on_changed(self.update)
-        self.sub_ts = np.copy(self.ts)
-        self.sub_xlocs = np.copy(self.xlocs)
-        self.sub_ylocs = np.copy(self.ylocs)
-        self.sub_zlocs = np.copy(self.zlocs)
-        self.sub_vel_xs = np.copy(self.vel_xs)
-        self.sub_vel_ys = np.copy(self.vel_ys)
-        self.sub_vel_zs = np.copy(self.vel_zs)
-        self.sub_ang_x = np.copy(self.ang_x)
-        self.sub_ang_x_obs = np.copy(self.ang_x_obs)
 
         self.fig_3d = plt.figure("CislunarSim")
         self.ax = self.fig_3d.gca(projection="3d")
@@ -88,73 +75,71 @@ class Plot:
             arrowprops=dict(arrowstyle="->"),
         )
         self.annot.set_visible(False)
+        self.lines_2d = []
 
     def plot_data(self) -> None:
         self.plot_data_2d()
         self.plot_data_3d()
         plt.tight_layout()
-        # plt.show()
 
     def update(self, _):
-        print(self.t_max.val)
-        print(self.t_max.val - self.ts[0])
-        print(self.ts[-1] - self.ts[0])
-        print((self.ts[-1] - self.ts[0]) / len(self.ts))
-        print(len(self.ts))
-        t_max_index = int(
-            (self.t_max.val - self.ts[0])
-            // ((self.ts[-1] - self.ts[0]) / (len(self.ts) - 1))
-        )
-        print(t_max_index)
-        self.sub_ts = self.ts[:t_max_index:]
-        self.sub_xlocs = self.xlocs[:t_max_index:]
-        self.sub_ylocs = self.ylocs[:t_max_index:]
-        self.sub_zlocs = self.zlocs[:t_max_index:]
-        self.sub_vel_xs = self.vel_xs[:t_max_index:]
-        self.sub_vel_ys = self.vel_ys[:t_max_index:]
-        self.sub_vel_zs = self.vel_zs[:t_max_index:]
-        self.sub_ang_x = self.ang_x[:t_max_index:]
-        self.sub_ang_x_obs = self.ang_x_obs[:t_max_index:]
+        t_selected_range = self.t_max.val - self.ts[0]
+        t_max_index = int(t_selected_range // D_T)
 
-        print(self.sub_ts)
-        # l.set_ydata(amp*np.sin(2*np.pi*freq*t))
-        self.fig_2d.canvas.draw_idle()
+        self.vel_xs_line.set_ydata(self.vel_xs[:t_max_index:])
+        self.vel_ys_line.set_ydata(self.vel_ys[:t_max_index:])
+        self.vel_zs_line.set_ydata(self.vel_zs[:t_max_index:])
+        self.xlocs_line.set_ydata(self.xlocs[:t_max_index:])
+        self.ylocs_line.set_ydata(self.ylocs[:t_max_index:])
+        self.zlocs_line.set_ydata(self.zlocs[:t_max_index:])
+        self.ang_x_line.set_ydata(self.ang_x[:t_max_index:])
+        self.ang_x_obs_line.set_ydata(self.ang_x_obs[:t_max_index:])
+
+        for line in self.lines_2d:
+            line.set_xdata(self.ts[:t_max_index:])
+
+        self.fig_2d.canvas.draw()
         self.fig_2d.canvas.flush_events()
-
-        self.ax_vel.clear()
-        self.ax_pos.clear()
-        self.ax_ang_vel_x.clear()
-        self.plot_data_2d()
-
-    def set_xlims(self):
-        x = self.ts[0]
-        max = self.ts[-1]
-        self.ax_vel.set_xlim(xmin=x, xmax=max)
-        self.ax_pos.set_xlim(xmin=x, xmax=max)
-        self.ax_ang_vel_x.set_xlim(xmin=x, xmax=max)
-        # self.ax_vel.set_xlim(xmin=x)
-        # self.ax_pos.set_xlim(xmin=x)
-        # self.ax_ang_vel_x.set_xlim(xmin=x)
 
     def plot_data_2d(self) -> None:
         """Procedure that displays 2d plots of spacecraft data"""
 
-        self.ax_vel.plot(self.sub_ts, self.sub_vel_xs, "--", c="hotpink", label="x")
-        self.ax_vel.plot(self.sub_ts, self.sub_vel_ys, "--", c="green", label="y")
-        self.ax_vel.plot(self.sub_ts, self.sub_vel_zs, "--", c="blue", label="z")
-
-        self.ax_pos.plot(self.sub_ts, self.sub_xlocs, "--", c="hotpink", label="x")
-        self.ax_pos.plot(self.sub_ts, self.sub_ylocs, "--", c="green", label="y")
-        self.ax_pos.plot(self.sub_ts, self.sub_zlocs, "--", c="blue", label="z")
-
-        self.ax_ang_vel_x.plot(
-            self.sub_ts, self.sub_ang_x, "--", c="hotpink", label="x (true)"
+        (self.vel_xs_line,) = self.ax_vel.plot(
+            self.ts, self.vel_xs, "--", c="hotpink", label="x"
         )
-        self.ax_ang_vel_x.plot(
-            self.sub_ts, self.sub_ang_x_obs, "--", c="green", label="x (observed)"
+        (self.vel_ys_line,) = self.ax_vel.plot(
+            self.ts, self.vel_ys, "--", c="green", label="y"
+        )
+        (self.vel_zs_line,) = self.ax_vel.plot(
+            self.ts, self.vel_zs, "--", c="blue", label="z"
         )
 
-        self.set_xlims()
+        (self.xlocs_line,) = self.ax_pos.plot(
+            self.ts, self.xlocs, "--", c="hotpink", label="x"
+        )
+        (self.ylocs_line,) = self.ax_pos.plot(
+            self.ts, self.ylocs, "--", c="green", label="y"
+        )
+        (self.zlocs_line,) = self.ax_pos.plot(
+            self.ts, self.zlocs, "--", c="blue", label="z"
+        )
+
+        (self.ang_x_line,) = self.ax_ang_vel_x.plot(
+            self.ts, self.ang_x, "--", c="hotpink", label="x (true)"
+        )
+        (self.ang_x_obs_line,) = self.ax_ang_vel_x.plot(
+            self.ts, self.ang_x_obs, "--", c="green", label="x (observed)"
+        )
+        self.lines_2d = [
+            self.vel_xs_line,
+            self.vel_ys_line,
+            self.vel_zs_line,
+            self.xlocs_line,
+            self.ylocs_line,
+            self.zlocs_line,
+            self.ang_x_line,
+            self.ang_x_obs_line,
+        ]
 
         self.ax_vel.legend()
         self.ax_pos.legend()
