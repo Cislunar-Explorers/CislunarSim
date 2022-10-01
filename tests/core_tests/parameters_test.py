@@ -2,14 +2,14 @@ import unittest
 
 from core.parameters import Parameters
 import math
-from utils.test_utils import d3456
+from utils.test_utils import d3456, d3456_dict
 
 
 class ParametersTestCase(unittest.TestCase):
     def test_parameters(self):
         self.assertEqual(
-            d3456,
-            Parameters(d3456).__dict__,
+            d3456_dict,
+            d3456.__dict__,
         )
 
         d_main = {
