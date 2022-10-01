@@ -60,6 +60,8 @@ class Plot:
         )
         self.annot.set_visible(False)
         self.paused = False
+        self.pause_ax = plt.axes([0.85, 0.02, 0.1, 0.075])
+        self.play_ax = plt.axes([0.85, 0.1, 0.1, 0.075])
 
     def plot_data(self) -> None:
         self.plot_data_2d()
@@ -123,8 +125,8 @@ class Plot:
         self.moon_ani = animation.FuncAnimation(
             self.fig_3d, self.animate_moon, frames=len(self.xlocs), fargs=(locs, moon)
         )
-        self.pause_button = Button(plt.axes([0.85, 0.02, 0.1, 0.075]), "Pause")
-        self.play_button = Button(plt.axes([0.85, 0.1, 0.1, 0.075]), "Play")
+        self.pause_button = Button(self.pause_ax, "Pause")
+        self.play_button = Button(self.play_ax, "Play")
         self.pause_button.on_clicked(self.toggle_pause)
         self.play_button.on_clicked(self.toggle_pause)
         plt.show()
