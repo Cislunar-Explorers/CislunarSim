@@ -35,6 +35,8 @@ python src/main.py configs/iss.json
 python src/main.py configs/test_angles.json -v
 ```
 
+We recommend setting your `D_T` value (the timestep length) in `constants.py` to be between 100 - 300. If you're looking for a faster run, you'll want to set it on the higher side of that range.
+
 ## Plotting Sim Runs
 
 #### Usage:  
