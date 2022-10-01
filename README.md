@@ -53,8 +53,6 @@ python src/utils/plot.py runs/cislunarsim-355942804.csv
 
 *Note: The above is an example CSV file that does not exist locally on your system.*
 
-We recommend setting your `D_T` value (the timestep length) in `constants.py` to be between 100 - 300. If you're looking for a faster run, you'll want to set it on the higher side of that range.
-
 ## IMPORTANT: Python Version MUST be >=3.8
 
 Run `python --version` to find your Python version. If it's lower than 3.8, you must upgrade your Python version:
