@@ -4,6 +4,8 @@ from utils.astropy_util import get_body_position
 import matplotlib.animation as animation
 from utils.constants import BodyEnum, R_EARTH, R_MOON
 from datetime import datetime
+from matplotlib.widgets import Button
+
 
 class Plot:
     """Handles all data output, processing, and visual representation in matplotlib."""
@@ -16,8 +18,7 @@ class Plot:
         self.ax_ang_vel_x = plt.subplot(223)
 
         self.fig_3d = plt.figure("CislunarSim")
-        self.ax = self.fig_3d.gca(projection='3d')
-
+        self.ax = self.fig_3d.add_subplot(1, 1, 1, projection="3d")
         self.u = np.linspace(0, 2 * np.pi, 60)
         self.v = np.linspace(0, np.pi, 60)
 
@@ -58,12 +59,13 @@ class Plot:
             arrowprops=dict(arrowstyle="->"),
         )
         self.annot.set_visible(False)
+        self.paused = False
 
     def plot_data(self) -> None:
         self.plot_data_2d()
         self.plot_data_3d()
         plt.tight_layout()
-        #plt.show()
+        # plt.show()
 
     def plot_data_2d(self) -> None:
         """Procedure that displays 2d plots of spacecraft data"""
@@ -90,8 +92,8 @@ class Plot:
 
         locs = np.array([self.xlocs, self.ylocs, self.zlocs])
         traj = plt.plot(self.xlocs, self.ylocs, self.zlocs, lw=2, c="blue")[0]
-        
-        traj_ani = animation.FuncAnimation(
+
+        self.traj_ani = animation.FuncAnimation(
             self.fig_3d,
             self.animate_traj,
             frames=len(self.xlocs),
@@ -100,15 +102,15 @@ class Plot:
             blit=False,
         )
 
-        self.ax.set_box_aspect(aspect = (1,1,1))
+        self.ax.set_box_aspect(aspect=(1, 1, 1))
 
         # Calculation and plotting of earth's position
-       
+
         earth_x = R_EARTH * np.outer(np.cos(self.u), np.sin(self.v))
         earth_y = R_EARTH * np.outer(np.sin(self.u), np.sin(self.v))
         earth_z = R_EARTH * np.outer(np.ones(np.size(self.u)), np.cos(self.v))
 
-        earth = [self.ax.plot_surface(earth_x, earth_y, earth_z, color="g")]
+        self.earth = [self.ax.plot_surface(earth_x, earth_y, earth_z, color="g")]
 
         # Calculation and plotting of moon's position
         moon_cx, moon_cy, moon_cz = get_body_position(self.ts[-1], BodyEnum.Moon)
@@ -118,13 +120,25 @@ class Plot:
 
         moon = [self.ax.plot_surface(moon_x, moon_y, moon_z, color="gray")]
 
-        moon_ani = animation.FuncAnimation(
-            self.fig_3d,
-            self.animate_moon,
-            frames=len(self.xlocs),
-            fargs=(locs, moon)
+        self.moon_ani = animation.FuncAnimation(
+            self.fig_3d, self.animate_moon, frames=len(self.xlocs), fargs=(locs, moon)
         )
+        self.pause_button = Button(plt.axes([0.85, 0.02, 0.1, 0.075]), "Pause")
+        self.play_button = Button(plt.axes([0.85, 0.1, 0.1, 0.075]), "Play")
+        self.pause_button.on_clicked(self.toggle_pause)
+        self.play_button.on_clicked(self.toggle_pause)
         plt.show()
+
+    def toggle_pause(self, click_event):
+        if self.paused:
+            self.play_button.set_active(False)
+            self.pause_button.set_active(True)
+            self.traj_ani.resume()
+        else:
+            self.play_button.set_active(True)
+            self.pause_button.set_active(False)
+            self.traj_ani.pause()
+        self.paused = not self.paused
 
     def animate_traj(self, num, locs, line):
         """Handles trajectory line positioning and updating
@@ -138,7 +152,10 @@ class Plot:
             line: the updated trajectory
         """
 
-        self.ax.set_title('Cislunar Sim \nTime = ' + datetime.utcfromtimestamp(self.times[num]).strftime('%Y-%m-%d %H:%M:%S'))
+        self.ax.set_title(
+            "Cislunar Sim \nTime = "
+            + datetime.utcfromtimestamp(self.times[num]).strftime("%Y-%m-%d %H:%M:%S")
+        )
         line.set_data(locs[0:2, :num])
         line.set_3d_properties(locs[2, :num])
         return line
@@ -152,23 +169,28 @@ class Plot:
             moon (list): the moon object at the current location (should be a list of size 1, may change this in the future)
         """
 
-        moon_cx = float(self.df["true_state.derived_state.r_mo"][num].strip("[]").split(" ")[1])
-        moon_cy = float(self.df["true_state.derived_state.r_mo"][num].strip("[]").split(" ")[2])
-        moon_cz = float(self.df["true_state.derived_state.r_mo"][num].strip("[]").split(" ")[3])
-        
+        moon_cx = float(
+            self.df["true_state.derived_state.r_mo"][num].strip("[]").split(" ")[1]
+        )
+        moon_cy = float(
+            self.df["true_state.derived_state.r_mo"][num].strip("[]").split(" ")[2]
+        )
+        moon_cz = float(
+            self.df["true_state.derived_state.r_mo"][num].strip("[]").split(" ")[3]
+        )
+
         moon_x = moon_cx + R_MOON * np.outer(np.cos(self.u), np.sin(self.v))
         moon_y = moon_cy + R_MOON * np.outer(np.sin(self.u), np.sin(self.v))
         moon_z = moon_cz + R_MOON * np.outer(np.ones(np.size(self.u)), np.cos(self.v))
 
         moon[0].remove()
         moon[0] = self.ax.plot_surface(moon_x, moon_y, moon_z, color="gray")
-    
+
     def plot_quat(self):
         quat_v1s = self.df["true_state.state.quat_v1"]
         quat_v2s = self.df["true_state.state.quat_v2"]
         quat_v3s = self.df["true_state.state.quat_v3"]
         quat_rs = self.df["true_state.state.quat_r"]
-
 
         fig = plt.figure()
         plt.plot(self.times, quat_v1s, alpha=0.8, label="v1")
