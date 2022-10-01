@@ -13,9 +13,9 @@ source venv/bin/activate
 pip install -e .
 ```
 
-You can exit this environment by running `deactivate`. To re-enter an existing environment, all you need is `source venv/bin/activate`.  
+You can exit this environment by running `deactivate`. To re-enter an existing environment, all you need is `source venv/bin/activate`.
 
-*Note: Some problems have been known to occur if your [pip](https://pypi.org/project/pip/) is not updated. Follow the warning prompt your terminal gives if this happens.*
+_Note: Some problems have been known to occur if your [pip](https://pypi.org/project/pip/) is not updated. Follow the warning prompt your terminal gives if this happens._
 
 ## Running the Sim
 
@@ -25,33 +25,37 @@ You can exit this environment by running `deactivate`. To re-enter an existing e
 python src/main.py {file path} [-v]
 ```
 
-#### Options:  
-`file path` *(Required)*: The path of the config file to simulate  
-`-v` *(Optional)*: Verbose mode for logging extra information to the terminal
+#### Options:
 
-#### Examples:  
+`file path` _(Required)_: The path of the config file to simulate  
+`-v` _(Optional)_: Verbose mode for logging extra information to the terminal
+
+#### Examples:
+
 ```zsh
-python src/main.py configs/iss.json 
+python src/main.py configs/iss.json
 python src/main.py configs/test_angles.json -v
 ```
 
 ## Plotting Sim Runs
 
-#### Usage:  
+#### Usage:
 
 ```zsh
 python src/utils/plot.py {file path}
 ```
 
-#### Options:  
-`file path` *(Required)*: The path of the csv file to plot  
+#### Options:
 
-#### Example:  
+`file path` _(Required)_: The path of the csv file to plot
+
+#### Example:
+
 ```zsh
 python src/utils/plot.py runs/cislunarsim-355942804.csv
 ```
 
-*Note: The above is an example CSV file that does not exist locally on your system.*
+_Note: The above is an example CSV file that does not exist locally on your system._
 
 We recommend setting your `D_T` value (the timestep length) in `constants.py` to be between 100 - 300. If you're looking for a faster run, you'll want to set it on the higher side of that range.
 
