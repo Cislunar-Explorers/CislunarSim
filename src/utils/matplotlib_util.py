@@ -2,9 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from utils.astropy_util import get_body_position
 import matplotlib.animation as animation
-from utils.constants import BodyEnum, R_EARTH, R_MOON
+from utils.constants import D_T, BodyEnum, R_EARTH, R_MOON
 from datetime import datetime
-from matplotlib.widgets import Button
+from matplotlib.widgets import Button, Slider
 
 
 class Plot:
@@ -12,13 +12,44 @@ class Plot:
 
     def __init__(self, df):
         self.df = df
+
+        self.ts = df["true_state.time"].to_numpy()
+
+        self.xlocs = df["true_state.state.x"].to_numpy()
+        self.ylocs = df["true_state.state.y"].to_numpy()
+        self.zlocs = df["true_state.state.z"].to_numpy()
+        self.vel_xs = df["true_state.state.vel_x"].to_numpy()
+        self.vel_ys = df["true_state.state.vel_y"].to_numpy()
+        self.vel_zs = df["true_state.state.vel_z"].to_numpy()
+
+        self.locs = np.array([self.xlocs, self.ylocs, self.zlocs])
+        self.ang_x = df["true_state.state.ang_vel_x"].to_numpy()
+        self.ang_x_obs = df["observed_state.ang_vel_x"].to_numpy()
+
         self.fig_2d = plt.figure()
-        self.ax_vel = plt.subplot(221)
-        self.ax_pos = plt.subplot(222)
-        self.ax_ang_vel_x = plt.subplot(223)
+        self.ax_vel = plt.subplot(421)
+        self.ax_pos = plt.subplot(422)
+        self.ax_ang_vel_x = plt.subplot(425)
+
+        self.ax_vel.set_xlim(xmin=self.ts[0], xmax=self.ts[-1])
+        self.ax_pos.set_xlim(xmin=self.ts[0], xmax=self.ts[-1])
+        self.ax_ang_vel_x.set_xlim(xmin=self.ts[0], xmax=self.ts[-1])
+
+        axcolor = "lightgoldenrodyellow"
+        axfreq = plt.axes([0.1, 0.1, 0.5, 0.01], facecolor=axcolor)
+        self.t_max = Slider(
+            axfreq,
+            "t",
+            self.ts[0],
+            self.ts[-1],
+            valinit=self.ts[-1],
+            valstep=D_T,
+        )
+        self.t_max.on_changed(self.update)
 
         self.fig_3d = plt.figure("CislunarSim")
-        self.ax = self.fig_3d.add_subplot(1, 1, 1, projection="3d")
+        self.ax = self.fig_3d.gca(projection="3d")
+
         self.u = np.linspace(0, 2 * np.pi, 60)
         self.v = np.linspace(0, np.pi, 60)
 
@@ -34,21 +65,6 @@ class Plot:
 
         self.ax_pos.set_xlabel("t")
         self.ax_pos.set_ylabel("Position")
-
-        self.ts = df["true_state.time"].to_numpy()
-
-        self.xlocs = df["true_state.state.x"].to_numpy()
-        self.ylocs = df["true_state.state.y"].to_numpy()
-        self.zlocs = df["true_state.state.z"].to_numpy()
-        self.vel_xs = df["true_state.state.vel_x"].to_numpy()
-        self.vel_ys = df["true_state.state.vel_y"].to_numpy()
-        self.vel_zs = df["true_state.state.vel_z"].to_numpy()
-
-        self.times = df["true_state.time"].to_numpy()
-
-        self.locs = np.array([self.xlocs, self.ylocs, self.zlocs])
-        self.ang_x = df["true_state.state.ang_vel_x"].to_numpy()
-        self.ang_x_obs = df["observed_state.ang_vel_x"].to_numpy()
 
         self.annot = self.ax.annotate(
             "",
@@ -68,19 +84,44 @@ class Plot:
         # plt.show()
 
     def plot_data_2d(self) -> None:
-        """Procedure that displays 2d plots of spacecraft data"""
-        self.ax_vel.plot(self.ts, self.vel_xs, "--", c="hotpink", label="x")
-        self.ax_vel.plot(self.ts, self.vel_ys, "--", c="green", label="y")
-        self.ax_vel.plot(self.ts, self.vel_zs, "--", c="blue", label="z")
+        """Displays 2d plots of spacecraft data"""
 
-        self.ax_pos.plot(self.ts, self.xlocs, "--", c="hotpink", label="x")
-        self.ax_pos.plot(self.ts, self.ylocs, "--", c="green", label="y")
-        self.ax_pos.plot(self.ts, self.zlocs, "--", c="blue", label="z")
+        (self.vel_xs_line,) = self.ax_vel.plot(
+            self.ts, self.vel_xs, "--", c="hotpink", label="x"
+        )
+        (self.vel_ys_line,) = self.ax_vel.plot(
+            self.ts, self.vel_ys, "--", c="green", label="y"
+        )
+        (self.vel_zs_line,) = self.ax_vel.plot(
+            self.ts, self.vel_zs, "--", c="blue", label="z"
+        )
 
-        self.ax_ang_vel_x.plot(self.ts, self.ang_x, "--", c="hotpink", label="x (true)")
-        self.ax_ang_vel_x.plot(
+        (self.xlocs_line,) = self.ax_pos.plot(
+            self.ts, self.xlocs, "--", c="hotpink", label="x"
+        )
+        (self.ylocs_line,) = self.ax_pos.plot(
+            self.ts, self.ylocs, "--", c="green", label="y"
+        )
+        (self.zlocs_line,) = self.ax_pos.plot(
+            self.ts, self.zlocs, "--", c="blue", label="z"
+        )
+
+        (self.ang_x_line,) = self.ax_ang_vel_x.plot(
+            self.ts, self.ang_x, "--", c="hotpink", label="x (true)"
+        )
+        (self.ang_x_obs_line,) = self.ax_ang_vel_x.plot(
             self.ts, self.ang_x_obs, "--", c="green", label="x (observed)"
         )
+        self.lines_2d = [
+            self.vel_xs_line,
+            self.vel_ys_line,
+            self.vel_zs_line,
+            self.xlocs_line,
+            self.ylocs_line,
+            self.zlocs_line,
+            self.ang_x_line,
+            self.ang_x_obs_line,
+        ]
 
         self.ax_vel.legend()
         self.ax_pos.legend()
@@ -88,7 +129,7 @@ class Plot:
         self.ax_ang_vel_x.legend()
 
     def plot_data_3d(self):
-        """Procedure that plots a model of the earth, moon and the craft's trajectory in R3"""
+        """Plots a model of the earth, moon and the craft's trajectory in R3"""
 
         locs = np.array([self.xlocs, self.ylocs, self.zlocs])
         traj = plt.plot(self.xlocs, self.ylocs, self.zlocs, lw=2, c="blue")[0]
@@ -154,7 +195,7 @@ class Plot:
 
         self.ax.set_title(
             "Cislunar Sim \nTime = "
-            + datetime.utcfromtimestamp(self.times[num]).strftime("%Y-%m-%d %H:%M:%S")
+            + datetime.utcfromtimestamp(self.ts[num]).strftime("%Y-%m-%d %H:%M:%S")
         )
         line.set_data(locs[0:2, :num])
         line.set_3d_properties(locs[2, :num])
@@ -187,16 +228,18 @@ class Plot:
         moon[0] = self.ax.plot_surface(moon_x, moon_y, moon_z, color="gray")
 
     def plot_quat(self):
+        """Plots true state quaternion versus time"""
+
         quat_v1s = self.df["true_state.state.quat_v1"]
         quat_v2s = self.df["true_state.state.quat_v2"]
         quat_v3s = self.df["true_state.state.quat_v3"]
         quat_rs = self.df["true_state.state.quat_r"]
 
         fig = plt.figure()
-        plt.plot(self.times, quat_v1s, alpha=0.8, label="v1")
-        plt.plot(self.times, quat_v2s, alpha=0.8, label="v2")
-        plt.plot(self.times, quat_v3s, alpha=0.8, label="v3")
-        plt.plot(self.times, quat_rs, "--", alpha=0.8, label="r")
+        plt.plot(self.ts, quat_v1s, alpha=0.8, label="v1")
+        plt.plot(self.ts, quat_v2s, alpha=0.8, label="v2")
+        plt.plot(self.ts, quat_v3s, alpha=0.8, label="v3")
+        plt.plot(self.ts, quat_rs, "--", alpha=0.8, label="r")
         plt.xlabel("Time")
         plt.ylabel("")
         plt.title("Attitude Quaternion")
