@@ -38,6 +38,8 @@ class State:
     y: float = 0.0
     z: float = 0.0
 
+    cgt_pressure: float = 0.0 # TODO: Get actual value for this
+
     force_propulsion_thrusters: float = 0.0
     fuel_mass: float = 0.0
 
