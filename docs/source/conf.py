@@ -34,7 +34,11 @@ author = "Cislunar Explorers"
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ["sphinx_rtd_theme", "sphinx.ext.autodoc", "sphinxcontrib.napoleon"]
+extensions = ["sphinx_rtd_theme", "sphinx.ext.autodoc", "sphinxcontrib.napoleon", "subprojecttoctree"]
+
+# Configure these docs to be a subproject of the main Cislunar docs
+is_subproject = True
+readthedocs_url = "https://cislunar-explorers-software-documentation.readthedocs.io"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
