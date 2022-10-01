@@ -1,5 +1,6 @@
 import math
 from core.state.state import State
+from core.parameters import Parameters
 
 s_0 = {
     "fill_frac": 0.0,
@@ -49,7 +50,7 @@ s_1 = {
 
 state_1 = State(**s_1)
 
-d3456 = {
+d3456 = Parameters(param_dict={
     "gyro_bias": [0.497625, -0.10821875, 0.77490625],
     "gyro_noise": [0.1824535, 0.11738579, 0.19192256],
     "gyro_sensitivity": 0.015625 * (math.pi / 180),
@@ -58,4 +59,4 @@ d3456 = {
     "tank_volume": 5,
     "thruster_force": 6,
     "max_iter": 1000000
-}
+})
