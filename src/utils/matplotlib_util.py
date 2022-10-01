@@ -4,7 +4,7 @@ from utils.astropy_util import get_body_position
 import matplotlib.animation as animation
 from utils.constants import D_T, BodyEnum, R_EARTH, R_MOON
 from datetime import datetime
-from matplotlib.widgets import Slider
+from matplotlib.widgets import Slider, Button
 
 
 class Plot:
@@ -75,7 +75,7 @@ class Plot:
             arrowprops=dict(arrowstyle="->"),
         )
         self.annot.set_visible(False)
-        self.lines_2d = []
+        self.paused = False
 
     def plot_data(self) -> None:
         self.plot_data_2d()
@@ -154,7 +154,7 @@ class Plot:
         locs = np.array([self.xlocs, self.ylocs, self.zlocs])
         traj = plt.plot(self.xlocs, self.ylocs, self.zlocs, lw=2, c="blue")[0]
 
-        traj_ani = animation.FuncAnimation(
+        self.traj_ani = animation.FuncAnimation(
             self.fig_3d,
             self.animate_traj,
             frames=len(self.xlocs),
@@ -171,7 +171,7 @@ class Plot:
         earth_y = R_EARTH * np.outer(np.sin(self.u), np.sin(self.v))
         earth_z = R_EARTH * np.outer(np.ones(np.size(self.u)), np.cos(self.v))
 
-        earth = [self.ax.plot_surface(earth_x, earth_y, earth_z, color="g", alpha=0.5)]
+        self.earth = [self.ax.plot_surface(earth_x, earth_y, earth_z, color="g")]
 
         # Calculation and plotting of moon's position
         moon_cx, moon_cy, moon_cz = get_body_position(self.ts[-1], BodyEnum.Moon)
@@ -181,10 +181,25 @@ class Plot:
 
         moon = [self.ax.plot_surface(moon_x, moon_y, moon_z, color="gray")]
 
-        moon_ani = animation.FuncAnimation(
+        self.moon_ani = animation.FuncAnimation(
             self.fig_3d, self.animate_moon, frames=len(self.xlocs), fargs=(locs, moon)
         )
+        self.pause_button = Button(plt.axes([0.85, 0.02, 0.1, 0.075]), "Pause")
+        self.play_button = Button(plt.axes([0.85, 0.1, 0.1, 0.075]), "Play")
+        self.pause_button.on_clicked(self.toggle_pause)
+        self.play_button.on_clicked(self.toggle_pause)
         plt.show()
+
+    def toggle_pause(self, click_event):
+        if self.paused:
+            self.play_button.set_active(False)
+            self.pause_button.set_active(True)
+            self.traj_ani.resume()
+        else:
+            self.play_button.set_active(True)
+            self.pause_button.set_active(False)
+            self.traj_ani.pause()
+        self.paused = not self.paused
 
     def animate_traj(self, num, locs, line):
         """Handles trajectory line positioning and updating
