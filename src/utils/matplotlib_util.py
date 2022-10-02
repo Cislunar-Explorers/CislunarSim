@@ -103,6 +103,7 @@ class Plot:
         self.fig_2d.canvas.flush_events()
 
     def update_3D_slider(self, _):
+        """Updates plotted 3D data in response to slider value change"""
         t_selected_range = self.t_3d.val - self.ts[0]
         t_max_index = int(t_selected_range // D_T)
 
@@ -212,6 +213,8 @@ class Plot:
         plt.show()
 
     def toggle_pause(self, _):
+        """Handles pausing and playing of the animations, toggled by the pause and play buttons."""
+
         if self.paused:
             self.play_button.set_active(False)
             self.pause_button.set_active(True)
