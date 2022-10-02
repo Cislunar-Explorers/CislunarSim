@@ -45,9 +45,9 @@ def save_anim(anim: FuncAnimation):
     Args:
         anim (FuncAnimation): The animation of the sim playback.
     """
-    writervideo = PillowWriter(fps=60)
     anim.save(
-        f"{SIM_ROOT}/playbacks/playback-{current_int_time()}.gif", writer=writervideo
+        f"{SIM_ROOT}/playbacks/playback-{current_int_time()}.gif",
+        writer=PillowWriter(fps=60),
     )
 
 
