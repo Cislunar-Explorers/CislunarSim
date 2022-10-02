@@ -44,12 +44,6 @@ def save_anim(anim: FuncAnimation):
 
     Args:
         anim (FuncAnimation): The animation of the sim playback.
-
-    We eventually also want to be able to embed this animation onto a web
-    playback app. We can pass around gif files, or we could embed the animation
-    as an HTML tag. These links give some leads on how to do that.
-    https://stackoverflow.com/questions/55163024/how-to-convert-matplotlib-animation-to-an-html5-video-tag
-    https://www.programcreek.com/python/example/76369/matplotlib.animation
     """
     writervideo = PillowWriter(fps=60)
     anim.save(
