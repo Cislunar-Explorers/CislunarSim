@@ -1,8 +1,8 @@
 from typing import Tuple
-from core.state import State
 from core.integrator.integrator import propagate_state
 from core.models.model_list import ModelContainer
-from core.state import ObservedState, StateTime
+from core.state.state import State, ObservedState
+from core.state.statetime import StateTime
 
 
 class Event:

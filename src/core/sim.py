@@ -1,7 +1,8 @@
 from queue import Queue
 import numpy as np
 from core.config import Config
-from core.state import StateTime, ObservedState, PropagatedOutput
+from core.state.state import ObservedState
+from core.state.statetime import StateTime, PropagatedOutput
 from core.models.model_list import ModelContainer
 from utils.log import log
 from utils.constants import R_EARTH, EARTH_SOI
