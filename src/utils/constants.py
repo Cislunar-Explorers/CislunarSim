@@ -52,5 +52,6 @@ R_MOON = 1_737_100  # Average Radius of the Moon, meters
 R_SUN = 696_340_000
 
 R = 8.314_462_618_153_24 # Ideal gas constant
+M_WATER = 18.0153 # Molar mass of water, g/mol
 
 D_T = 0.1  # timestep in seconds

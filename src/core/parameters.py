@@ -18,8 +18,8 @@ class Parameters:
         
         # fuel tank
         self.tank_volume = 0
-        self.fuel_volume = 0
-        self.electolyzer_rate = 1.0
+        self.fuel_mass = 100.0
+        self.electolyzer_rate = 10.0 * (1/1000)
 
         # prop
         self.thruster_force = 0
