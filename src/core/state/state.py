@@ -114,6 +114,8 @@ class ObservedState(State):
     force_propulsion_thrusters: float = 0.0
     fuel_mass: float = 0.0
 
+    
+
     # derived state (Newtons)
     force_earth: float = 0.0
     force_moon: float = 0.0

@@ -51,4 +51,6 @@ R_EARTH = 6_378_137  # Average Radius of the Earth, meters
 R_MOON = 1_737_100  # Average Radius of the Moon, meters
 R_SUN = 696_340_000
 
-D_T = 200  # timestep in seconds
+R = 8.314_462_618_153_24 # Ideal gas constant
+
+D_T = 0.1  # timestep in seconds
