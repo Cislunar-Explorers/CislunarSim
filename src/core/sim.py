@@ -5,7 +5,7 @@ from core.state import StateTime, ObservedState, PropagatedOutput
 from core.models.model_list import ModelContainer
 from utils.log import log
 from utils.constants import R_EARTH, EARTH_SOI
-from core.event import Event
+from core.event import Event, NormalEvent
 
 class CislunarSim:
     """This class consolidates all parts of the sim (config, models, state). It is responsible for 
@@ -25,11 +25,11 @@ class CislunarSim:
     def step(self) -> PropagatedOutput:
         """step() is the combined true and observed state after one step."""
 
-        event = Event(self._models)
+        event = NormalEvent(self._models)
         self.event_queue.put(event)
 
         current_event = self.event_queue.get()
-        self.state_time, self.observed_state = current_event.evaluate_model_list(self.state_time)
+        self.state_time, self.observed_state = current_event.evaluate(self.state_time)
 
         # TODO: Feed outputs of sensor models into FSW and return actuator's state as part of `PropagatedOutput`
 
