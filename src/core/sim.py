@@ -23,16 +23,13 @@ class CislunarSim:
         self.event_queue : "Queue[Event]" = Queue()
 
     def step(self) -> PropagatedOutput:
-        """Evaluates all models and propagates state
-        Returns:
-            PropagatedOutput: The true and observed states resulting from this step
-        """
+        """step() is the combined true and observed state after one step."""
+
+        current_event = self.event_queue.get()
+        output = current_event.evaluate_model_list(self.state)
 
         event = Event(self._models)
         self.event_queue.put(event)
-
-        current_event = self.event_queue.get()
-        self.state_time, self.observed_state = current_event.evaluate_model_list(self.state_time)
 
         # TODO: Feed outputs of sensor models into FSW and return actuator's state as part of `PropagatedOutput`
 
@@ -40,8 +37,8 @@ class CislunarSim:
         self.should_run = not (self.should_stop())
         self.num_iters += 1
 
-        log.debug(self.state_time)
-        return PropagatedOutput(self.state_time, self.observed_state)
+        log.debug(self.state)
+        return output
 
     def should_stop(self) -> bool:
         """Returns true if our state reaches a condition that should stop the sim
