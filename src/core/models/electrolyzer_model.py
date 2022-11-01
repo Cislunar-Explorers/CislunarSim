@@ -5,7 +5,6 @@ from typing import Dict, Any
 from utils.constants import R, M_WATER
 import numpy as np
 
-
 class ElectrolyzerModel(ActuatorModel):
   """Propagates fuel mass and chamber pressure according to electrolysis parameters"""
 
@@ -14,7 +13,6 @@ class ElectrolyzerModel(ActuatorModel):
 
       self._duration = duration
       self._electrolyzer_rate = np.array(self._parameters.electolyzer_rate)
-      self._chamber_temp = np.array(self._parameters.combustion_chamber_temp)
       self._chamber_vol = np.array(self._parameters.combustion_chamber_volume)
 
   def evaluate(self, state_time: StateTime) -> Dict[str, Any]:
@@ -29,13 +27,17 @@ class ElectrolyzerModel(ActuatorModel):
 
       # get fuel mass at this time
       fuel_mass_i = np.array([state_time.state.fuel_mass])
+      chamber_temp = np.array([state_time.state.chamber_temp])
 
       # calculate updated fuel mass
+      print("duration:", self._duration)
+      print("e rate:", self._electrolyzer_rate)
       kg_electrolyzed = self._duration * self._electrolyzer_rate
+      print(kg_electrolyzed)
       fuel_mass_d = fuel_mass_i - kg_electrolyzed
 
       # P = nRT / V, calculate updated chamber pressure
-      chamber_pressure_d = ((kg_electrolyzed / (M_WATER / 1000)) * R * self._chamber_temp) / self._chamber_vol
+      chamber_pressure_d = ((kg_electrolyzed / (M_WATER / 1000)) * R * chamber_temp) / self._chamber_vol
 
       # return updated fuel mass and chamber pressure
       return {
