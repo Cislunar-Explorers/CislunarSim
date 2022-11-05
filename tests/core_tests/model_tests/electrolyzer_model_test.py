@@ -23,13 +23,6 @@ class ElectrolyzerModelUnitTest(unittest.TestCase):
         self.assertIsNotNone(eval_a)
         self.assertIsInstance(electrolyzer_a, ElectrolyzerModel)
         self.assertIsInstance(eval_a, Dict)
-        
-
-        print(eval_a)
-
-
-		
-
 
 if __name__ == "__main__":
     unittest.main()

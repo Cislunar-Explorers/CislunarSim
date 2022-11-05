@@ -30,10 +30,7 @@ class ElectrolyzerModel(ActuatorModel):
       chamber_temp = np.array([state_time.state.chamber_temp])
 
       # calculate updated fuel mass
-      print("duration:", self._duration)
-      print("e rate:", self._electrolyzer_rate)
       kg_electrolyzed = self._duration * self._electrolyzer_rate
-      print(kg_electrolyzed)
       fuel_mass_d = fuel_mass_i - kg_electrolyzed
 
       # P = nRT / V, calculate updated chamber pressure

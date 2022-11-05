@@ -66,8 +66,9 @@ class StateTestCases(unittest.TestCase):
             16.0,
             17.0,
             18.0,
+            19.0,
             True,
-            False,
+            False
         ]
         self.assertEqual(
             state_list,
