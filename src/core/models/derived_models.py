@@ -54,6 +54,32 @@ def cartesian_to_spherical(x: float, y: float, z: float) -> Tuple[float, float, 
     return (r, phi, theta)
 
 
+class DerivedAngularVelocity(DerivedStateModel):
+    """Calculates angular velocity from angular momentum of the spacecraft in the body frame."""
+
+    # NOTE: Because gyros directly measure angular velocity, should it be 
+
+    def evaluate(self, time: float, state: State) -> Dict[str, Union[float, int, bool]]:
+        
+        # Get angular momentum components
+        L = np.array([state.L_x, state.L_y, state.L_z])
+
+        # Get moment of inertia matrix from state
+        I = np.array([[state.Ixx, state.Ixy, state.Ixz], 
+                    [state.Ixy, state.Iyy, state.Iyz], 
+                    [state.Ixz, state.Iyz, state.Izz]])
+
+        # Compute angular velocity vector
+        omega = np.linalg.solve(I, L)
+
+        # Return angular velocity components
+        return {
+            "ang_vel_x": omega[0],
+            "ang_vel_y": omega[1],
+            "ang_vel_z": omega[2],
+        }
+
+
 class DerivedAttitude(DerivedStateModel):
     def evaluate(self, _: float, state: State):
         spin_vector = quat_to_rotvec((state.quat_v1, state.quat_v2, state.quat_v3, state.quat_r))
@@ -101,4 +127,4 @@ class DerivedPosition(DerivedStateModel):
         }
 
 
-DERIVED_MODEL_LIST: List[DerivedStateModel] = [DerivedPosition(), DerivedAttitude()]
+DERIVED_MODEL_LIST: List[DerivedStateModel] = [DerivedPosition(), DerivedAttitude(), DerivedAngularVelocity()]

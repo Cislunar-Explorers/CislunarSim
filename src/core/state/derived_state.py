@@ -23,6 +23,11 @@ class DerivedState:
     Izy: float = 0.0
     Izz: float = 0.0
 
+    # angular velocity (rad/s)
+    ang_vel_x: float = 0.0
+    ang_vel_y: float = 0.0
+    ang_vel_z: float = 0.0
+
     # Kane damping constant
     kane_c: float = 0.0
 

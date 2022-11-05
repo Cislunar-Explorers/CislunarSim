@@ -18,9 +18,14 @@ class State:
     fill_frac: float = 0.0  # TODO, decouple with fuel_mass
 
     # angular momentum (kg*m^2/s)
-    ang_vel_x: float = 0.0
-    ang_vel_y: float = 0.0
-    ang_vel_z: float = 0.0
+    Lx: float = 0.0
+    Ly: float = 0.0
+    Lz: float = 0.0
+
+    # angular velocity (rad/s)
+    # ang_vel_x: float = 0.0
+    # ang_vel_y: float = 0.0
+    # ang_vel_z: float = 0.0
 
     # angular position (quaternion)
     quat_v1: float = 0.0
@@ -93,9 +98,14 @@ class ObservedState(State):
     # TODO: Implement noise application
 
     # angular velocity (radians/second)
-    ang_vel_x: float = 0.0
-    ang_vel_y: float = 0.0
-    ang_vel_z: float = 0.0
+    # ang_vel_x: float = 0.0
+    # ang_vel_y: float = 0.0
+    # ang_vel_z: float = 0.0
+
+    # angular momentum (kg*m^2/s)
+    Lx: float = 0.0
+    Ly: float = 0.0
+    Lz: float = 0.0
 
     # angular position
     quat_v1: float = 0.0

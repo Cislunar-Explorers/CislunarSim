@@ -108,10 +108,10 @@ class AttitudeDynamics(EnvironmentModel):
         """
 
         s = state_time.state
-        # d = state_time.derived_state
+        d = state_time.derived_state
 
         cur_quat = np.array([s.quat_v1, s.quat_v2, s.quat_v3, s.quat_r])
-        angular_vel = np.array([s.ang_vel_x, s.ang_vel_y, s.ang_vel_z])
+        angular_vel = np.array([d.ang_vel_x, d.ang_vel_y, d.ang_vel_z])
 
         d_quat = quaternion_derivative(cur_quat, angular_vel)
         # TODO: Use angular momentum as state variable and for most dynamics evaluation
