@@ -20,7 +20,7 @@ s_0 = {
     "z": 0.0,
     "force_propulsion_thrusters": 0.0,
     "fuel_mass": 0.0,
-    "chamber_temp": 273.15,
+    "chamber_temp": 0.0,
     "force_earth": 0.0,
     "force_moon": 0.0,
     "propulsion_on": False,

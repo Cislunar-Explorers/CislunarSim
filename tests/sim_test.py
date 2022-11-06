@@ -17,7 +17,6 @@ class SimTest(unittest.TestCase):
 
         initial_conditions = sim._config.init_cond
         next_conditions = sim.step()
-
         # The unittest model keeps every state the same. dState/dt = 0
         self.assertEqual(initial_conditions.state, next_conditions.true_state.state)
 
