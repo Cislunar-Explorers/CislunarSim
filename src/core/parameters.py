@@ -22,7 +22,7 @@ class Parameters:
 
         # prop
         self.thruster_force = 0
-        self.combustion_chamber_volume = 1 
+        self.combustion_chamber_volume = 0
 
         # sim
         self.max_iter = 1e6

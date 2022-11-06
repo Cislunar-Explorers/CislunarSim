@@ -61,7 +61,9 @@ d3456_dict: Dict = {
         "dry_mass": 3,
         "com": 4,
         "tank_volume": 5,
+        "electolyzer_rate": 10.0 * (1/1000),
         "thruster_force": 6,
+        "combustion_chamber_volume": 7,
         "max_iter": 1000000
 }
 
