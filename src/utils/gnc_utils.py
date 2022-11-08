@@ -121,3 +121,54 @@ def quaternion_derivative(current_quat: np.ndarray, angular_velocity: np.ndarray
     quat_derivative = 0.5 * np.matmul(xi, angular_velocity)  # 4x3 times a 3x1 = 4x1
 
     return quat_derivative
+
+
+def C1(theta: float) -> np.ndarray:
+    """Simple Direction Cosine Matrix - C1
+
+    Calculates the direction cosine matrix (DCM) of a simple rotation
+    around the primary axis (x-axis).
+    Calculation taken from page 6 of
+    https://cornell.app.box.com/file/809902268460
+
+    Args:
+        theta (float): angle of rotation in radians
+
+    Returns:
+        np.ndarray: 3x3 DCM
+    """
+    return np.array([[1, 0, 0], [0, np.cos(theta), np.sin(theta)], [0, -1 * np.sin(theta), np.cos(theta)]])
+
+
+def C2(theta: float) -> np.ndarray:
+    """Simple Direction Cosine Matrix - C2
+
+    Calculates the direction cosine matrix (DCM) of a simple rotation
+    around the secondary axis (y-axis).
+    Calculation taken from page 6 of
+    https://cornell.app.box.com/file/809902268460
+
+    Args:
+        theta (float): angle of rotation in radians
+
+    Returns:
+        np.ndarray: 3x3 DCM
+    """
+    return np.array([[np.cos(theta), 0, -1 * np.sin(theta)], [0, 1, 0], [np.sin(theta), 0, np.cos(theta)]])
+
+
+def C3(theta: float) -> np.ndarray:
+    """Simple Direction Cosine Matrix - C3
+
+    Calculates the direction cosine matrix (DCM) of a simple rotation
+    around the tertiary axis (z-axis).
+    Calculation taken from page 6 of
+    https://cornell.app.box.com/file/809902268460
+
+    Args:
+        theta (float): angle of rotation in radians
+
+    Returns:
+        np.ndarray: 3x3 DCM
+    """
+    return np.array([[np.cos(theta), np.sin(theta), 0], [-1 * np.sin(theta), np.cos(theta), 0], [0, 0, 1]])
