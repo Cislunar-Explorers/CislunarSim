@@ -27,8 +27,8 @@ def vec_in_fov(cam: CameraFov, vector_array: np.ndarray):
     y_angle_cam = np.arctan2(ys, -zs)
 
     # filter which vectors are good
-    x_good = np.abs(x_angle_cam) <= cam.horizontal
-    y_good = np.abs(y_angle_cam) <= cam.vertical
+    x_good = np.abs(x_angle_cam) <= cam.horizontal/2
+    y_good = np.abs(y_angle_cam) <= cam.vertical/2
     boolean_map = np.logical_and(x_good, y_good)
     
     return np.matmul(cam.orientation.T, vector_array_in_camera_frame[boolean_map].T).T
