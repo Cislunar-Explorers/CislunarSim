@@ -22,12 +22,13 @@ You can exit this environment by running `deactivate`. To re-enter an existing e
 #### Usage:
 
 ```zsh
-python src/main.py {file path} [-v]
+python src/main.py {file path} [-v] [-l]
 ```
 
 #### Options:  
 `file path` *(Required)*: The path of the config file to simulate  
-`-v` *(Optional)*: Verbose mode for logging extra information to the terminal
+`-v` *(Optional)*: Verbose mode for logging extra information to the terminal  
+`-l` *(Optional)*: Headless mode that will not generate a CSV nor plot any data
 
 #### Examples:  
 ```zsh
