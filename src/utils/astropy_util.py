@@ -22,7 +22,7 @@ def get_body_position(time: int, body: BodyEnum) -> Tuple[float, float, float]:
         Tuple[float, float, float]: position vector of the specified body
     """
     current_time = time
-    current_au = SkyCoord(
+    current_au: SkyCoord = SkyCoord(
         0, 0, 0, unit="m", frame="gcrs", representation_type="cartesian"
     )
     if body == BodyEnum.Sun:
