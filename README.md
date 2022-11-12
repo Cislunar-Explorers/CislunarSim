@@ -22,17 +22,21 @@ You can exit this environment by running `deactivate`. To re-enter an existing e
 #### Usage:
 
 ```zsh
-python src/main.py {file path} [-v]
+python src/main.py config [-v] [-p] [-o [OUT]] 
 ```
 
 #### Options:  
-`file path` *(Required)*: The path of the config file to simulate  
-`-v` *(Optional)*: Verbose mode for logging extra information to the terminal
+`config` *(Required)*: The path of the config file to simulate  
+`-v` *(Optional)*: Verbose mode for logging extra information to the terminal  
+`-p` *(Optional)*: Plotting mode to plot the data of this sim run  
+`-o [OUT]` *(Optional)*: Outputs the data of this sim run to a CSV file. A name OUT can be provided, otherwise the name will be the current Unix timestamp
 
 #### Examples:  
 ```zsh
 python src/main.py configs/iss.json 
-python src/main.py configs/test_angles.json -v
+python src/main.py configs/freefall.json -pv
+python src/main.py configs/test_angles.json -vo
+python src/main.py configs/tli.json -po "tli"
 ```
 
 We recommend setting your `D_T` value (the timestep length) in `constants.py` to be between 100 - 300. If you're looking for a faster run, you'll want to set it to be on the higher side of that range.
@@ -51,9 +55,10 @@ python src/utils/plot.py {file path}
 #### Example:  
 ```zsh
 python src/utils/plot.py runs/cislunarsim-355942804.csv
+python src/utils/plot.py runs/tli.csv
 ```
 
-*Note: The above is an example CSV file that does not exist locally on your system.*
+*Note: The above are example CSV files that don't necessarily exist locally on your system.*
 
 ## IMPORTANT: Python Version MUST be >=3.8
 

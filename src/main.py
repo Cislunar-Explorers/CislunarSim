@@ -11,7 +11,7 @@ from utils.matplotlib_util import Plot
 import argparse
 
 
-_DESCRIPTION = """CISLUNAR Simulation Runner!"""
+_DESCRIPTION = """Cislunar Sim Runner!"""
 
 
 class SimRunner:
@@ -38,7 +38,7 @@ class SimRunner:
             parser.add_argument(
                 "config",
                 type=str,
-                help="Initialize simulation with given path to json config file.",
+                help="initialize simulation with given path to json config file",
             )
             parser.add_argument(
                 "-v",
@@ -46,13 +46,27 @@ class SimRunner:
                 action="store_true",
                 help="set the logging level to DEBUG instead of INFO",
             )
-
+            parser.add_argument(
+                "-p",
+                "--plot",
+                action="store_true",
+                help="plot the sim output"
+            )
+            parser.add_argument(
+                "-o",
+                "--out",
+                const="None",
+                nargs="?",
+                help="write the sim output to a CSV file"
+            )
+            
             # Parser command line arguments
             args = parser.parse_args()
 
             # Set Logging level of "Sim" based on --verbose argument.
             log.setLevel(logging.DEBUG) if args.verbose else log.setLevel(logging.INFO)
-
+            self.out = args.out
+            self.plot = args.plot
             self._sim = CislunarSim(Config.make_config(args.config))
 
         self.state_history = []
@@ -69,9 +83,11 @@ class SimRunner:
         run_df = states_to_df(states)
 
         log.setLevel(logging.INFO)  # to prevent being spammed by matplotlib's debug logs (doesn't work)
-        data_plot = Plot(run_df)
-        data_plot.plot_data()
 
+        if self.plot:
+            data_plot = Plot(run_df)
+            data_plot.plot_data()
+        
         return run_df
 
     def _run(self):
@@ -79,17 +95,24 @@ class SimRunner:
             try:
                 updated_states = self._sim.step()
                 self.state_history.append(updated_states)
-            except (Exception, KeyboardInterrupt) as e:
+            except (Exception) as e:
                 log.critical("Stopping sim due to unhandled exception:")
                 log.error(e, exc_info=True)
+                break
+            except (KeyboardInterrupt):
+                log.info("Stopping sim")
                 break
 
         return self.state_history
 
 
 def run_sim():
-    data = SimRunner().run()
-    df_to_csv(data)
+    sim = SimRunner()
+    data = sim.run()
+
+    # don't store any data if the sim was not specified to output to a file
+    if sim.out != None:
+        df_to_csv(data, sim.out)
 
 
 if __name__ == "__main__":

@@ -95,13 +95,13 @@ class Config:
 
             json_params = data.get("parameters", {})
             if json_params == {}:
-                log.warning("parameters are not specified")
+                log.warning("Parameters are not specified")
             json_init_cond = data.get("initial_condition", {})
             if json_init_cond == {}:
-                log.warning("initial conditions are not specified")
+                log.warning("Initial conditions are not specified")
             json_models = data.get("models", [])
             if json_models == []:
-                log.warning("models are not specified")
+                log.warning("Models are not specified")
 
             actual_models = []
             for model_str in json_models:
