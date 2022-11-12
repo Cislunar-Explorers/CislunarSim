@@ -24,10 +24,7 @@ class ParametersTestCase(unittest.TestCase):
             "combustion_chamber_volume": 0,
             "max_iter": 1000000,
         }
-        print(d_main)
         d_main["gyro_bias"] = [1.0, 2.0, 3.0]
-        print(d_main)
-        print(Parameters({"gyro_bias": [1.0, 2.0, 3.0]}).__dict__)
         self.assertEqual(
             d_main,
             Parameters({"gyro_bias": [1.0, 2.0, 3.0]}).__dict__,
