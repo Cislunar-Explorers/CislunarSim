@@ -5,6 +5,7 @@ from core.state.statetime import PropagatedOutput
 from dataclasses import asdict
 from utils.constants import SIM_ROOT
 from pathlib import Path
+from matplotlib.animation import FuncAnimation, PillowWriter
 
 
 def states_to_df(states: List[PropagatedOutput]) -> pd.DataFrame:
@@ -28,11 +29,27 @@ def states_to_df(states: List[PropagatedOutput]) -> pd.DataFrame:
 
 def df_to_csv(dataframe: pd.DataFrame, path: Optional[Union[str, Path]] = None):
     """Creates and writes the data in [dataframe] into a csv file at [path]
-    
+
     Args:
         dataframe (pd.DataFrame): Pandas DataFrame containing state data
         path (Optional[Union[str, Path]]): path of the CSV to write the state data to
     """
     if path is None:
         path = SIM_ROOT / "runs"
-    dataframe.to_csv(f"{path}/cislunarsim-{int(time.time())}.csv")
+    dataframe.to_csv(f"{path}/cislunarsim-{current_int_time()}.csv")
+
+
+def save_anim(anim: FuncAnimation):
+    """Saves [anim] as gif file under [/playbacks].
+
+    Args:
+        anim (FuncAnimation): The animation of the sim playback.
+    """
+    anim.save(
+        f"{SIM_ROOT}/playbacks/playback-{current_int_time()}.gif",
+        writer=PillowWriter(fps=60),
+    )
+
+
+def current_int_time():
+    return int(time.time())

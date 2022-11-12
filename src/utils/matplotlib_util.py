@@ -1,10 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from utils.astropy_util import get_body_position
-import matplotlib.animation as animation
+from matplotlib.animation import FuncAnimation
 from utils.constants import D_T, BodyEnum, R_EARTH, R_MOON
 from datetime import datetime
-from matplotlib.widgets import Slider
+from matplotlib.widgets import Slider, Button
+from utils.data_handling import save_anim
 
 
 class Plot:
@@ -35,17 +36,15 @@ class Plot:
         self.ax_pos.set_xlim(xmin=self.ts[0], xmax=self.ts[-1])
         self.ax_ang_vel_x.set_xlim(xmin=self.ts[0], xmax=self.ts[-1])
 
-        axcolor = "lightgoldenrodyellow"
-        axfreq = plt.axes([0.1, 0.1, 0.5, 0.01], facecolor=axcolor)
         self.t_max = Slider(
-            axfreq,
+            plt.axes([0.1, 0.1, 0.5, 0.01], facecolor="lightgoldenrodyellow"),
             "t",
             self.ts[0],
             self.ts[-1],
             valinit=self.ts[-1],
             valstep=D_T,
         )
-        self.t_max.on_changed(self.update)
+        self.t_max.on_changed(self.update_2D_slider)
 
         self.fig_3d = plt.figure("CislunarSim")
         self.ax = self.fig_3d.gca(projection="3d")
@@ -75,15 +74,15 @@ class Plot:
             arrowprops=dict(arrowstyle="->"),
         )
         self.annot.set_visible(False)
-        self.lines_2d = []
+        self.paused = False
 
     def plot_data(self) -> None:
         self.plot_data_2d()
         self.plot_data_3d()
         plt.tight_layout()
 
-    def update(self, _):
-        """Updates plotted data in response to slider value change"""
+    def update_2D_slider(self, _):
+        """Updates plotted 2D data in response to slider value change"""
 
         t_selected_range = self.t_max.val - self.ts[0]
         t_max_index = int(t_selected_range // D_T)
@@ -102,6 +101,15 @@ class Plot:
 
         self.fig_2d.canvas.draw()
         self.fig_2d.canvas.flush_events()
+
+    def update_3D_slider(self, _):
+        """Updates plotted 3D data in response to slider value change"""
+        t_selected_range = self.t_3d.val - self.ts[0]
+        t_max_index = int(t_selected_range // D_T)
+
+        self.animate_traj(t_max_index, self.locs, self.traj)
+        self.fig_3d.canvas.draw()
+        self.fig_3d.canvas.flush_events()
 
     def plot_data_2d(self) -> None:
         """Displays 2d plots of spacecraft data"""
@@ -151,18 +159,8 @@ class Plot:
     def plot_data_3d(self):
         """Plots a model of the earth, moon and the craft's trajectory in R3"""
 
-        locs = np.array([self.xlocs, self.ylocs, self.zlocs])
-        traj = plt.plot(self.xlocs, self.ylocs, self.zlocs, lw=2, c="blue")[0]
-
-        traj_ani = animation.FuncAnimation(
-            self.fig_3d,
-            self.animate_traj,
-            frames=len(self.xlocs),
-            fargs=(locs, traj),
-            interval=1,
-            blit=False,
-        )
-
+        self.locs = np.array([self.xlocs, self.ylocs, self.zlocs])
+        self.traj = plt.plot(self.xlocs, self.ylocs, self.zlocs, lw=2, c="blue")[0]
         self.ax.set_box_aspect(aspect=(1, 1, 1))
 
         # Calculation and plotting of earth's position
@@ -171,7 +169,7 @@ class Plot:
         earth_y = R_EARTH * np.outer(np.sin(self.u), np.sin(self.v))
         earth_z = R_EARTH * np.outer(np.ones(np.size(self.u)), np.cos(self.v))
 
-        earth = [self.ax.plot_surface(earth_x, earth_y, earth_z, color="g", alpha=0.5)]
+        self.earth = [self.ax.plot_surface(earth_x, earth_y, earth_z, color="g")]
 
         # Calculation and plotting of moon's position
         moon_cx, moon_cy, moon_cz = get_body_position(self.ts[-1], BodyEnum.Moon)
@@ -181,10 +179,51 @@ class Plot:
 
         moon = [self.ax.plot_surface(moon_x, moon_y, moon_z, color="gray")]
 
-        moon_ani = animation.FuncAnimation(
-            self.fig_3d, self.animate_moon, frames=len(self.xlocs), fargs=(locs, moon)
+        self.traj_ani = FuncAnimation(
+            self.fig_3d,
+            self.animate_traj,
+            frames=len(self.xlocs),
+            fargs=(self.locs, self.traj),
+            interval=1,
+            blit=False,
         )
+        self.moon_ani = FuncAnimation(
+            self.fig_3d,
+            self.animate_moon,
+            frames=len(self.xlocs),
+            fargs=(self.locs, moon),
+        )
+        self.t_3d = Slider(
+            plt.axes([0.1, 0.01, 0.5, 0.01], facecolor="lightgoldenrodyellow"),
+            "t",
+            self.ts[0],
+            self.ts[-1],
+            valinit=self.ts[-1],
+            valstep=D_T,
+        )
+        self.t_3d.on_changed(self.update_3D_slider)
+
+        self.pause_button = Button(plt.axes([0.85, 0.02, 0.1, 0.075]), "Pause")
+        self.play_button = Button(plt.axes([0.85, 0.1, 0.1, 0.075]), "Play")
+        self.save_button = Button(plt.axes([0.85, 0.18, 0.1, 0.075]), "Save")
+        self.pause_button.on_clicked(self.toggle_pause)
+        self.play_button.on_clicked(self.toggle_pause)
+        self.save_button.on_clicked(lambda _: save_anim(self.traj_ani))
+
         plt.show()
+
+    def toggle_pause(self, _):
+        """Handles pausing and playing of the animations, toggled by the pause and play buttons."""
+
+        if self.paused:
+            self.play_button.set_active(False)
+            self.pause_button.set_active(True)
+            self.traj_ani.resume()
+        else:
+            self.play_button.set_active(True)
+            self.pause_button.set_active(False)
+            self.traj_ani.pause()
+        self.paused = not self.paused
 
     def animate_traj(self, num, locs, line):
         """Handles trajectory line positioning and updating
@@ -192,7 +231,7 @@ class Plot:
         Args:
             num (int): counter that increments on each call to this function
             locs (npt.ArrayLike): the trajectory location data
-            line (_type_): the trajectory that is being modified and plotted
+            line (mpl_toolkits.mplot3d.art3d.Line3D): the trajectory that is being modified and plotted
 
         Returns:
             line: the updated trajectory
@@ -206,7 +245,7 @@ class Plot:
         line.set_3d_properties(locs[2, :num])
         return line
 
-    def animate_moon(self, num, locs, moon):
+    def animate_moon(self, num, _, moon):
         """Handles moon positioning and updating
 
         Args:

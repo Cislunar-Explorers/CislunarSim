@@ -31,6 +31,9 @@ class CislunarSim:
 
         current_event = self.event_queue.get()
         self.state_time, self.observed_state = current_event.evaluate(self.state_time)
+
+        current_event = self.event_queue.get()
+        self.state_time, self.observed_state = current_event.evaluate(self.state_time)
         # TODO: Feed outputs of sensor models into FSW and return actuator's state as part of `PropagatedOutput`
 
         # check if we should stop the sim
