@@ -47,7 +47,7 @@ class Plot:
         self.t_max.on_changed(self.update_2D_slider)
 
         self.fig_3d = plt.figure("CislunarSim")
-        self.ax = self.fig_3d.gca(projection="3d")
+        self.ax = self.fig_3d.add_subplot(projection='3d')
 
         self.u = np.linspace(0, 2 * np.pi, 60)
         self.v = np.linspace(0, np.pi, 60)
@@ -187,12 +187,13 @@ class Plot:
             interval=1,
             blit=False,
         )
-        self.moon_ani = FuncAnimation(
-            self.fig_3d,
-            self.animate_moon,
-            frames=len(self.xlocs),
-            fargs=(self.locs, moon),
-        )
+        # Moon animation is currently not functional due to a csv-related issue and a python issue in animate_moon
+        # self.moon_ani = FuncAnimation(
+        #     self.fig_3d,
+        #     self.animate_moon,
+        #     frames=len(self.xlocs),
+        #     fargs=(self.locs, moon),
+        # )
         self.t_3d = Slider(
             plt.axes([0.1, 0.01, 0.5, 0.01], facecolor="lightgoldenrodyellow"),
             "t",
