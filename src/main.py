@@ -111,7 +111,7 @@ def run_sim():
     data = sim.run()
 
     # don't store any data if the sim was not specified to output to a file
-    if sim.out != "None":
+    if sim.out != None:
         df_to_csv(data, sim.out)
 
 

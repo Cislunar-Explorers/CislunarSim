@@ -37,8 +37,8 @@ def df_to_csv(dataframe: pd.DataFrame, name: str, path: Optional[Union[str, Path
     if path is None:
         path = SIM_ROOT / "runs"
     if name == "None":
-        name = current_int_time()
-    dataframe.to_csv(f"{path}/cislunarsim-{name}.csv")
+        name = f"cislunarsim-{current_int_time()}"
+    dataframe.to_csv(f"{path}/{name}.csv")
 
 
 def save_anim(anim: FuncAnimation):
