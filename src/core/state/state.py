@@ -40,6 +40,7 @@ class State:
 
     force_propulsion_thrusters: float = 0.0
     fuel_mass: float = 0.0
+    chamber_temp: float = 0.0
 
     # derived state (Newtons)
     force_earth: float = 0.0
@@ -113,6 +114,9 @@ class ObservedState(State):
 
     force_propulsion_thrusters: float = 0.0
     fuel_mass: float = 0.0
+    chamber_temp: float = 0.0
+
+    
 
     # derived state (Newtons)
     force_earth: float = 0.0

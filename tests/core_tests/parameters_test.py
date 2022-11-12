@@ -18,9 +18,11 @@ class ParametersTestCase(unittest.TestCase):
             "gyro_sensitivity": 0.015625 * (math.pi / 180),
             "dry_mass": 0,
             "com": 0,
-            "max_iter": 1000000,
-            "tank_volume": 0,
+            "tank_volume": 1,
+            "electolyzer_rate": 10.0 * (1/1000),
             "thruster_force": 0,
+            "combustion_chamber_volume": 1,
+            "max_iter": 1000000,
         }
         d_main["gyro_bias"] = [1.0, 2.0, 3.0]
         self.assertEqual(
@@ -51,7 +53,7 @@ class ParametersTestCase(unittest.TestCase):
             d_main,
             Parameters({"tank_volume": 5}).__dict__,
         )
-        d_main["tank_volume"] = 0
+        d_main["tank_volume"] = 1
         d_main["thruster_force"] = 6
         self.assertEqual(
             d_main,
@@ -64,9 +66,11 @@ class ParametersTestCase(unittest.TestCase):
                 "gyro_sensitivity": 0.015625 * (math.pi / 180),
                 "dry_mass": 0,
                 "com": 0,
-                "tank_volume": 0,
+                "tank_volume": 1,
+                "electolyzer_rate": 10.0 * (1/1000),
                 "thruster_force": 0,
-                "max_iter": 1000000
+                "combustion_chamber_volume": 1,
+                "max_iter": 1000000,
             },
             Parameters({}).__dict__,
         )

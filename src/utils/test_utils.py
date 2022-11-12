@@ -20,10 +20,11 @@ s_0 = {
     "z": 0.0,
     "force_propulsion_thrusters": 0.0,
     "fuel_mass": 0.0,
+    "chamber_temp": 0.0,
     "force_earth": 0.0,
     "force_moon": 0.0,
     "propulsion_on": False,
-    "solenoid_actuation_on": False,
+    "solenoid_actuation_on": False
 }
 
 s_1 = {
@@ -43,10 +44,11 @@ s_1 = {
     "z": 14.0,
     "force_propulsion_thrusters": 15.0,
     "fuel_mass": 16.0,
-    "force_earth": 17.0,
-    "force_moon": 18.0,
+    "chamber_temp": 17.0,
+    "force_earth": 18.0,
+    "force_moon": 19.0,
     "propulsion_on": True,
-    "solenoid_actuation_on": False,
+    "solenoid_actuation_on": False
 }
 
 state_1 = State(**s_1)
@@ -59,7 +61,9 @@ d3456_dict: Dict = {
         "dry_mass": 3,
         "com": 4,
         "tank_volume": 5,
+        "electolyzer_rate": 10.0 * (1/1000),
         "thruster_force": 6,
+        "combustion_chamber_volume": 7,
         "max_iter": 1000000
 }
 
