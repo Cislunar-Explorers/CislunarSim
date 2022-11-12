@@ -27,7 +27,7 @@ def states_to_df(states: List[PropagatedOutput]) -> pd.DataFrame:
     return complete_df
 
 
-def df_to_csv(dataframe: pd.DataFrame, path: Optional[Union[str, Path]] = None):
+def df_to_csv(dataframe: pd.DataFrame, name: str, path: Optional[Union[str, Path]] = None):
     """Creates and writes the data in [dataframe] into a csv file at [path]
 
     Args:
@@ -36,7 +36,9 @@ def df_to_csv(dataframe: pd.DataFrame, path: Optional[Union[str, Path]] = None):
     """
     if path is None:
         path = SIM_ROOT / "runs"
-    dataframe.to_csv(f"{path}/cislunarsim-{current_int_time()}.csv")
+    if name == "None":
+        name = current_int_time()
+    dataframe.to_csv(f"{path}/cislunarsim-{name}.csv")
 
 
 def save_anim(anim: FuncAnimation):
