@@ -17,12 +17,12 @@ class Parameters:
         self.com = 0
         
         # fuel tank
-        self.tank_volume = 0
+        self.tank_volume = 1
         self.electolyzer_rate = 10.0 * (1/1000)
 
         # prop
         self.thruster_force = 0
-        self.combustion_chamber_volume = 0
+        self.combustion_chamber_volume = 1
 
         # sim
         self.max_iter = 1e6
