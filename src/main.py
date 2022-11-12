@@ -79,9 +79,12 @@ class SimRunner:
             try:
                 updated_states = self._sim.step()
                 self.state_history.append(updated_states)
-            except (Exception, KeyboardInterrupt) as e:
+            except (Exception) as e:
                 log.critical("Stopping sim due to unhandled exception:")
                 log.error(e, exc_info=True)
+                break
+            except (KeyboardInterrupt):
+                log.info("Stopping sim")
                 break
 
         return self.state_history
