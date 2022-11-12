@@ -11,7 +11,7 @@ from utils.matplotlib_util import Plot
 import argparse
 
 
-_DESCRIPTION = """CISLUNAR Simulation Runner!"""
+_DESCRIPTION = """Cislunar Sim Runner!"""
 
 
 class SimRunner:
@@ -38,7 +38,7 @@ class SimRunner:
             parser.add_argument(
                 "config",
                 type=str,
-                help="Initialize simulation with given path to json config file.",
+                help="initialize simulation with given path to json config file",
             )
             parser.add_argument(
                 "-v",
@@ -103,6 +103,8 @@ class SimRunner:
 def run_sim():
     sim = SimRunner()
     data = sim.run()
+
+    # don't store any data if the sim was run in headless mode
     if not sim.headless:
         df_to_csv(data)
 
