@@ -46,12 +46,20 @@ class SimRunner:
                 action="store_true",
                 help="set the logging level to DEBUG instead of INFO",
             )
+            parser.add_argument(
+                "-l",
+                "--headless",
+                action="store_true",
+                help="run the sim without saving to a csv or plotting the data"
+            )
 
             # Parser command line arguments
             args = parser.parse_args()
 
             # Set Logging level of "Sim" based on --verbose argument.
             log.setLevel(logging.DEBUG) if args.verbose else log.setLevel(logging.INFO)
+
+            self.headless = args.headless == True
 
             self._sim = CislunarSim(Config.make_config(args.config))
 
@@ -69,9 +77,11 @@ class SimRunner:
         run_df = states_to_df(states)
 
         log.setLevel(logging.INFO)  # to prevent being spammed by matplotlib's debug logs (doesn't work)
-        data_plot = Plot(run_df)
-        data_plot.plot_data()
 
+        if not self.headless:
+            data_plot = Plot(run_df)
+            data_plot.plot_data()
+        
         return run_df
 
     def _run(self):
@@ -91,8 +101,10 @@ class SimRunner:
 
 
 def run_sim():
-    data = SimRunner().run()
-    df_to_csv(data)
+    sim = SimRunner()
+    data = sim.run()
+    if not sim.headless:
+        df_to_csv(data)
 
 
 if __name__ == "__main__":
