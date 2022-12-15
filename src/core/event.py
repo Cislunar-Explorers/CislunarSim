@@ -3,6 +3,7 @@ from core.integrator.integrator import propagate_state
 from core.models.model_list import ModelContainer
 from core.state.state import State, ObservedState
 from core.state.statetime import StateTime
+from core.parameters import Parameters
 
 
 class Event:
@@ -43,7 +44,7 @@ class NormalEvent(Event):
             state_time.update(actuator_model.evaluate(state_time))
 
         # Evaluate environmental models to propagate state
-        new_state_time: StateTime = propagate_state(self.model_container, state_time)
+        new_state_time: StateTime = propagate_state(self.model_container, state_time, )
 
         # Evaluate sensor models
         temp_state = State()

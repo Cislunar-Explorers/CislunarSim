@@ -1,0 +1,35 @@
+{
+    "name": "ISS LEO with actuation",
+    "initial_condition": {
+        "x": 201289.9547729282,
+        "y": -1748827.84098,
+        "z": 6551130.06623,
+        "vel_x": 7665.4147515,
+        "vel_y": 13.6338551383,
+        "vel_z": -229.87558448,
+        "time": 1651906800
+    },
+    "models": ["pos", "gyro", "electrolyzer"],
+    "actuation_events": [
+        {
+            "actuator_type": "electrolyzer",
+            "start": 1651907800,
+            "end": 1651907900
+        },
+        {
+            "actuator_type": "electrolyzer",
+            "start": 1651908900,
+            "end": 1651909900
+        },
+        {
+            "actuator_type": "prop",
+            "start": 1651910000,
+            "end": 1651910010
+        }
+    ],
+    "d_t": 10
+  }
+
+
+
+  

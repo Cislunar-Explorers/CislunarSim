@@ -2,6 +2,7 @@ from typing import Callable, List, Dict
 import numpy as np
 from core.models.model import ActuatorModel, EnvironmentModel, SensorModel, MODEL_TYPES
 from core.models.gyro_model import GyroModel
+from core.models.electrolyzer_model import ElectrolyzerModel
 from core.state.state import State, array_to_state
 from core.state.statetime import StateTime
 from core.config import Config
@@ -84,6 +85,7 @@ MODEL_DICT: Dict[ModelEnum, MODEL_TYPES] = {
     ModelEnum.AttitudeModel: AttitudeDynamics,
     ModelEnum.PositionModel: PositionDynamics,
     ModelEnum.GyroModel: GyroModel,
+    ModelEnum.ElectrolyzerModel: ElectrolyzerModel,
     ModelEnum.UnittestModel: TestModel,
 }
 
@@ -120,7 +122,8 @@ class ModelContainer:
         self.environmental: List[EnvironmentModel] = []
 
         # Actuator models convert actions from FSW to changes in (force/torque) states.
-        self.actuator: List[ActuatorModel] = []
+        # Only one actuator model allowed per model container
+        self.actuator: ActuatorModel 
 
         # Sensor models convert a true state to an observed state.
         self.sensor: List[SensorModel] = []
@@ -133,8 +136,11 @@ class ModelContainer:
                 model_instantiated = model(config.param)
                 self.environmental.append(model_instantiated)
             elif issubclass(model, ActuatorModel):
+                #todo
                 model_instantiated = model(config.param)
-                self.actuator.append(model_instantiated)
+                self.actuator = model_instantiated
+                
+                # append(model_instantiated)
             elif issubclass(model, SensorModel):
                 model_instantiated = model(config.param)
                 self.sensor.append(model_instantiated)

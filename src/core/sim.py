@@ -15,13 +15,21 @@ class CislunarSim:
 
     def __init__(self, config: Config) -> None:
         self._config = config
+        self.event_queue : "Queue[Event]" = Queue()
+        
+        for e in config.actuation_events:
+            #todo
+            mc = ModelContainer(config)
+            event = NormalEvent(mc)
+            self.event_queue.put(event)
+
         self._models = ModelContainer(self._config) #wouldn't need for event-based
         self.state_time: StateTime = self._config.init_cond
         self.observed_state = ObservedState()
 
         self.should_run = True
         self.num_iters = 0
-        self.event_queue : "Queue[Event]" = Queue()
+        
 
     def step(self) -> PropagatedOutput:
         """step() is the combined true and observed state after one step."""

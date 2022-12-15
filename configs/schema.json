@@ -3,6 +3,9 @@
 	"type": "object",
 	"description": "This is the schema that is used to validate json files, none of the fields are required, if they are not specified, a default value will be substituted. Type check and spell check are handled by the validation process, so no typo will be allowed. *Be careful to not miss declaring any properties of customization, the program will still run without warning but might not behave as expected!* ",
 	"properties": {
+		"name": {
+			"type": "string"
+		},
 		"parameters": {
 			"type": "object",
 			"properties": {
@@ -110,6 +113,26 @@
 			"items": {
 				"type": "string"
 			}
+		},
+		"actuation_events": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"actuator_type": {
+						"type": "string"
+					},
+					"start": {
+						"type": "number"
+					},
+					"end": {
+						"type": "number"
+					}
+				}
+			}
+		},
+		"d_t": {
+			"type": "number"
 		}
 	},
 	"additionalProperties": false

@@ -41,13 +41,13 @@ class SensorModel(Model):
 
 
 class ActuatorModel(Model):
-    def __init__(self, parameters: Parameters) -> None:
+    def __init__(self, duration: float, parameters: Parameters) -> None:
         """Creates an actuator model with the given parameters
 
         Args:
             parameters (Parameters): parameters for actuator model
         """
-        super().__init__(parameters)
+        super().__init__(duration, parameters)
 
     @abstractmethod
     def evaluate(self, state_time: StateTime) -> Dict[str, Any]:

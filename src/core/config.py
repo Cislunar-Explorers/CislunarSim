@@ -28,14 +28,16 @@ class Config:
 
     def __init__(
         self,
+        name: str,
         parameters: Dict,
         initial_condition: Dict,
+        actuation_events: Dict,
         models: List[ModelEnum] = [ModelEnum.AttitudeModel, ModelEnum.PositionModel],
     ):
 
         self.param = Parameters(param_dict=parameters)
         self.init_cond = StateTime.from_dict(initial_condition)
-
+        self.actuation_events = actuation_events
         # convert string list to model list
         model_objs = []
         for model in models:
@@ -93,12 +95,18 @@ class Config:
             except TypeError:
                 pass  # there is no "gyro_noise" in the json
 
+            json_name = data.get("name", "")
+            if json_name == "":
+                log.warning("Name is not specified")
+
             json_params = data.get("parameters", {})
             if json_params == {}:
                 log.warning("Parameters are not specified")
+
             json_init_cond = data.get("initial_condition", {})
             if json_init_cond == {}:
                 log.warning("Initial conditions are not specified")
+
             json_models = data.get("models", [])
             if json_models == []:
                 log.warning("Models are not specified")
@@ -106,5 +114,10 @@ class Config:
             actual_models = []
             for model_str in json_models:
                 actual_models.append(ModelEnum(model_str))
+            
 
-        return cls(json_params, json_init_cond, actual_models)
+            json_actuation_events = data.get("actuation_events", [])
+            print(json_name)
+            print(json_actuation_events)
+
+        return cls(json_name, json_params, json_init_cond, json_actuation_events, actual_models)

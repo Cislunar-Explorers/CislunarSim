@@ -26,6 +26,7 @@ class Parameters:
 
         # sim
         self.max_iter = 1e6
+        self.d_t = 300.0
 
         for key, value in param_dict.items():
             if key in self.__dict__.keys():
