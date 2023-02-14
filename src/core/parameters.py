@@ -9,7 +9,7 @@ class Parameters:
 
     def __init__(self, param_dict: Dict = {}):
 
-        self.gyro_bias = [0.497625, -0.10821875, 0.77490625]
+        self.gyro_bias = [0.4976250, -0.10821875, 0.77490625]
         self.gyro_noise = [0.1824535, 0.11738579, 0.19192256]
         self.gyro_sensitivity = 0.015625 * (math.pi / 180)
 
