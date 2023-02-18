@@ -1,4 +1,5 @@
 import unittest
+from core.integrator import propagate_state
 
 DEBUG = False
 
