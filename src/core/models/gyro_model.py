@@ -27,16 +27,20 @@ class GyroModel(SensorModel):
             Dict[str, Any]: The augmented angular velocities
         """
 
+        # setting up the initial angular velocity using x, y, z components 
         ang_vel_i = np.array([state_time.state.ang_vel_x, state_time.state.ang_vel_y, state_time.state.ang_vel_z])
 
+        # adding initial angular velocity to gyro_bias
         ang_vel_d = ang_vel_i + self.gyro_bias
         ang_vel_d = np.random.normal(loc=ang_vel_d, scale=self.gyro_noise, size=3)
 
+        #filling in the array, applying gyro sensitivity
         for i in range(3):
             ang_vel_d[i] = self._parameters.gyro_sensitivity * int(
                 self._parameters.gyro_sensitivity / 2 + ang_vel_d[i] / self._parameters.gyro_sensitivity
             )
 
+        #return components of the angular velocity
         return {
             "ang_vel_x": ang_vel_d[0],
             "ang_vel_y": ang_vel_d[1],
