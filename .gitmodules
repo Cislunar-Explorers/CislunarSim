@@ -1,0 +1,3 @@
+[submodule "src/fsw"]
+	path = src/fsw
+	url = https://github.com/Cislunar-Explorers/FlightSoftware.git
