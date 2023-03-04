@@ -7,7 +7,7 @@ from core.models.model_list import ModelContainer
 from utils.log import log
 from utils.constants import R_EARTH, EARTH_SOI
 from core.event import Event, NormalEvent
-
+from fsw.main import MainSatelliteThread as MainSatelliteThread
 class CislunarSim:
     """This class consolidates all parts of the sim (config, models, state). It is responsible for 
     stepping the sim and checking stop conditions.
@@ -22,6 +22,7 @@ class CislunarSim:
         self.should_run = True
         self.num_iters = 0
         self.event_queue : "Queue[Event]" = Queue()
+        self.main_thread = MainSatelliteThread(is_sim_run=True)
 
     def step(self) -> PropagatedOutput:
         """step() is the combined true and observed state after one step."""
@@ -33,6 +34,8 @@ class CislunarSim:
         self.state_time, self.observed_state = current_event.evaluate(self.state_time)
         # TODO: Feed outputs of sensor models into FSW and return actuator's state as part of `PropagatedOutput`
 
+        fsw_output = self.main_thread.step(self.observed_state.__dict__)
+        print(fsw_output)
         # check if we should stop the sim
         self.should_run = not (self.should_stop())
         self.num_iters += 1
