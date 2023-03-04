@@ -106,7 +106,9 @@ def build_state_update_function(
 
         for model in env_models:
             propagated_state.update(model.evaluate(state_in))
-
+            
+        
+        # Turn propagated_state into an array so that it can be used in the Callable object
         propagated_state_array = propagated_state.to_array()
         return propagated_state_array
 
