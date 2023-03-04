@@ -23,6 +23,7 @@ jobs:
         run: |
           git submodule update --init --recursive
           git submodule update --recursive --remote
+          git pull --recurse-submodules
       - name: Test with pytest
         run: |
           pytest
