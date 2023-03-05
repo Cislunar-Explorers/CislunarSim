@@ -30,3 +30,4 @@ tomli==2.0.1
 tornado==6.1
 zipp==3.8.0
 python-dotenv=0.21.1
+sqlalchemy=2.0.4
