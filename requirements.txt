@@ -32,3 +32,12 @@ zipp==3.8.0
 python-dotenv=0.21.1
 sqlalchemy=2.0.4
 psutil=5.9.4
+bitstring=4.0.1
+numba=0.56.4
+numpy-quaternion=2022.4.3
+opencv-python-headless=4.7.0.72
+opencv-python=4.7.0.72
+pyquaternion=0.9.9
+tqdm=4.65.0
+uptime=3.0.1
+parameterized=0.8.1
