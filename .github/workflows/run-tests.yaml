@@ -6,14 +6,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - uses: actions/checkout@v2
+      - name: Checkout submodule
         uses: actions/checkout@v2
         with:
           submodules: 'true'
           repository: Cislunar-Explorers/FlightSoftware
           path: './src/fsw'
           ref: a514cd98dea499f126a7d72ca970710a01ab3b98
-      - uses: actions/checkout@v2
       - name: Pull & update submodules recursively
         run: |
           git submodule update --init --recursive
