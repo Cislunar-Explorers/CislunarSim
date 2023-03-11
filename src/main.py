@@ -59,15 +59,24 @@ class SimRunner:
                 nargs="?",
                 help="write the sim output to a CSV file"
             )
-            
+            parser.add_argument(
+                "-f",
+                "--fsw",
+                action="store_true",
+                help="Enable the simulator to run with the FSW"
+            )
+
             # Parser command line arguments
             args = parser.parse_args()
 
             # Set Logging level of "Sim" based on --verbose argument.
-            log.setLevel(logging.DEBUG) if args.verbose else log.setLevel(logging.INFO)
+            log.setLevel(logging.DEBUG) if args.verbose else log.setLevel(
+                logging.INFO)
             self.out = args.out
             self.plot = args.plot
-            self._sim = CislunarSim(Config.make_config(args.config))
+            self.run_fsw = args.fsw
+            self._sim = CislunarSim(
+                Config.make_config(args.config), self.run_fsw)
 
         self.state_history = []
 
@@ -82,12 +91,13 @@ class SimRunner:
         states = self._run()
         run_df = states_to_df(states)
 
-        log.setLevel(logging.INFO)  # to prevent being spammed by matplotlib's debug logs (doesn't work)
+        # to prevent being spammed by matplotlib's debug logs (doesn't work)
+        log.setLevel(logging.INFO)
 
         if self.plot:
             data_plot = Plot(run_df)
             data_plot.plot_data()
-        
+
         return run_df
 
     def _run(self):

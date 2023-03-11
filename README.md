@@ -30,6 +30,7 @@ python src/main.py config [-v] [-p] [-o [OUT]]
 `-v` *(Optional)*: Verbose mode for logging extra information to the terminal  
 `-p` *(Optional)*: Plotting mode to plot the data of this sim run  
 `-o [OUT]` *(Optional)*: Outputs the data of this sim run to a CSV file. A name OUT can be provided, otherwise the name will be the current Unix timestamp
+`-f` *(Optional)*: Runs the flight software alongside the simulator, displaying FSW output
 
 #### Examples:  
 ```zsh
