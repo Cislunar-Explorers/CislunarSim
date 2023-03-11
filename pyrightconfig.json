@@ -8,5 +8,8 @@
     "reportUnusedVariable": "warning",
     "reportWildcardImportFromLibrary": "error",
     "reportOptionalMemberAccess": "warning",
-    "reportDuplicateImport": "error"
+    "reportDuplicateImport": "error",
+    "exclude": [
+        "src/fsw/*"
+    ]
 }
