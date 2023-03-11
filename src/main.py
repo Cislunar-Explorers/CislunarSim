@@ -29,7 +29,7 @@ class SimRunner:
         """
         # if called from somewhere within the program, with config objects
         if isinstance(config, Config):
-            self._sim = CislunarSim(config)
+            self._sim = CislunarSim(config, False)
 
         # if called from command line
         else:
