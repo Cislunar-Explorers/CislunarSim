@@ -13,6 +13,7 @@ jobs:
           repository: Cislunar-Explorers/FlightSoftware
           path: './src/fsw'
           ref: a514cd98dea499f126a7d72ca970710a01ab3b98
+      - uses: actions/checkout@v2
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
