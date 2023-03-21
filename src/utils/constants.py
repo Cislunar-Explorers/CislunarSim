@@ -51,7 +51,10 @@ R_EARTH = 6_378_137  # Average Radius of the Earth, meters
 R_MOON = 1_737_100  # Average Radius of the Moon, meters
 R_SUN = 696_340_000
 
+#electrolyzer model constants
 R = 8.314_462_618_153_24 # Ideal gas constant
 M_WATER = 18.0153 # Molar mass of water, g/mol
+M_OXYGEN = 31.999 # Molar mass of oxygen gas (diatomic), g/mol
+M_HYDROGEN = 2.016 # Molar mass of hydrogen gas (diatomic), g/mol
 
-D_T = 0.1  # timestep in seconds
+D_T = 250  # timestep in seconds
