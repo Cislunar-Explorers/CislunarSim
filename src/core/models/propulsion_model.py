@@ -3,7 +3,6 @@ from src.core.parameters import Parameters
 from src.core.state.statetime import StateTime
 from typing import Dict, Any
 import numpy as np
-import matplotlib.pyplot as plt
 import cantera as ct
 import numpy as np
 
@@ -79,7 +78,6 @@ class PropulsionModel(ActuatorModel):
         for i, time in enumerate(t[:-1]): # Loop over each time step
             mdot[i] = Choke.mass_flow_rate
             network.advance(time + dt)
-
             Taft = combustor.thermo.T # Combustion chamber temperature at current time step
             Paft = combustor.thermo.P # Pressure chamber temperature at current time step
             m[i] = combustor.mass # Combustion chamber mass at current time step
