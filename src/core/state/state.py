@@ -49,6 +49,7 @@ class State:
 
     # discrete state
     propulsion_on: bool = False
+    time_since_propulsing: float = 0.0
     solenoid_actuation_on: bool = False
 
     def update(self, state_dict: Dict[str, State_Type]) -> None:
@@ -126,6 +127,7 @@ class ObservedState(State):
 
     # discrete state
     propulsion_on: bool = False
+    time_since_propulsing: float = 0.0
     solenoid_actuation_on: bool = False
 
     def init_from_state(self, state: State):
