@@ -69,7 +69,7 @@ class PropulsionModel(ActuatorModel):
         dt = 0.0001 #time step
         tdiff = self._t2 - self._t1
 
-        t = np.arange(0, tdiff + dt, dt) #time array up to length of firing with the specified time step
+        t = np.arange(0, tdiff + dt, dt) #time array up to length of firing with specified time step
         m = np.zeros_like(t) # Array to store the mass of the combustion chamber at each time step
         P = np.zeros_like(t)
 
