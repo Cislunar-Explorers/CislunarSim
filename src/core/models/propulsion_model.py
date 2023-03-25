@@ -5,6 +5,10 @@ from typing import Dict, Any
 import numpy as np
 import cantera as ct
 import numpy as np
+#if is_propelling
+#    prop_model()
+#Prop_Model()
+#    augment the current state
 
 class PropulsionModel(ActuatorModel):
     """Propagates location, time, based on propulsion model"""
@@ -12,8 +16,8 @@ class PropulsionModel(ActuatorModel):
     def __init__(self, start_time: float, end_time: float, parameters: Parameters) -> None:
       super().__init__(parameters)
 
-      self._t1 = start_time
-      self._t2 = end_time
+      #self._t1 = start_time
+      #self._t2 = end_time
     
     def evaluate(self, state_time: StateTime) -> Dict[str, Any]:
         """Function that calculates force, position, and velocity based on model
@@ -96,7 +100,10 @@ class PropulsionModel(ActuatorModel):
         
         #Thrust & Impulse
         Force = P3 * A3 / mdot[-1]
+        state_time.state.force_propulsion_thrusters = 
         Impulse = np.sum(Force, axis=0) * dt
+        print(Force)
+        print(Impulse)
 
         #Return
         return {
