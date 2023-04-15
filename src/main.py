@@ -4,8 +4,12 @@ import logging
 from typing import Union
 from core.config import Config
 from core.sim import CislunarSim
+from sys import getsizeof
+from core.state import state
 import pandas as pd
 from utils.matplotlib_util import Plot
+from multiprocessing import shared_memory
+import numpy as np
 
 
 import argparse
@@ -79,6 +83,8 @@ class SimRunner:
         Returns:
             pd.DataFrame: Dataframe of the true and observed states at each instant of observation.
         """
+        shm = shared_memory.SharedMemory(create=True, name="Simulator Data", size=getsizeof(state.ObservedState().to_array())) # Create shared memory
+        
         states = self._run()
         run_df = states_to_df(states)
 
@@ -88,12 +94,19 @@ class SimRunner:
             data_plot = Plot(run_df)
             data_plot.plot_data()
         
+        shm.close()
+        shm.unlink()
         return run_df
 
     def _run(self):
         while self._sim.should_run:
             try:
                 updated_states = self._sim.step()
+                # shm = shared_memory.SharedMemory(name="Simulator Data")
+                # dummyArray = state.ObservedState().to_array()
+                # dataArray = np.ndarray(dummyArray.shape, dtype=dummyArray.dtype, buffer=shm.buf)
+                # assert (updated_states.observed_state.to_array() == dataArray).all()
+                # The above code asserts the data stored in the shared memory is the same as is propagated elsewhere
                 self.state_history.append(updated_states)
             except (Exception) as e:
                 log.critical("Stopping sim due to unhandled exception:")

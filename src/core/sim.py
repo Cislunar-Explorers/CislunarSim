@@ -7,6 +7,7 @@ from core.models.model_list import ModelContainer
 from utils.log import log
 from utils.constants import R_EARTH, EARTH_SOI
 from core.event import Event, NormalEvent
+from multiprocessing import shared_memory
 
 class CislunarSim:
     """This class consolidates all parts of the sim (config, models, state). It is responsible for 
@@ -32,7 +33,11 @@ class CislunarSim:
         current_event = self.event_queue.get()
         self.state_time, self.observed_state = current_event.evaluate(self.state_time)
         # TODO: Feed outputs of sensor models into FSW and return actuator's state as part of `PropagatedOutput`
-
+        # Current implementation uses Shared Memory to pass data
+        shm = shared_memory.SharedMemory(name="Simulator Data") 
+        observedArray = self.observed_state.to_array()
+        stateArray = np.ndarray(observedArray.shape, dtype=observedArray.dtype, buffer=shm.buf)
+        stateArray[:] = observedArray[:]
         # check if we should stop the sim
         self.should_run = not (self.should_stop())
         self.num_iters += 1
