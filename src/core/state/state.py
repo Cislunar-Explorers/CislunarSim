@@ -43,6 +43,13 @@ class State:
     # temp_fuel_mass: float = 0.0
     chamber_temp: float = 0.0 #C
     # temp_chamber_temp: float = 0.0
+    kg_electrolyzed: float = 0.0
+    # whether the electrolyzer is on
+    electrolyzer_on: bool = False
+    # the amount of time the electrolyzer is on
+    onDuration: float = 0.0
+    # electrolyzer rate -- dependent on voltage, which will be delt with outside electrolyzer model
+    electrolyzer_rate: float = 0.0
 
     # derived state (Newtons)
     force_earth: float = 0.0
