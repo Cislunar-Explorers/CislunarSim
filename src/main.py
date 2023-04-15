@@ -102,11 +102,6 @@ class SimRunner:
         while self._sim.should_run:
             try:
                 updated_states = self._sim.step()
-                # shm = shared_memory.SharedMemory(name="Simulator Data")
-                # dummyArray = state.ObservedState().to_array()
-                # dataArray = np.ndarray(dummyArray.shape, dtype=dummyArray.dtype, buffer=shm.buf)
-                # assert (updated_states.observed_state.to_array() == dataArray).all()
-                # The above code asserts the data stored in the shared memory is the same as is propagated elsewhere
                 self.state_history.append(updated_states)
             except (Exception) as e:
                 log.critical("Stopping sim due to unhandled exception:")
