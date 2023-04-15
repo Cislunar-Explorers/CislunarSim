@@ -8,6 +8,7 @@ from utils.log import log
 from utils.constants import R_EARTH, EARTH_SOI
 from core.event import Event, NormalEvent
 from multiprocessing import shared_memory
+from sys import getsizeof
 
 class CislunarSim:
     """This class consolidates all parts of the sim (config, models, state). It is responsible for 
@@ -34,8 +35,12 @@ class CislunarSim:
         self.state_time, self.observed_state = current_event.evaluate(self.state_time)
         # TODO: Feed outputs of sensor models into FSW and return actuator's state as part of `PropagatedOutput`
         # Current implementation uses Shared Memory to pass data
-        shm = shared_memory.SharedMemory(name="Simulator Data") 
         observedArray = self.observed_state.to_array()
+        try:
+            shm = shared_memory.SharedMemory(name="Simulator Data") 
+        except (FileNotFoundError) as e:
+            log.warn("Some external processes closed the shared memory. I will restart it, but this may lead to an error on any other processes listening on this memory. Unsafe behaviour ahead!")
+            shm = shared_memory.SharedMemory(create=True, name="Simulator Data", size=getsizeof(observedArray))
         stateArray = np.ndarray(observedArray.shape, dtype=observedArray.dtype, buffer=shm.buf)
         stateArray[:] = observedArray[:]
         # check if we should stop the sim
