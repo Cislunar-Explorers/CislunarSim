@@ -65,8 +65,8 @@ class PropulsionModel(ActuatorModel):
         gamma = CpH2O / CvH2O # Ratio of specific heats for water vapor
         calc = (gamma + 1) / (2 * (gamma - 1))
         arearatio = A2 / A3
-        int = arearatio * 1 / ((1 + (gamma - 1) / 2) ** calc)
-        M3 = ct.oneD.solve_area_ratio(gas2, A2, A3, int, gamma=gamma) #Mach No. Calculation
+        intermediate = arearatio * 1 / ((1 + (gamma - 1) / 2) ** calc)
+        M3 = ct.oneD.solve_area_ratio(gas2, A2, A3, intermediate, gamma=gamma) #Mach No. Calculation
         
         dt = 0.001 #time step
         tdiff = self._t2 - self._t1
@@ -90,7 +90,7 @@ class PropulsionModel(ActuatorModel):
             # Check if the pressure of the combustion chamber has exceeded the upper pressure limit
             if Paft > plim2:
                 mdot[i+1] = A2 * Paft * np.sqrt(gamma/RH2O) * ((gamma+1)/2)**num / np.sqrt(Taft)
-                Pc = P[i] #Pressure in combustion chamber
+                chamberpressure = P[i] #Pressure in combustion chamber
             else:
                 mdot[i+1] = 0 #Reset to zero if we've gone over
                 P[i] = plim2
@@ -100,8 +100,8 @@ class PropulsionModel(ActuatorModel):
         a = np.sqrt(gamma * RH2O * T3) #Local speed of sound
         v_eq = M3*a*np.sqrt(gamma*RH2O*T3) #Equivalent velocity
         F = mdot * v_eq #Array storing force at each dt time interval
-        Pc = P[-1] 
-        #P3 = Pc / ((1 + (gamma - 1) / 2 * M3 ** 2) ** (gamma / (gamma - 1))) # Pressure
+        chamberpressure = P[-1] 
+        #P3 = chamberpressure / ((1 + (gamma - 1) / 2 * M3 ** 2) ** (gamma / (gamma - 1))) # Pressure
 
         Force = 0
         #Traverse amd sum force array from time of last prop call to current time since propulsing
