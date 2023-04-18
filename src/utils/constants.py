@@ -5,6 +5,7 @@ from pathlib import Path
 
 SIM_ROOT = (Path(__file__).parent / "../..").resolve()
 SRC_ROOT = (Path(__file__).parent / "..").resolve()
+SHRD_MEM_NAME = "Simulator Data"
 
 
 class StringEnum(str, Enum):

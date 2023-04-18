@@ -9,7 +9,7 @@ from core.state import state
 import pandas as pd
 from utils.matplotlib_util import Plot
 from multiprocessing import shared_memory
-import numpy as np
+from utils.constants import SHRD_MEM_NAME
 
 
 import argparse
@@ -83,7 +83,7 @@ class SimRunner:
         Returns:
             pd.DataFrame: Dataframe of the true and observed states at each instant of observation.
         """
-        shm = shared_memory.SharedMemory(create=True, name="Simulator Data", size=getsizeof(state.ObservedState().to_array())) # Create shared memory
+        shm = shared_memory.SharedMemory(create=True, name=SHRD_MEM_NAME, size=getsizeof(state.ObservedState().to_array())) # Create shared memory
         
         states = self._run()
         run_df = states_to_df(states)

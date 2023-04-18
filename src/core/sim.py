@@ -9,6 +9,7 @@ from utils.constants import R_EARTH, EARTH_SOI
 from core.event import Event, NormalEvent
 from multiprocessing import shared_memory
 from sys import getsizeof
+from utils.constants import SHRD_MEM_NAME
 
 class CislunarSim:
     """This class consolidates all parts of the sim (config, models, state). It is responsible for 
@@ -33,16 +34,16 @@ class CislunarSim:
 
         current_event = self.event_queue.get()
         self.state_time, self.observed_state = current_event.evaluate(self.state_time)
-        # TODO: Feed outputs of sensor models into FSW and return actuator's state as part of `PropagatedOutput`
-        # Current implementation uses Shared Memory to pass data
-        observedArray = self.observed_state.to_array()
+        # Feed the current observed state of the simulator into the shared memory.
+        observed_array = self.observed_state.to_array()
         try:
-            shm = shared_memory.SharedMemory(name="Simulator Data") 
+            shm = shared_memory.SharedMemory(name=SHRD_MEM_NAME) 
         except (FileNotFoundError) as e:
-            log.warn("Some external processes closed the shared memory. I will restart it, but this may lead to an error on any other processes listening on this memory. Unsafe behaviour ahead!")
-            shm = shared_memory.SharedMemory(create=True, name="Simulator Data", size=getsizeof(observedArray))
-        stateArray = np.ndarray(observedArray.shape, dtype=observedArray.dtype, buffer=shm.buf)
-        stateArray[:] = observedArray[:]
+            log.warn(e)
+            log.warn("Shared Memory likely closed by external process. Recreating with current data.")
+            shm = shared_memory.SharedMemory(create=True, name=SHRD_MEM_NAME, size=getsizeof(observed_array))
+        state_array = np.ndarray(observed_array.shape, dtype=observed_array.dtype, buffer=shm.buf)
+        state_array[:] = observed_array[:]
         # check if we should stop the sim
         self.should_run = not (self.should_stop())
         self.num_iters += 1
