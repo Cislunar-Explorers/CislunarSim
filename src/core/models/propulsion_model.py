@@ -16,19 +16,17 @@ class PropulsionModel(ActuatorModel):
     def __init__(self, start_time: float, end_time: float, parameters: Parameters) -> None:
       super().__init__(parameters)
 
-      #self._t1 = start_time
-      #self._t2 = end_time
+      self._t1 = start_time
+      self._t2 = end_time
     
     def evaluate(self, state_time: StateTime) -> Dict[str, Any]:
-        """Function that calculates force, position, and velocity based on model
+        """Function that calculates propulsion force based on model
 
       Args:
-          t1: start time
-          t2: end time
           state_time (StateTime): The input statetime
 
       Returns:
-          Dict[str, Any]: Thrust/Force (N) & Impulse (N⋅s)
+          Dict[str, Any]: Thrust/Force (N)
       """
 
         ct.suppress_thermo_warnings(True)
@@ -60,6 +58,7 @@ class PropulsionModel(ActuatorModel):
         combustor.volume = vc 
         network = ct.ReactorNet([combustor]) 
         Choke = ct.MassFlowController(combustor, exhaust) # mass flow rate into combustion chamber
+        Taft=gas1.T
         CpH2O = 2532.8  # Specific heat capacity of water vapor (J/kg*K)
         CvH2O = 2071.2  # specific heat capacity of water vapor at constant volume (J/kg*K)
         RH2O = CpH2O - CvH2O
@@ -69,7 +68,7 @@ class PropulsionModel(ActuatorModel):
         int = arearatio * 1 / ((1 + (gamma - 1) / 2) ** calc)
         M3 = ct.oneD.solve_area_ratio(gas2, A2, A3, int, gamma=gamma) #Mach No. Calculation
         
-        dt = 0.0001 #time step
+        dt = 0.001 #time step
         tdiff = self._t2 - self._t1
 
         t = np.arange(0, tdiff + dt, dt) #time array up to length of firing with specified time step
@@ -95,18 +94,22 @@ class PropulsionModel(ActuatorModel):
                 mdot[i+1] = 0 #Reset to zero if we've gone over
                 P[i] = plim2
                 # return updated fuel mass and chamber pressure
-        Pc = P[-1]
+        mdot = mdot[1:]
+        T3=Taft/(1+((gamma-1)*M3^2)/2) #Exit temperature
+        a = np.sqrt(gamma * RH2O * T3) #Local speed of sound
+        v_eq = M3*a*np.sqrt(gamma*RH2O*T3) #Equivalent velocity
+        F = mdot * v_eq #Array storing force at each dt time interval
+        Pc = P[-1] 
         P3 = Pc / ((1 + (gamma - 1) / 2 * M3 ** 2) ** (gamma / (gamma - 1))) # Pressure
-        
-        #Thrust & Impulse
-        Force = P3 * A3 / mdot[-1]
-        state_time.state.force_propulsion_thrusters = 
-        Impulse = np.sum(Force, axis=0) * dt
-        print(Force)
-        print(Impulse)
+
+        Force = 0
+        #Traverse amd sum force array from time of last prop call to current time since propulsing
+        for j in range(int(state_time.state.last_prop_call_time/dt), int(state_time.state.time_since_propulsing/dt)):
+          Force += F[j]
+        #Divide force by number of array elements summed to calculate average force since last prop call
+        Force = Force / (int(state_time.state.time_since_propulsing/dt) - int(state_time.state.last_prop_call_time/dt))
 
         #Return
         return {
           "thrust": Force,
-          "impulse": Impulse,
         }
