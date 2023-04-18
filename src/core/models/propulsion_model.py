@@ -101,7 +101,7 @@ class PropulsionModel(ActuatorModel):
         v_eq = M3*a*np.sqrt(gamma*RH2O*T3) #Equivalent velocity
         F = mdot * v_eq #Array storing force at each dt time interval
         Pc = P[-1] 
-        P3 = Pc / ((1 + (gamma - 1) / 2 * M3 ** 2) ** (gamma / (gamma - 1))) # Pressure
+        #P3 = Pc / ((1 + (gamma - 1) / 2 * M3 ** 2) ** (gamma / (gamma - 1))) # Pressure
 
         Force = 0
         #Traverse amd sum force array from time of last prop call to current time since propulsing
