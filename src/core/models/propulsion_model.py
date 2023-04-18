@@ -36,14 +36,14 @@ class PropulsionModel(ActuatorModel):
         d2 = 0.05 * 0.0254  # (m)
         #d2mm = d2 * 1000
         d3 = 0.305 * 0.0254  # (m)
-        A1 = np.pi * d ** 2 / 4 #Cross-sectional area of the nozzle throat (m^2)
+        #A1 = np.pi * d ** 2 / 4 #Cross-sectional area of the nozzle throat (m^2)
         A2 = np.pi * d2 ** 2 / 4 #Cross-sectional area of the nozzle exit (m^2)
         A3 = np.pi * d3 ** 2 / 4  # Cross-sectional area of the combustion chamber (m^2)
         vc = h * np.pi * d ** 2 / 4
         plim1 = 45 * 6894.76  # Pascals
         plim2 = 100 * 6894.76  # Pascals
-        RH2 = 4.124e3  # J/kg*K
-        RO2 = 0.2598e3  # J/kg*K
+        #RH2 = 4.124e3  # J/kg*K
+        #RO2 = 0.2598e3  # J/kg*K
         RH2O = 0.4615e3  # J/kg*K
 
         gas1 = ct.Solution('gri30.xml') #gri30 is cantera's database of gases with all the gas properties
@@ -71,6 +71,7 @@ class PropulsionModel(ActuatorModel):
         dt = 0.001 #time step
         tdiff = self._t2 - self._t1
 
+        num=(-gamma+1)/(2*(gamma-1))
         t = np.arange(0, tdiff + dt, dt) #time array up to length of firing with specified time step
         m = np.zeros_like(t) # Array to store the mass of the combustion chamber at each time step
         P = np.zeros_like(t)
