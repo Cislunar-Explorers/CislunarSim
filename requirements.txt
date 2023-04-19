@@ -1,6 +1,7 @@
 astropy==5.0.4
 attrs==21.4.0
 -e git+https://github.com/Cislunar-Explorers/CislunarSim.git@918ab4c711657c7aa221dc6dd5a42998a672e193#egg=cislunar_sim
+cantera==2.6.0
 cycler==0.11.0
 fonttools==4.31.2
 importlib-resources==5.7.1

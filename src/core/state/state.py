@@ -40,6 +40,7 @@ class State:
 
     force_propulsion_thrusters: float = 0.0
     fuel_mass: float = 0.0
+    dry_mass: float = 0.0
     chamber_temp: float = 0.0
 
     # derived state (Newtons)
@@ -48,6 +49,7 @@ class State:
 
     # discrete state
     propulsion_on: bool = False
+    time_since_propulsing: float = 0.0
     solenoid_actuation_on: bool = False
 
     def update(self, state_dict: Dict[str, State_Type]) -> None:
@@ -114,16 +116,20 @@ class ObservedState(State):
 
     force_propulsion_thrusters: float = 0.0
     fuel_mass: float = 0.0
+    dry_mass: float = 0.0
     chamber_temp: float = 0.0
-
-    
 
     # derived state (Newtons)
     force_earth: float = 0.0
     force_moon: float = 0.0
 
     # discrete state
-    propulsion_on: bool = False
+    #Is cubesat firing boolean
+    propulsion_on: bool = False 
+    #Time since start of firing
+    time_since_propulsing: float = 0.0 
+    #Time of last integrator propulsion call since start of prop firing (Reset to 0 after current firing completed)
+    last_prop_call_time: float = 0.0 
     solenoid_actuation_on: bool = False
 
     def init_from_state(self, state: State):
