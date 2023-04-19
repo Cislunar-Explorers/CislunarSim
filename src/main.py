@@ -4,8 +4,12 @@ import logging
 from typing import Union
 from core.config import Config
 from core.sim import CislunarSim
+from sys import getsizeof
+from core.state import state
 import pandas as pd
 from utils.matplotlib_util import Plot
+from multiprocessing import shared_memory
+from utils.constants import SHRD_MEM_NAME
 
 
 import argparse
@@ -79,6 +83,8 @@ class SimRunner:
         Returns:
             pd.DataFrame: Dataframe of the true and observed states at each instant of observation.
         """
+        shm = shared_memory.SharedMemory(create=True, name=SHRD_MEM_NAME, size=getsizeof(state.ObservedState().to_array())) # Create shared memory
+        
         states = self._run()
         run_df = states_to_df(states)
 
@@ -88,6 +94,8 @@ class SimRunner:
             data_plot = Plot(run_df)
             data_plot.plot_data()
         
+        shm.close()
+        shm.unlink()
         return run_df
 
     def _run(self):
