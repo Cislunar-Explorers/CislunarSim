@@ -77,5 +77,5 @@ class ElectrolyzerModel(ActuatorModel):
       # return updated fuel mass
       return {
         "Electrolyzer rate (kg/s)": self._electrolyzer_rate, "H2 Production Rate (Moles/s)": h2Rate, 
-        "O2 Production Rate (moles/s)": o2Rate
+        "O2 Production Rate (moles/s)": o2Rate, "Time it was on": onTime
       }
