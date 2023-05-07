@@ -5,9 +5,9 @@ from core.parameters import Parameters
 
 s_0 = {
     "fill_frac": 0.0,
-    "ang_vel_x": 0.0,
-    "ang_vel_y": 0.0,
-    "ang_vel_z": 0.0,
+    "h_x": 0.0,
+    "h_y": 0.0,
+    "h_z": 0.0,
     "quat_v1": 0.0,
     "quat_v2": 0.0,
     "quat_v3": 0.0,
@@ -29,9 +29,9 @@ s_0 = {
 
 s_1 = {
     "fill_frac": 1.0,
-    "ang_vel_x": 2.0,
-    "ang_vel_y": 3.0,
-    "ang_vel_z": 4.0,
+    "h_x": 2.0,
+    "h_y": 3.0,
+    "h_z": 4.0,
     "quat_v1": 5.0,
     "quat_v2": 6.0,
     "quat_v3": 7.0,
