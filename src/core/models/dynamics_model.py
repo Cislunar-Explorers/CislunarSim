@@ -5,7 +5,6 @@ from typing import Dict, Any
 from core.state.state import State
 from core.state.statetime import StateTime
 from utils.gnc_utils import quaternion_derivative
-import logging
 
 
 class KaneModel(DerivedStateModel):
@@ -51,8 +50,6 @@ class AttitudeDynamics(EnvironmentModel):
 
         cur_quat = np.array([s.quat_v1, s.quat_v2, s.quat_v3, s.quat_r])
         angular_vel = np.array([d.ang_vel_x, d.ang_vel_y, d.ang_vel_z])
-        logging.info(cur_quat)
-        logging.info(angular_vel)
         d_quat = quaternion_derivative(cur_quat, angular_vel)
         # TODONE: Use angular momentum as state variable and for most dynamics evaluation
         # then calculate angular rates from momenta b/c inertia matricies change over time
