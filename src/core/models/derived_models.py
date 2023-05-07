@@ -1,11 +1,11 @@
 from abc import abstractmethod
 from core.state.state import State
 from utils.astropy_util import get_body_position
-from typing import Dict
 import numpy as np
 from utils.constants import BodyEnum
 from core.models.model_base import Model
-from typing import Union, Tuple, List
+from typing import Union, Tuple, List, Dict
+import logging
 
 
 class DerivedStateModel(Model):
@@ -101,4 +101,87 @@ class DerivedPosition(DerivedStateModel):
         }
 
 
-DERIVED_MODEL_LIST: List[DerivedStateModel] = [DerivedPosition(), DerivedAttitude()]
+class InertiaModel(DerivedStateModel):
+    def evaluate(self, _: float, state: State) -> Dict[str, Union[float, int, bool]]:
+        """ the _b postfix means the value is in the spacecraft's body frame"""
+        fill_frac = state.fill_frac
+
+        dcm = np.array([[0, 1, 0], [0, 0, -1], [-1, 0, 0]], dtype=np.int32)
+        dcmT = np.transpose(dcm)
+        # not sure why we do the above. Did i do that?
+        # probably to get the (incorrect) solidworks frame into the spacecraft
+        # body frame
+
+        # Inertia tensor when full. Structure is:
+        # [[Ixx, Ixy, Ixz],
+        #  [Iyx, Iyy, Iyz],
+        #  [Izx, Izy, Izz]].
+        # Units are (kg * m^2).
+        idf = (
+            np.array(
+                [
+                    [933513642.20, 260948256.18, 430810000.30],
+                    [260948256.18, 1070855457.07, 387172545.62],
+                    [430810000.30, 387172545.62, 629606813.62],
+                ],
+                dtype=np.float64,
+            )
+            * 1e-9
+        )
+        # inertia tensor in correct body frame
+        idf_b = np.matmul(np.matmul(dcm, idf), dcmT)
+
+        # Inertia tensor at 125 mL. Structure is:
+        # [[Ixx, Ixy, Ixz],
+        #  [Iyx, Iyy, Iyz],
+        #  [Izx, Izy, Izz]].
+        # Units are (kg * m^2).
+        idi = (
+            np.array(
+                [
+                    [855858994.14, 229481961.55, 377087149.13],
+                    [229481961.55, 963124288.81, 353943859.15],
+                    [377087149.13, 353943859.15, 559805590.96],
+                ],
+                dtype=np.float64,
+            )
+            * 1e-9
+        )
+        # inertia tensor in correct body frame
+        idi_b = np.matmul(np.matmul(dcm, idi), dcmT)
+
+        # Determine inertia tensor for Oxygen via linear interpolation as a function of fill
+        # fraction.
+
+        # TODO: determine whether linear fit is accurate enough
+        ineria_matrix_b = (idf_b - idi_b) * fill_frac + idi_b
+
+        # now that we know our moment of inertia (I matrix), we can calculate our angular
+        # velocities:
+        # page 14 of the 4060 Attitude Dynamics handout:
+        # h = I dot omega
+        # --> omega = inverse(I) matmul h
+
+        angular_momentum = np.array([[state.h_x, state.h_y, state.h_z]])
+        
+        angular_velocity = np.matmul(np.linalg.inv(ineria_matrix_b), angular_momentum.T)
+        logging.info(f"Inv: {np.linalg.inv(ineria_matrix_b)}")
+        logging.info(f"h: {angular_momentum}")
+        logging.info(f"w: {angular_velocity}")
+        return {
+            "Ixx": ineria_matrix_b[0][0],
+            "Ixy": ineria_matrix_b[0][1],
+            "Ixz": ineria_matrix_b[0][2],
+            "Iyx": ineria_matrix_b[1][0],
+            "Iyy": ineria_matrix_b[1][1],
+            "Iyz": ineria_matrix_b[1][2],
+            "Izx": ineria_matrix_b[2][0],
+            "Izy": ineria_matrix_b[2][1],
+            "Izz": ineria_matrix_b[2][2],
+            "ang_vel_x": angular_velocity[0][0],
+            "ang_vel_y": angular_velocity[1][0],
+            "ang_vel_z": angular_velocity[2][0],
+        }
+    
+
+DERIVED_MODEL_LIST: List[DerivedStateModel] = [DerivedPosition(), DerivedAttitude(), InertiaModel()]

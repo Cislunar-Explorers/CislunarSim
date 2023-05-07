@@ -17,10 +17,10 @@ class State:
     # primitive state
     fill_frac: float = 0.0  # TODO, decouple with fuel_mass
 
-    # angular momentum (kg*m^2/s)
-    ang_vel_x: float = 0.0
-    ang_vel_y: float = 0.0
-    ang_vel_z: float = 0.0
+    # angular momentum (kg*m^2/s, or N*m*s)
+    h_x: float = 0.0
+    h_y: float = 0.0
+    h_z: float = 0.0
 
     # angular position (quaternion)
     quat_v1: float = 0.0
@@ -115,8 +115,6 @@ class ObservedState(State):
     force_propulsion_thrusters: float = 0.0
     fuel_mass: float = 0.0
     chamber_temp: float = 0.0
-
-    
 
     # derived state (Newtons)
     force_earth: float = 0.0

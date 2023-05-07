@@ -23,6 +23,11 @@ class DerivedState:
     Izy: float = 0.0
     Izz: float = 0.0
 
+    # angular velocity in rad/s
+    ang_vel_x: float = 0.0
+    ang_vel_y: float = 0.0
+    ang_vel_z: float = 0.0
+
     # Kane damping constant
     kane_c: float = 0.0
 
@@ -44,13 +49,13 @@ class DerivedState:
     # earth to the craft
     r_ec: np.ndarray = np.array((0.0, 0.0, 0.0))
 
-    # attitude (unit) vector of spacecraft in ECI
+    # attitude (unit) vector of spacecraft's +X vector in ECI
     attitude_vector: np.ndarray = np.array((0.0, 0.0, 0.0))
 
-    # Azimuth angle of the spacecraft frame in ECI. "Theta" angle in spherical coords
+    # Azimuth angle of the +X spacecraft frame in ECI. "Theta" angle in spherical coords
     azimuth: float = 0  # radians
 
-    # Elevation angle of the spacecraft frame in ECI. "phi" angle in spherical coords
+    # Elevation angle of the +X spacecraft frame in ECI. "phi" angle in spherical coords
     elevation: float = 0  # radians
 
     def update(self, derived_state_dict: Dict) -> None:
