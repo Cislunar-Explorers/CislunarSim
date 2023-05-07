@@ -4,7 +4,7 @@ from typing import Dict
 
 class Parameters:
     """This is a container class for all parameters as defined in this sheet:
-     https://cornell.box.com/s/z20wbp66q0pseqievmadf515ucd971g2.
+    https://cornell.box.com/s/z20wbp66q0pseqievmadf515ucd971g2.
     """
 
     def __init__(self, param_dict: Dict = {}):
@@ -15,10 +15,10 @@ class Parameters:
 
         self.dry_mass = 0
         self.com = 0
-        
+
         # fuel tank
         self.tank_volume = 1
-        self.electolyzer_rate = 10.0 * (1/1000)
+        self.electolyzer_rate = 10.0 * (1 / 1000)
 
         # prop
         self.thruster_force = 0

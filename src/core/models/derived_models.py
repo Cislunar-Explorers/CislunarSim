@@ -5,7 +5,6 @@ import numpy as np
 from utils.constants import BodyEnum
 from core.models.model_base import Model
 from typing import Union, Tuple, List, Dict
-import logging
 
 
 class DerivedStateModel(Model):
@@ -103,7 +102,7 @@ class DerivedPosition(DerivedStateModel):
 
 class InertiaModel(DerivedStateModel):
     def evaluate(self, _: float, state: State) -> Dict[str, Union[float, int, bool]]:
-        """ the _b postfix means the value is in the spacecraft's body frame"""
+        """the _b postfix means the value is in the spacecraft's body frame"""
         fill_frac = state.fill_frac
 
         dcm = np.array([[0, 1, 0], [0, 0, -1], [-1, 0, 0]], dtype=np.int32)
@@ -163,11 +162,9 @@ class InertiaModel(DerivedStateModel):
         # --> omega = inverse(I) matmul h
 
         angular_momentum = np.array([[state.h_x, state.h_y, state.h_z]])
-        
+
         angular_velocity = np.matmul(np.linalg.inv(ineria_matrix_b), angular_momentum.T)
-        logging.info(f"Inv: {np.linalg.inv(ineria_matrix_b)}")
-        logging.info(f"h: {angular_momentum}")
-        logging.info(f"w: {angular_velocity}")
+
         return {
             "Ixx": ineria_matrix_b[0][0],
             "Ixy": ineria_matrix_b[0][1],
@@ -182,6 +179,6 @@ class InertiaModel(DerivedStateModel):
             "ang_vel_y": angular_velocity[1][0],
             "ang_vel_z": angular_velocity[2][0],
         }
-    
+
 
 DERIVED_MODEL_LIST: List[DerivedStateModel] = [DerivedPosition(), DerivedAttitude(), InertiaModel()]

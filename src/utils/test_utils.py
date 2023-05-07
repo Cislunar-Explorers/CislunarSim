@@ -24,7 +24,7 @@ s_0 = {
     "force_earth": 0.0,
     "force_moon": 0.0,
     "propulsion_on": False,
-    "solenoid_actuation_on": False
+    "solenoid_actuation_on": False,
 }
 
 s_1 = {
@@ -48,25 +48,24 @@ s_1 = {
     "force_earth": 18.0,
     "force_moon": 19.0,
     "propulsion_on": True,
-    "solenoid_actuation_on": False
+    "solenoid_actuation_on": False,
 }
 
 state_1 = State(**s_1)
 
 
 d3456_dict: Dict = {
-        "gyro_bias": [0.497625, -0.10821875, 0.77490625],
-        "gyro_noise": [0.1824535, 0.11738579, 0.19192256],
-        "gyro_sensitivity": 0.015625 * (math.pi / 180),
-        "dry_mass": 3,
-        "com": 4,
-        "tank_volume": 5,
-        "electolyzer_rate": 10.0 * (1/1000),
-        "thruster_force": 6,
-        "combustion_chamber_volume": 7,
-        "max_iter": 1000000
+    "gyro_bias": [0.497625, -0.10821875, 0.77490625],
+    "gyro_noise": [0.1824535, 0.11738579, 0.19192256],
+    "gyro_sensitivity": 0.015625 * (math.pi / 180),
+    "dry_mass": 3,
+    "com": 4,
+    "tank_volume": 5,
+    "electolyzer_rate": 10.0 * (1 / 1000),
+    "thruster_force": 6,
+    "combustion_chamber_volume": 7,
+    "max_iter": 1000000,
 }
 
 
 d3456: Parameters = Parameters(d3456_dict)
-
