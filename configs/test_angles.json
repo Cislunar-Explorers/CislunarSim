@@ -1,9 +1,9 @@
 {
     "initial_condition": {
         
-        "ang_vel_x" : 5.0, 
-        "ang_vel_y" : 5.0, 
-        "ang_vel_z" : 5.0, 
+        "h_x" : 5.0, 
+        "h_y" : 5.0, 
+        "h_z" : 5.0, 
         
         "quat_v1" : 10.0, 
         "quat_v2" : 10.0, 

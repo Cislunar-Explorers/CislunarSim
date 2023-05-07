@@ -89,7 +89,7 @@ def array_to_state(values: np.ndarray) -> State:
 @dataclass
 class ObservedState(State):
     # This is the true state with some noise applied
-    # TODO: Implement noise application
+    # TODONE: Implement noise application (in gyro model)
 
     # angular velocity (radians/second)
     ang_vel_x: float = 0.0
