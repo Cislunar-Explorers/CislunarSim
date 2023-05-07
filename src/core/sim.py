@@ -39,8 +39,8 @@ class CislunarSim:
         try:
             shm = shared_memory.SharedMemory(name=SHRD_MEM_NAME) 
         except (FileNotFoundError) as e:
-            log.warn(e)
-            log.warn("Shared Memory likely closed by external process. Recreating with current data.")
+            log.warning(e)
+            log.warning("Shared Memory likely closed by external process. Recreating with current data.")
             shm = shared_memory.SharedMemory(create=True, name=SHRD_MEM_NAME, size=getsizeof(observed_array))
         state_array = np.ndarray(observed_array.shape, dtype=observed_array.dtype, buffer=shm.buf)
         state_array[:] = observed_array[:]
