@@ -4,7 +4,8 @@ from core.models.derived_models import DerivedStateModel
 from typing import Dict, Any
 from core.state.state import State
 from core.state.statetime import StateTime
-from utils.gnc_utils import quaternion_derivative
+from utils import gnc_utils
+from utils import constants
 
 
 class KaneModel(DerivedStateModel):
@@ -37,7 +38,7 @@ class KaneModel(DerivedStateModel):
 class AttitudeDynamics(EnvironmentModel):
     """Class for the angular velocity and position model."""
 
-    def d_state(self, state_time: StateTime) -> Dict[str, Any]:
+    def d_state(self, state_time: StateTime) -> Dict[str, constants.State_Type]:
         """Evaluates
         (tau)   =   [I_b d(omega_{B/N})/dt]
                 +   [(omega_{B/N}) x (I_b (omega_{B/N}))]
@@ -49,12 +50,35 @@ class AttitudeDynamics(EnvironmentModel):
         d = state_time.derived_state
 
         cur_quat = np.array([s.quat_v1, s.quat_v2, s.quat_v3, s.quat_r])
-        angular_vel = np.array([d.ang_vel_x, d.ang_vel_y, d.ang_vel_z])
-        d_quat = quaternion_derivative(cur_quat, angular_vel)
+        angular_vel = d.ang_vel
+        d_quat = gnc_utils.quaternion_derivative(cur_quat, angular_vel)
         # TODONE: Use angular momentum as state variable and for most dynamics evaluation
         # then calculate angular rates from momenta b/c inertia matricies change over time
 
         # TODO: track external moments somewhere in state
-        # external_moments = np.array([[0,0,0]])
+        # external moments include mostly just ACS firings/torques, but can also include:
+        # gravity gradient torques (J2, of Earth and Moon), differential solar wind pressure, atmospheric drag, etc.
+        external_moments = np.array([[0.0, 0.0, 0.0]]).T
 
-        return {"quat_v1": d_quat[0], "quat_v2": d_quat[1], "quat_v3": d_quat[2], "quat_r": d_quat[3]}
+        # page 16 of MAE 4060 Handout: Rigid Body Dynamics:
+        # I dw/dt + w cross h = tau
+        # --> dh/dt =  (tau - w cross h)
+        angular_momentum = np.array([[s.h_x, s.h_y, s.h_z]]).T
+
+        # time derivative of angular momentum
+        cross_matrix = gnc_utils.cross_product_matrix(d.ang_vel)
+        dhdt = external_moments - np.matmul(cross_matrix, angular_momentum)
+
+        dh_x = dhdt[0][0]
+        dh_y = dhdt[1][0]
+        dh_z = dhdt[2][0]
+        
+        return {
+            "quat_v1": float(d_quat[0][0]),
+            "quat_v2": float(d_quat[1][0]),
+            "quat_v3": float(d_quat[2][0]),
+            "quat_r": float(d_quat[3][0]),
+            "h_x": float(dh_x),
+            "h_y": float(dh_y),
+            "h_z": float(dh_z),
+        }

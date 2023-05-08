@@ -164,21 +164,10 @@ class InertiaModel(DerivedStateModel):
         angular_momentum = np.array([[state.h_x, state.h_y, state.h_z]])
 
         angular_velocity = np.matmul(np.linalg.inv(ineria_matrix_b), angular_momentum.T)
-
         return {
-            "Ixx": ineria_matrix_b[0][0],
-            "Ixy": ineria_matrix_b[0][1],
-            "Ixz": ineria_matrix_b[0][2],
-            "Iyx": ineria_matrix_b[1][0],
-            "Iyy": ineria_matrix_b[1][1],
-            "Iyz": ineria_matrix_b[1][2],
-            "Izx": ineria_matrix_b[2][0],
-            "Izy": ineria_matrix_b[2][1],
-            "Izz": ineria_matrix_b[2][2],
-            "ang_vel_x": angular_velocity[0][0],
-            "ang_vel_y": angular_velocity[1][0],
-            "ang_vel_z": angular_velocity[2][0],
-        }
+            "I": ineria_matrix_b,
+            "ang_vel": angular_velocity,
+            }
 
 
 DERIVED_MODEL_LIST: List[DerivedStateModel] = [DerivedPosition(), DerivedAttitude(), InertiaModel()]

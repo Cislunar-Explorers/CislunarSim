@@ -7,7 +7,7 @@ from core.sim import CislunarSim
 from sys import getsizeof
 from core.state import state
 import pandas as pd
-from utils.matplotlib_util import Plot
+# from utils.matplotlib_util import Plot
 from multiprocessing import shared_memory
 from utils.constants import SHRD_MEM_NAME
 
@@ -90,9 +90,9 @@ class SimRunner:
 
         log.setLevel(logging.INFO)  # to prevent being spammed by matplotlib's debug logs (doesn't work)
 
-        if self.plot:
-            data_plot = Plot(run_df)
-            data_plot.plot_data()
+        # if self.plot:
+        #     data_plot = Plot(run_df)
+        #     data_plot.plot_data()
         
         shm.close()
         shm.unlink()

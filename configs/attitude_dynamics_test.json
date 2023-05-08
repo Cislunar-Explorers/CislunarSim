@@ -1,4 +1,7 @@
 {
+    "parameters": {
+        "max_iter": 1e2
+    },
     "initial_condition": {
         "x": 100000000.0,
         "h_x": 1.5,

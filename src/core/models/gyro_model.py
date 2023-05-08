@@ -29,14 +29,10 @@ class GyroModel(SensorModel):
 
         # smush the x, y, z components from state into a vector
         # (because vectorization is cool as hecc)
-        ang_vel_true = np.array(
-            [state_time.derived_state.ang_vel_x,
-             state_time.derived_state.ang_vel_y,
-             state_time.derived_state.ang_vel_z]
-        )
+        ang_vel_true = state_time.derived_state.ang_vel
 
         # add gyro's bias
-        ang_vel_biased = ang_vel_true + self.gyro_bias
+        ang_vel_biased = ang_vel_true.reshape(3) + self.gyro_bias.reshape(3)
         # add gyro's noise
         ang_vel_observed = np.random.normal(loc=ang_vel_biased, scale=self.gyro_noise, size=3)
 

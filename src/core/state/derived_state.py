@@ -13,20 +13,9 @@ class DerivedState:
     # [[Ixx, Ixy, Ixz],
     #  [Iyx, Iyy, Iyz],
     #  [Izx, Izy, Izz]].
-    Ixx: float = 0.0
-    Ixy: float = 0.0
-    Ixz: float = 0.0
-    Iyx: float = 0.0
-    Iyy: float = 0.0
-    Iyz: float = 0.0
-    Izx: float = 0.0
-    Izy: float = 0.0
-    Izz: float = 0.0
-
+    I: np.matrix = np.zeros((3, 3))
     # angular velocity in rad/s
-    ang_vel_x: float = 0.0
-    ang_vel_y: float = 0.0
-    ang_vel_z: float = 0.0
+    ang_vel: np.ndarray = np.zeros((3, 1))
 
     # Kane damping constant
     kane_c: float = 0.0
