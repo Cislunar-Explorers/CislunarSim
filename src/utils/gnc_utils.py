@@ -2,7 +2,7 @@ import numpy as np
 from typing import Tuple
 
 
-def cross_product_matrix(vector: np.ndarray) -> np.matrix:  # type: ignore
+def cross_product_matrix(vector: np.ndarray) -> np.ndarray:  # type: ignore
     """Creates a cross-multiplication matrix for a length 3 vector
     See bottom of page 2 of https://cornell.app.box.com/file/809903125394
     for brief reference.
@@ -12,16 +12,16 @@ def cross_product_matrix(vector: np.ndarray) -> np.matrix:  # type: ignore
         vector (np.array): a 3x1 vector
 
     Returns:
-        np.matrix: a 3x3 matrix which when matrix multiplied with another vector, b, has the same results as the input
+        np.ndarray: a 3x3 matrix which when matrix multiplied with another vector, b, has the same results as the input
         vector cross-product with b
     """
-
-    return np.matrix(
+    vector.shape = (3,)
+    return np.array(
         [[0, -vector[2], vector[1]], [vector[2], 0, -vector[0]], [-vector[1], vector[0], 0]]  # type: ignore
     )
 
 
-def calc_xi(v: np.ndarray, r: float) -> np.matrix:
+def calc_xi(v: np.ndarray, r: float) -> np.ndarray:
     """Xi function as defined on page 7 of https://cornell.app.box.com/file/809903125394
 
     Args:
@@ -33,10 +33,10 @@ def calc_xi(v: np.ndarray, r: float) -> np.matrix:
     """
     top = r * np.eye(3) + cross_product_matrix(v)  # 3-by-3 matrix
     bot = -v.T  # 1-by-3 matrix
-    return np.matrix(np.vstack((top, bot)))  # stacked to be a 4-by-3
+    return np.vstack((top, bot))  # stacked to be a 4-by-3
 
 
-def calc_psi(v: np.ndarray, r: float) -> np.matrix:
+def calc_psi(v: np.ndarray, r: float) -> np.ndarray:
     """Psi function as defined on page 7 of https://cornell.app.box.com/file/809903125394
 
     Args:
@@ -44,21 +44,21 @@ def calc_psi(v: np.ndarray, r: float) -> np.matrix:
         r (float): scalar component of the quaternion
 
     Returns:
-        np.matrix: 4-by-3 Psi matrix
+        np.ndarray: 4-by-3 Psi matrix
     """
     top = r * np.eye(3) - cross_product_matrix(v)  # 3-by-3 matrix
     bot = -v.T  # 1-by-3 matrix
-    return np.matrix(np.vstack((top, bot)))  # stacked to be a 4-by-3
+    return np.vstack((top, bot))  # stacked to be a 4-by-3
 
 
-def quat_to_dcm(quat: np.ndarray) -> np.matrix:
+def quat_to_dcm(quat: np.ndarray) -> np.ndarray:
     """Calculates the direction cosine matrix (DCM) associated with the input quaternion.
     The math in this function is based off of page 17 of https://cornell.app.box.com/file/809903002605
     Args:
         quat (np.ndarray): 4x1 quaternion
 
     Returns:
-        np.matrix: 3x3 Direction Cosine Matrix
+        np.ndarray: 3x3 Direction Cosine Matrix
     """
 
     v = quat[0:3]
@@ -69,17 +69,17 @@ def quat_to_dcm(quat: np.ndarray) -> np.matrix:
 
     dcm = np.matmul(xi.T, psi)
 
-    return np.matrix(dcm)
+    return dcm
 
 
 def dcm_to_spherical_coords(
-    dcm: np.matrix, spacecraft_frame_vector: np.ndarray = np.array((1, 0, 0))
+    dcm: np.ndarray, spacecraft_frame_vector: np.ndarray = np.array((1, 0, 0))
 ) -> Tuple[float, float]:
     """Calculates the spherical coordinate components (theta, phi) of the `spacecraft_frame_vector` from the input
     spacecraft-body DCM.
 
     Args:
-        dcm (np.matrix): the DCM of an ECI to spacecraft body frame transformation
+        dcm (np.ndarray): the DCM of an ECI to spacecraft body frame transformation
         spacecraft_frame_vector (np.ndarray, optional): vector in the spacecraft body
         frame that is converted into ECI and then transformed into spherical coordinates.
         Defaults to np.array((1, 0, 0)), the X-axis of the spacecraft .

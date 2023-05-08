@@ -19,9 +19,9 @@ class ConfigTestCases(unittest.TestCase):
     }
     ic_pos = {"x": 3.0, "y": 3.0, "z": 3.0}
     ic_all = {
-        "ang_vel_x": 10.0,
-        "ang_vel_y": 10.0,
-        "ang_vel_z": 10.0,
+        "h_x": 10.0,
+        "h_y": 10.0,
+        "h_z": 10.0,
         "quat_v1": 10.0,
         "quat_v2": 10.0,
         "quat_v3": 10.0,
@@ -52,9 +52,9 @@ class ConfigTestCases(unittest.TestCase):
     }
 
     zeroes_ic = {
-        "ang_vel_x": 0.0,
-        "ang_vel_y": 0.0,
-        "ang_vel_z": 0.0,
+        "h_x": 0.0,
+        "h_y": 0.0,
+        "h_z": 0.0,
         "quat_v1": 0.0,
         "quat_v2": 0.0,
         "quat_v3": 0.0,
@@ -75,9 +75,9 @@ class ConfigTestCases(unittest.TestCase):
     default_model = ["att", "pos"]
 
     angles_ic = {
-        "ang_vel_x": 5.0,
-        "ang_vel_y": 5.0,
-        "ang_vel_z": 5.0,
+        "h_x": 5.0,
+        "h_y": 5.0,
+        "h_z": 5.0,
         "quat_v1": 10.0,
         "quat_v2": 10.0,
         "quat_v3": 10.0,

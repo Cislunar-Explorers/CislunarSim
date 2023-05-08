@@ -8,7 +8,7 @@ from typing import Dict, Union
 
 @dataclass
 class StateTime:
-    """ This class associates the state with the time. """
+    """This class associates the state with the time."""
 
     state: State = State()
     time: float = 0.0
@@ -43,10 +43,21 @@ class StateTime:
         self.state.update(state_dict)
 
     def update_derived(self, state_dict: Dict) -> None:
-        """update_derived() is a procedure that updates the fields of the derived state with specified key/value pairs in state_dict.
+        """update_derived() is a procedure that updates the fields of the derived state with specified key/value pairs
+        in state_dict.
         If a key in the `state_dict` is not defined as an attribute in DerivedState.__init__, it will be ignored.
         """
         self.derived_state.update(state_dict)
+
+
+def apply_coupled_initial_conditions(st: StateTime) -> None:
+    """Updates the input statetime with any coupled initial conditions"""
+    # page 5 of Bernardini_Pietro_2022_Spring_ACS.docx:
+    # initial condition of angular velocity of kane damper = spacecraft spin rate
+    if st.derived_state.ang_vel.any():
+        st.state.w_kane_x = float(st.derived_state.ang_vel[0][0])
+        st.state.w_kane_y = float(st.derived_state.ang_vel[1][0])
+        st.state.w_kane_z = float(st.derived_state.ang_vel[2][0])
 
 
 @dataclass

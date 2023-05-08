@@ -1,10 +1,11 @@
 import math
 from typing import Dict
+import numpy as np
 
 
 class Parameters:
     """This is a container class for all parameters as defined in this sheet:
-     https://cornell.box.com/s/z20wbp66q0pseqievmadf515ucd971g2.
+    https://cornell.box.com/s/z20wbp66q0pseqievmadf515ucd971g2.
     """
 
     def __init__(self, param_dict: Dict = {}):
@@ -15,14 +16,20 @@ class Parameters:
 
         self.dry_mass = 0
         self.com = 0
-        
+
         # fuel tank
         self.tank_volume = 1
-        self.electolyzer_rate = 10.0 * (1/1000)
+        self.electolyzer_rate = 10.0 * (1 / 1000)
 
         # prop
         self.thruster_force = 0
         self.combustion_chamber_volume = 1
+
+        # attitude dynamics
+        # TODO: add dry and wet spacecraft moments of inertia here
+
+        # I don't actually know what to set this to. Guessing for now:
+        self.kane_damper_inertia = np.eye(3)
 
         # sim
         self.max_iter = 1e6

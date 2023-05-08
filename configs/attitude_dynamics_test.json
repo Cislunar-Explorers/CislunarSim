@@ -1,8 +1,12 @@
 {
+    "parameters": {
+        "max_iter": 1e3
+    },
     "initial_condition": {
         "x": 100000000.0,
-        "ang_vel_x": 4.5,
-        "ang_vel_y": 1.0,
+        "h_x": 4.5,
+        "h_y": 0.2,
+        "h_z": 0.0,
         "time": 0.0,
         "quat_v1": 1.0,
         "quat_v2": 0.0,

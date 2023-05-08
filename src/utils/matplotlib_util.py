@@ -24,7 +24,7 @@ class Plot:
         self.vel_zs = df["true_state.state.vel_z"].to_numpy()
 
         self.locs = np.array([self.xlocs, self.ylocs, self.zlocs])
-        self.ang_x = df["true_state.state.ang_vel_x"].to_numpy()
+        self.h_x = df["true_state.state.h_x"].to_numpy()
         self.ang_x_obs = df["observed_state.ang_vel_x"].to_numpy()
 
         self.fig_2d = plt.figure()
@@ -93,7 +93,7 @@ class Plot:
         self.xlocs_line.set_ydata(self.xlocs[:t_max_index:])
         self.ylocs_line.set_ydata(self.ylocs[:t_max_index:])
         self.zlocs_line.set_ydata(self.zlocs[:t_max_index:])
-        self.ang_x_line.set_ydata(self.ang_x[:t_max_index:])
+        self.h_x_line.set_ydata(self.h_x[:t_max_index:])
         self.ang_x_obs_line.set_ydata(self.ang_x_obs[:t_max_index:])
 
         for line in self.lines_2d:
@@ -134,8 +134,8 @@ class Plot:
             self.ts, self.zlocs, "--", c="blue", label="z"
         )
 
-        (self.ang_x_line,) = self.ax_ang_vel_x.plot(
-            self.ts, self.ang_x, "--", c="hotpink", label="x (true)"
+        (self.h_x_line,) = self.ax_ang_vel_x.plot(
+            self.ts, self.h_x, "--", c="hotpink", label="x (true)"
         )
         (self.ang_x_obs_line,) = self.ax_ang_vel_x.plot(
             self.ts, self.ang_x_obs, "--", c="green", label="x (observed)"
@@ -147,7 +147,7 @@ class Plot:
             self.xlocs_line,
             self.ylocs_line,
             self.zlocs_line,
-            self.ang_x_line,
+            self.h_x_line,
             self.ang_x_obs_line,
         ]
 

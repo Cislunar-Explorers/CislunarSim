@@ -7,7 +7,6 @@ from core.sim import CislunarSim
 from sys import getsizeof
 from core.state import state
 import pandas as pd
-from utils.matplotlib_util import Plot
 from multiprocessing import shared_memory
 from utils.constants import SHRD_MEM_NAME
 
@@ -50,20 +49,9 @@ class SimRunner:
                 action="store_true",
                 help="set the logging level to DEBUG instead of INFO",
             )
-            parser.add_argument(
-                "-p",
-                "--plot",
-                action="store_true",
-                help="plot the sim output"
-            )
-            parser.add_argument(
-                "-o",
-                "--out",
-                const="None",
-                nargs="?",
-                help="write the sim output to a CSV file"
-            )
-            
+            parser.add_argument("-p", "--plot", action="store_true", help="plot the sim output")
+            parser.add_argument("-o", "--out", const="None", nargs="?", help="write the sim output to a CSV file")
+
             # Parser command line arguments
             args = parser.parse_args()
 
@@ -83,17 +71,20 @@ class SimRunner:
         Returns:
             pd.DataFrame: Dataframe of the true and observed states at each instant of observation.
         """
-        shm = shared_memory.SharedMemory(create=True, name=SHRD_MEM_NAME, size=getsizeof(state.ObservedState().to_array())) # Create shared memory
-        
+        shm = shared_memory.SharedMemory(
+            create=True, name=SHRD_MEM_NAME, size=getsizeof(state.ObservedState().to_array())
+        )  # Create shared memory
+
         states = self._run()
         run_df = states_to_df(states)
 
         log.setLevel(logging.INFO)  # to prevent being spammed by matplotlib's debug logs (doesn't work)
 
         if self.plot:
+            from utils.matplotlib_util import Plot
             data_plot = Plot(run_df)
             data_plot.plot_data()
-        
+
         shm.close()
         shm.unlink()
         return run_df
@@ -119,7 +110,7 @@ def run_sim():
     data = sim.run()
 
     # don't store any data if the sim was not specified to output to a file
-    if sim.out != None:
+    if sim.out is not None:
         df_to_csv(data, sim.out)
 
 

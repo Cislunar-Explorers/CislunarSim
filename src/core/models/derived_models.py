@@ -1,11 +1,10 @@
 from abc import abstractmethod
 from core.state.state import State
 from utils.astropy_util import get_body_position
-from typing import Dict
 import numpy as np
-from utils.constants import BodyEnum
+from utils.constants import BodyEnum, State_Type
 from core.models.model_base import Model
-from typing import Union, Tuple, List
+from typing import Union, Tuple, List, Dict
 
 
 class DerivedStateModel(Model):
@@ -101,4 +100,101 @@ class DerivedPosition(DerivedStateModel):
         }
 
 
-DERIVED_MODEL_LIST: List[DerivedStateModel] = [DerivedPosition(), DerivedAttitude()]
+class InertiaModel(DerivedStateModel):
+    def evaluate(self, _: float, state: State) -> Dict[str, State_Type]:
+        """the _b postfix means the value is in the spacecraft's body frame"""
+        fill_frac = state.fill_frac
+
+        dcm = np.array([[0, 1, 0], [0, 0, -1], [-1, 0, 0]], dtype=np.int32)
+        dcmT = np.transpose(dcm)
+        # not sure why we do the above. Did i do that?
+        # probably to get the (incorrect) solidworks frame into the spacecraft
+        # body frame
+
+        # Inertia tensor when full. Structure is:
+        # [[Ixx, Ixy, Ixz],
+        #  [Iyx, Iyy, Iyz],
+        #  [Izx, Izy, Izz]].
+        # Units are (kg * m^2).
+        idf = (
+            np.array(
+                [
+                    [933513642.20, 260948256.18, 430810000.30],
+                    [260948256.18, 1070855457.07, 387172545.62],
+                    [430810000.30, 387172545.62, 629606813.62],
+                ],
+                dtype=np.float64,
+            )
+            * 1e-9
+        )
+        # inertia tensor in correct body frame
+        idf_b = np.matmul(dcm, idf)
+
+        # Inertia tensor at 125 mL. Structure is:
+        # [[Ixx, Ixy, Ixz],
+        #  [Iyx, Iyy, Iyz],
+        #  [Izx, Izy, Izz]].
+        # Units are (kg * m^2).
+        idi = (
+            np.array(
+                [
+                    [855858994.14, 229481961.55, 377087149.13],
+                    [229481961.55, 963124288.81, 353943859.15],
+                    [377087149.13, 353943859.15, 559805590.96],
+                ],
+                dtype=np.float64,
+            )
+            * 1e-9
+        )
+        # inertia tensor in correct body frame
+        idi_b = np.matmul(dcm, idi)
+
+        # Determine inertia tensor for Oxygen via linear interpolation as a function of fill
+        # fraction.
+
+        # TODO: determine whether linear fit is accurate enough
+        ineria_matrix_b = (idf_b - idi_b) * fill_frac + idi_b
+
+        # now that we know our moment of inertia (I matrix), we can calculate our angular
+        # velocities:
+        # page 14 of the 4060 Attitude Dynamics handout:
+        # h = I dot omega
+        # --> omega = inverse(I) matmul h
+
+        angular_momentum = np.array([[state.h_x, state.h_y, state.h_z]])
+
+        angular_velocity = np.matmul(np.linalg.inv(ineria_matrix_b), angular_momentum.T)
+        return {
+            "I": ineria_matrix_b,
+            "ang_vel": angular_velocity,
+        }
+
+
+class KaneModel(DerivedStateModel):
+    """Calculates the Kane damping coefficient from 2016 simulation data by K. Doyle."""
+
+    def evaluate(self, _: float, state: State) -> Dict[str, State_Type]:
+        # Coefficients below are from Kyle's work.
+        # TODO: Update them when we conduct a new Ansys analysis.
+        k = 0.00085
+        factor = 1.2
+
+        N = 50
+        kane = fill = tau1 = tau2 = np.zeros(N)
+        for i in range(N):
+            fill[i] = (i - 1) / N
+            tau1[i] = k * fill[i]
+            tau2[i] = factor * k * (1 - fill[i])
+            kane[i] = -np.sqrt(tau1[i] ** 2 + tau2[i] ** 2)
+
+        kane = kane - np.max(kane) + k
+        kane = kane - np.min(kane)
+        kane = kane * k / np.max(kane)
+
+        q = int(np.round(state.fill_frac / 0.02 + 1))
+        c = kane[q]
+
+        return {"kane_c": c}
+
+
+DERIVED_MODEL_LIST: List[DerivedStateModel] = [DerivedPosition(), DerivedAttitude(), InertiaModel(), KaneModel()]
