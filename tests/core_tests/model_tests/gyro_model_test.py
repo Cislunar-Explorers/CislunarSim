@@ -28,9 +28,9 @@ class GyroModelUnitTest(unittest.TestCase):
         self.assertIsInstance(eval_clean, Dict)
 
         # verify the original values have not been augmented by the model
-        self.assertAlmostEqual(eval_clean["ang_vel_x"], dummy_state.derived_state.ang_vel_x)
-        self.assertAlmostEqual(eval_clean["ang_vel_y"], dummy_state.derived_state.ang_vel_y)
-        self.assertAlmostEqual(eval_clean["ang_vel_z"], dummy_state.derived_state.ang_vel_z)
+        self.assertAlmostEqual(eval_clean["ang_vel_x"], dummy_state.derived_state.ang_vel[0][0])
+        self.assertAlmostEqual(eval_clean["ang_vel_y"], dummy_state.derived_state.ang_vel[1][0])
+        self.assertAlmostEqual(eval_clean["ang_vel_z"], dummy_state.derived_state.ang_vel[2][0])
 
         # test noisy and biased model
         param_noisy_biased = Parameters({})
@@ -45,9 +45,9 @@ class GyroModelUnitTest(unittest.TestCase):
         self.assertIsInstance(eval_noisy_biased, Dict)
 
         # verify the original values have been augmented by the model
-        self.assertNotEqual(eval_noisy_biased["ang_vel_x"], dummy_state.derived_state.ang_vel_x)
-        self.assertNotEqual(eval_noisy_biased["ang_vel_y"], dummy_state.derived_state.ang_vel_y)
-        self.assertNotEqual(eval_noisy_biased["ang_vel_z"], dummy_state.derived_state.ang_vel_z)
+        self.assertNotEqual(eval_noisy_biased["ang_vel_x"], dummy_state.derived_state.ang_vel[0][0])
+        self.assertNotEqual(eval_noisy_biased["ang_vel_y"], dummy_state.derived_state.ang_vel[1][0])
+        self.assertNotEqual(eval_noisy_biased["ang_vel_z"], dummy_state.derived_state.ang_vel[2][0])
 
 
 if __name__ == "__main__":
