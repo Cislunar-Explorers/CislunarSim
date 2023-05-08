@@ -30,7 +30,6 @@ class AttDynamicsModelTest(unittest.TestCase):
         # - the vector norm of the attitude quaternion must always be 1
         # - the vector norm of the angular momentum vector must not change (unless
         #   there is energy added to the system, i.e. by an ACS thruster firing)
-        # 
         # The above checks don't really test if the model works, they just ensure that the model doesn't break physics
 
     def test_constant_angular_moment_norm(self):
