@@ -2,7 +2,7 @@ from abc import abstractmethod
 from core.state.state import State
 from utils.astropy_util import get_body_position
 import numpy as np
-from utils.constants import BodyEnum
+from utils.constants import BodyEnum, State_Type
 from core.models.model_base import Model
 from typing import Union, Tuple, List, Dict
 
@@ -101,7 +101,7 @@ class DerivedPosition(DerivedStateModel):
 
 
 class InertiaModel(DerivedStateModel):
-    def evaluate(self, _: float, state: State) -> Dict[str, Union[float, int, bool]]:
+    def evaluate(self, _: float, state: State) -> Dict[str, State_Type]:
         """the _b postfix means the value is in the spacecraft's body frame"""
         fill_frac = state.fill_frac
 
@@ -128,7 +128,7 @@ class InertiaModel(DerivedStateModel):
             * 1e-9
         )
         # inertia tensor in correct body frame
-        idf_b = np.matmul(np.matmul(dcm, idf), dcmT)
+        idf_b = np.matmul(dcm, idf)
 
         # Inertia tensor at 125 mL. Structure is:
         # [[Ixx, Ixy, Ixz],
@@ -147,7 +147,7 @@ class InertiaModel(DerivedStateModel):
             * 1e-9
         )
         # inertia tensor in correct body frame
-        idi_b = np.matmul(np.matmul(dcm, idi), dcmT)
+        idi_b = np.matmul(dcm, idi)
 
         # Determine inertia tensor for Oxygen via linear interpolation as a function of fill
         # fraction.
@@ -167,7 +167,34 @@ class InertiaModel(DerivedStateModel):
         return {
             "I": ineria_matrix_b,
             "ang_vel": angular_velocity,
-            }
+        }
 
 
-DERIVED_MODEL_LIST: List[DerivedStateModel] = [DerivedPosition(), DerivedAttitude(), InertiaModel()]
+class KaneModel(DerivedStateModel):
+    """Calculates the Kane damping coefficient from 2016 simulation data by K. Doyle."""
+
+    def evaluate(self, _: float, state: State) -> Dict[str, State_Type]:
+        # Coefficients below are from Kyle's work.
+        # TODO: Update them when we conduct a new Ansys analysis.
+        k = 0.00085
+        factor = 1.2
+
+        N = 50
+        kane = fill = tau1 = tau2 = np.zeros(N)
+        for i in range(N):
+            fill[i] = (i - 1) / N
+            tau1[i] = k * fill[i]
+            tau2[i] = factor * k * (1 - fill[i])
+            kane[i] = -np.sqrt(tau1[i] ** 2 + tau2[i] ** 2)
+
+        kane = kane - np.max(kane) + k
+        kane = kane - np.min(kane)
+        kane = kane * k / np.max(kane)
+
+        q = int(np.round(state.fill_frac / 0.02 + 1))
+        c = kane[q]
+
+        return {"kane_c": c}
+
+
+DERIVED_MODEL_LIST: List[DerivedStateModel] = [DerivedPosition(), DerivedAttitude(), InertiaModel(), KaneModel()]

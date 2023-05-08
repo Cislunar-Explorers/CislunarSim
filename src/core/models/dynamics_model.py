@@ -1,38 +1,9 @@
 import numpy as np
 from core.models.model import EnvironmentModel
-from core.models.derived_models import DerivedStateModel
-from typing import Dict, Any
-from core.state.state import State
+from typing import Dict
 from core.state.statetime import StateTime
 from utils import gnc_utils
 from utils import constants
-
-
-class KaneModel(DerivedStateModel):
-    """Calculates the Kane damping coefficient from 2016 simulation data by K. Doyle."""
-
-    def evaluate(self, state: State) -> Dict[str, Any]:
-        # Coefficients below are from Kyle's work.
-        # TODO: Update them when we conduct a new Ansys analysis.
-        k = 0.00085
-        factor = 1.2
-
-        N = 50
-        kane = fill = tau1 = tau2 = np.zeros(N)
-        for i in range(N):
-            fill[i] = (i - 1) / N
-            tau1[i] = k * fill[i]
-            tau2[i] = factor * k * (1 - fill[i])
-            kane[i] = -np.sqrt(tau1[i] ** 2 + tau2[i] ** 2)
-
-        kane = kane - np.max(kane) + k
-        kane = kane - np.min(kane)
-        kane = kane * k / np.max(kane)
-
-        q = np.round(state.fill_frac / 0.02 + 1)
-        c = kane[q]
-
-        return {"kane_c": c}
 
 
 class AttitudeDynamics(EnvironmentModel):
@@ -65,20 +36,33 @@ class AttitudeDynamics(EnvironmentModel):
         # --> dh/dt =  (tau - w cross h)
         angular_momentum = np.array([[s.h_x, s.h_y, s.h_z]]).T
 
-        # time derivative of angular momentum
+        # time derivative of angular momentum in the rigid body case
         cross_matrix = gnc_utils.cross_product_matrix(d.ang_vel)
-        dhdt = external_moments - np.matmul(cross_matrix, angular_momentum)
+        dhdt_rigid_body = external_moments - np.matmul(cross_matrix, angular_momentum)
+        # Kane damper dynamics:
+        # solves the second equation on page 5 of Bernardini_Pietro_2022_Spring_ACS.docx
+        # for \dot{\omega}^{D/I}
+        kane_damper_angular_velocity = np.array([[s.w_kane_x, s.w_kane_y, s.w_kane_z]]).T
+        I_kd = self._parameters.kane_damper_inertia
+        kane_cross_matrix = gnc_utils.cross_product_matrix(kane_damper_angular_velocity)
+        kane_damping_term = d.kane_c * (kane_damper_angular_velocity - d.ang_vel)
+        rhs = kane_damping_term - np.matmul(np.matmul(kane_cross_matrix, I_kd), kane_damper_angular_velocity)
+        d_kane_ang_vel_dt = np.matmul(np.linalg.inv(I_kd), rhs)
 
+        dhdt = dhdt_rigid_body - kane_damping_term.reshape((3, 1))
         dh_x = dhdt[0][0]
         dh_y = dhdt[1][0]
         dh_z = dhdt[2][0]
-        
+
         return {
             "quat_v1": float(d_quat[0][0]),
             "quat_v2": float(d_quat[1][0]),
             "quat_v3": float(d_quat[2][0]),
             "quat_r": float(d_quat[3][0]),
-            "h_x": float(dh_x),
+            "h_x": float(dh_x), 
             "h_y": float(dh_y),
             "h_z": float(dh_z),
+            "w_kane_x": float(d_kane_ang_vel_dt[0]),
+            "w_kane_y": float(d_kane_ang_vel_dt[1]),
+            "w_kane_z": float(d_kane_ang_vel_dt[2]),
         }

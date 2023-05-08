@@ -7,7 +7,7 @@ from jsonschema import Draft3Validator, ValidationError
 from utils.constants import ModelEnum
 
 from core.parameters import Parameters
-from core.state.statetime import StateTime
+from core.state import statetime
 
 
 class MutationException(Exception):
@@ -34,7 +34,8 @@ class Config:
     ):
 
         self.param = Parameters(param_dict=parameters)
-        self.init_cond = StateTime.from_dict(initial_condition)
+        self.init_cond = statetime.StateTime.from_dict(initial_condition)
+        statetime.apply_coupled_initial_conditions(self.init_cond)
 
         # convert string list to model list
         model_objs = []
@@ -57,9 +58,12 @@ class Config:
     def make_config(cls, path_str: str):
         """make_config creates a config object from json file in the proposed location.
 
-        It is dependent on state.py, and parameters.py. Changes in these files will affect this method. It will be used by main.py. Changes in this method might affect the functionality of Main.
+        It is dependent on state.py, and parameters.py. Changes in these files will affect this method. It will be used
+        by main.py. Changes in this method might affect the functionality of Main.
 
-        To construct a json file, consult schema.json and example.json in the 'configs' folder. All properties are optional, default values will be inserted if a field is not specified. However, if a property is specified its type and format has to be correct.
+        To construct a json file, consult schema.json and example.json in the 'configs' folder. All properties are
+        optional, default values will be inserted if a field is not specified. However, if a property is specified
+        its type and format has to be correct.
 
         Raises: `JsonError` if json file is not well defined.
 
@@ -74,7 +78,8 @@ class Config:
             except ValidationError:
                 raise JsonError("Schema validation failed.")
 
-            # Checking if gyro_bias ans gyro_noise are in the correct format if thery are specified. (other type verification is done by schema.json)
+            # Checking if gyro_bias ans gyro_noise are in the correct format if thery are specified. 
+            # (other type verification is done by schema.json)
             try:  # validate gyro_bias is a list of length 3
                 gyro_bias = data.get("parameters").get("gyro_bias")
                 if len(gyro_bias) != 3:

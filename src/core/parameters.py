@@ -1,5 +1,6 @@
 import math
 from typing import Dict
+import numpy as np
 
 
 class Parameters:
@@ -23,6 +24,12 @@ class Parameters:
         # prop
         self.thruster_force = 0
         self.combustion_chamber_volume = 1
+
+        # attitude dynamics
+        # TODO: add dry and wet spacecraft moments of inertia here
+
+        # I don't actually know what to set this to. Guessing for now:
+        self.kane_damper_inertia = np.eye(3)
 
         # sim
         self.max_iter = 1e6

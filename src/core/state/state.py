@@ -28,6 +28,11 @@ class State:
     quat_v3: float = 0.0
     quat_r: float = 0.0
 
+    # Kane damper angular velocity (rad/s)
+    w_kane_x: float = 0.0
+    w_kane_y: float = 0.0
+    w_kane_z: float = 0.0
+
     # velocity (meters / second)
     vel_x: float = 0.0
     vel_y: float = 0.0
