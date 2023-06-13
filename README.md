@@ -1,3 +1,5 @@
+# Warning
+This repository is no longer used or maintained. We had a lot of fun and learned a lot while building this, and there are plenty of lessons to be learned. Reach out to tmf97@cornell.edu if interested in hearing some stories and lessons learned.
 # CislunarSim
 
 Simulation Software for the Cislunar Explorers Mission  
