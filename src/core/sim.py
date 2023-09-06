@@ -11,20 +11,21 @@ from multiprocessing import shared_memory
 from sys import getsizeof
 from utils.constants import SHRD_MEM_NAME
 
+
 class CislunarSim:
-    """This class consolidates all parts of the sim (config, models, state). It is responsible for 
+    """This class consolidates all parts of the sim (config, models, state). It is responsible for
     stepping the sim and checking stop conditions.
     """
 
     def __init__(self, config: Config) -> None:
         self._config = config
-        self._models = ModelContainer(self._config) #wouldn't need for event-based
+        self._models = ModelContainer(self._config)  # wouldn't need for event-based
         self.state_time: StateTime = self._config.init_cond
         self.observed_state = ObservedState()
 
         self.should_run = True
         self.num_iters = 0
-        self.event_queue : "Queue[Event]" = Queue()
+        self.event_queue: "Queue[Event]" = Queue()
 
     def step(self) -> PropagatedOutput:
         """step() is the combined true and observed state after one step."""
@@ -37,10 +38,10 @@ class CislunarSim:
         # Feed the current observed state of the simulator into the shared memory.
         observed_array = self.observed_state.to_array()
         try:
-            shm = shared_memory.SharedMemory(name=SHRD_MEM_NAME) 
+            shm = shared_memory.SharedMemory(name=SHRD_MEM_NAME)
         except (FileNotFoundError) as e:
-            log.warn(e)
-            log.warn("Shared Memory likely closed by external process. Recreating with current data.")
+            log.warning(e)
+            log.warning("Shared Memory likely closed by external process. Recreating with current data.")
             shm = shared_memory.SharedMemory(create=True, name=SHRD_MEM_NAME, size=getsizeof(observed_array))
         state_array = np.ndarray(observed_array.shape, dtype=observed_array.dtype, buffer=shm.buf)
         state_array[:] = observed_array[:]
@@ -74,7 +75,7 @@ class CislunarSim:
             log.error("Stopping sim because two years have passed")
             log.debug(f"Elapsed time = {int(self.state_time.time - self._config.init_cond.time)}s > 6.312e7")
             return True
-        
+
         r_e = (state.x**2 + state.y**2 + state.z**2) ** 0.5
         if r_e < R_EARTH:
             log.error("Stopping sim because craft is inside the Earth")

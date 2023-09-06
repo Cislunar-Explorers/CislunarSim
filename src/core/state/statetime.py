@@ -43,7 +43,8 @@ class StateTime:
         self.state.update(state_dict)
 
     def update_derived(self, state_dict: Dict) -> None:
-        """update_derived() is a procedure that updates the fields of the derived state with specified key/value pairs in state_dict.
+        """update_derived() is a procedure that updates the fields of the derived state with specified key/value pairs
+        in state_dict.
         If a key in the `state_dict` is not defined as an attribute in DerivedState.__init__, it will be ignored.
         """
         self.derived_state.update(state_dict)

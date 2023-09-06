@@ -42,13 +42,13 @@
 		"initial_condition": {
 			"type": "object",
 			"properties": {
-				"ang_vel_x": {
+				"h_x": {
 					"type": "number"
 				},
-				"ang_vel_y": {
+				"h_y": {
 					"type": "number"
 				},
-				"ang_vel_z": {
+				"h_z": {
 					"type": "number"
 				},
 				"quat_v1": {

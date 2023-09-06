@@ -24,7 +24,7 @@ class Plot:
         self.vel_zs = df["true_state.state.vel_z"].to_numpy()
 
         self.locs = np.array([self.xlocs, self.ylocs, self.zlocs])
-        self.ang_x = df["true_state.state.ang_vel_x"].to_numpy()
+        self.ang_x = df["true_state.derived_state.ang_vel_x"].to_numpy()
         self.ang_x_obs = df["observed_state.ang_vel_x"].to_numpy()
 
         self.fig_2d = plt.figure()
