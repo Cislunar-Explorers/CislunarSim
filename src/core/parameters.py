@@ -17,8 +17,17 @@ class Parameters:
         self.com = 0
         
         # fuel tank
-        self.tank_volume = 1
-        self.electolyzer_rate = 10.0 * (1/1000)
+        self.tank_length = 1 # m
+        self.tank_width = 1 
+        self.tank_height = 1
+        # changed rate to match that of the actual electrolyzer (was 10.0 * (1/1000) g/s): 
+        # https://h-tec-education.com/quattro-electrolyzer-htec-e105
+        self.electolyzer_rate = 0.00222222 #g/s
+        self.min_ang_vel = 0.0
+        self.min_height = 0.0
+
+        self.temperature_min = 5
+        self.temperature_max = 45
 
         # prop
         self.thruster_force = 0
