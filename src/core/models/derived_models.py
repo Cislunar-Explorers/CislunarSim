@@ -55,6 +55,7 @@ def cartesian_to_spherical(x: float, y: float, z: float) -> Tuple[float, float, 
 
 
 class DerivedAttitude(DerivedStateModel):
+    """Updates the attitude vector, azimuth, and elevation."""
     def evaluate(self, _: float, state: State):
         spin_vector = quat_to_rotvec((state.quat_v1, state.quat_v2, state.quat_v3, state.quat_r))
         spherical_coordinates = cartesian_to_spherical(*spin_vector)
